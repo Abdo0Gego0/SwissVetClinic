@@ -1,0 +1,94 @@
+﻿@model TermsAndConditionsDto
+
+
+
+@{
+    Layout = "../../../Views/Shared/_CenterAdminLayout.cshtml";
+}
+
+
+<br/>
+<br/>
+
+<form asp-action="TermsAndConditions" asp-controller="Setting" method="post">
+    <input asp-for="Id" hidden />
+    <label class="fieldLabel" style="direction:ltr !important; text-align:left !important">
+
+        Terms and Conditions
+    </label>
+    <center>
+
+
+
+    @(Html.Kendo().Editor()
+        .Name("TermsAndConditionsTextEn")
+        .HtmlAttributes(new { style = "width: 90% !important; height:200px;font-size:18px", id = "TermsAndConditionsTextEn", name = "TermsAndConditionsTextEn" })
+        .Tools(tools => tools
+        .Clear()
+        .Bold().Italic().Underline()
+        .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+        .InsertUnorderedList().InsertOrderedList()
+        .Outdent().Indent()
+        .CreateLink().Unlink()
+        .InsertImage()
+        .TableEditing()
+        .FontName()
+        .FontSize()
+        .ForeColor().BackColor()
+        .Undo().Redo()
+        .FormatPainter()
+        .InsertLowerRomanList()
+        .InsertUpperRomanList()
+        .CleanFormatting()
+        .Separator()
+        .ViewHtml()
+        .Strikethrough()
+
+        )
+        )
+
+    <span class="text-danger" asp-validation-for="TermsAndConditionsTextEn"></span>
+
+    <br />
+
+    <div dir="rtl">
+
+    <label class="fieldLabel" dir="rtl">
+        الشروط والأحكام
+    </label>
+    </div>
+
+    @(Html.Kendo().Editor()
+        .Name("TermsAndConditionsTextAr")
+        .HtmlAttributes(new { style = "width: 90% !important; height:200px;font-size:18px", id = "TermsAndConditionsTextAr", name = "TermsAndConditionsTextAr" })
+        .Tools(tools => tools
+        .Clear()
+        .Bold().Italic().Underline()
+        .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+        .InsertUnorderedList().InsertOrderedList()
+        .Outdent().Indent()
+        .CreateLink().Unlink()
+        .InsertImage()
+        .TableEditing()
+        .FontName()
+        .FontSize()
+        .ForeColor().BackColor()
+        .Undo().Redo()
+        .FormatPainter()
+        .InsertLowerRomanList()
+        .InsertUpperRomanList()
+        .CleanFormatting()
+        .Separator()
+        .ViewHtml()
+        .Strikethrough()
+
+        )
+        )
+
+    <span class="text-danger" asp-validation-for="TermsAndConditionsTextAr"></span>
+
+    <br />
+
+    <button type="submit" class="form-control addCtrl"> @Localizer["Save"]</button>
+    </center>
+</form>

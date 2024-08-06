@@ -1,0 +1,119 @@
+﻿
+
+@inject IUserService userService
+
+<br />
+
+@{
+    if (userService.GetMyClinicId()==null)
+    {
+        <label class="fieldLabel">@Localizer["Choose clinic to login"]</label>
+
+        <partial name="_ChooseClinic"></partial>
+    }
+}
+
+<br />
+<br />
+
+@{
+    if (userService.GetMyClinicId() == null)
+    {
+        <text>
+            <div style="display:none">
+        </text>
+
+    }
+    else
+    {
+        <text>
+            <div>
+        </text>
+
+    }
+}
+
+
+<div id="NoVisits" style="display:none" class="fieldLabel">
+    <center>
+        <h1>
+
+            @Localizer["No Appointments"]
+
+        </h1>
+    </center>
+</div>
+
+<div id="AppDetails" style="display:none;     box-shadow: 0px 1px 7px 3px var(--site-light-pink);border-radius:20px">
+
+    <input hidden id="appId"/>
+
+    <div class="containter" style="padding:10px ">
+
+    <div class="row justify-content-center" style="align-items:center">
+    
+    <div class="col-md-8">
+                    <div class="fieldLabel" id="appDate" style="padding:10px;color:black">
+                    </div>
+
+
+                    <div class=" fieldLabel" id="appPat" style="padding:10px;color:black">
+                    </div>
+
+    </div>
+
+            <div class="col-md-4" style="justify-content: center; display: flex;">
+                <button style="font-size: 21px;width: 90%; font-weight: bold;height: 80px;" class="form-control" onclick="startVisit()">
+                     
+                    
+                    @Localizer["Start Examination"]
+
+                    <i style="font-size:32px; font-weight:900">@Html.Raw(Localizer["examArrow"])</i>
+                </button>
+
+            </div>
+
+    </div>
+
+
+
+    </div>
+
+
+
+</div>
+</div>
+
+<script>
+
+    get_clinic_appointment();
+
+
+    function startVisit()
+    {
+        var appId = $("#appId").val();
+
+        var URL = "/Doctor/Appointment/StartVisit/?appId=" + appId;
+
+        var a = document.createElement('a');
+        a.href = URL;
+        a.target ="_blank";
+        a.click();
+
+    }
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

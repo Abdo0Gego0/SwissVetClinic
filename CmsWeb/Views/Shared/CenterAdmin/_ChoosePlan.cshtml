@@ -1,0 +1,73 @@
+﻿@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model IEnumerable<SubscriptionPlan>
+
+@{
+    Layout = "../../../Views/Shared/_CenterAdminLayoutWithoutSideBar.cshtml";
+}
+
+<div class="container py-4 py-xl-5">
+    <div class="row mb-3">
+        <center>
+            <img src="~/siteimages/logoWithText.svg" />
+            <br />
+            <br />
+            <h1 class="LoginTitle">Please choose your plan to continue to the control panel</h1>
+        </center>
+    </div>
+    <div>
+
+        <div class="tab-content pt-5">
+            <div id="tab-1" class="tab-pane active" role="tabpanel">
+                <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+                    @{
+                        foreach (SubscriptionPlan item in Model)
+                        {
+                            <form asp-action="CheckOut" asp-controller="Home" method="get" id="@item.Id">
+                            <input value="@item.Id" name="Id" hidden />
+                                <div class="col" style="">
+                                <div class="card h-100" style="border-radius:20px;border: 1px solid #79C3E3;
+            box-shadow: 5px 5px 10px 0px #79C3E3 inset,  5px 5px 7px 0px #79C3E3;min-height:500px !important; max-height:500px !important;
+">
+        
+                                    <div class="card-body flex-grow-0 p-4">
+                                    <center>
+                                        <span class="badge bg-primary text-uppercase mb-2" 
+                                        style="font-size:20px !important; background-color:var(--site-light-pink) !important;
+                                        border-top-right-radius:20px  !important;                                        
+                                            border-bottom-left-radius:20px  !important; padding:10px  !important;">
+                                        @item.SubscriptionPlanTranslation[0].Name
+                                        </span>
+                                     </center>
+                                        <h4 class="display-6 fw-bold card-title">AED @item.PriceAmount<span class="fs-3 fw-normal text-muted">/@item.PriceRecuencyInterval.ToUpper()</span></h4>
+                                    </div>
+                                    <div class="card-footer d-flex flex-column flex-grow-1 justify-content-between"
+                                         style="border-radius:20px !important; ">
+                                        <div>
+                                            <ul class="list-unstyled">
+                                                <li class="d-flex mb-2">
+                                                    <span>
+                                                        @Html.Raw(HttpUtility.HtmlDecode(item.SubscriptionPlanTranslation[0].Description))
+                                                    </span>
+                                                </li>
+                                            </ul>
+                                        </div><button class="btn btn-primary d-block w-100" style="background-color:var(--site-blue);border:none" type="submit" href="#">Buy</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                        }
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* <span class="bs-icon-xs bs-icon-rounded bs-icon-primary-light bs-icon me-2">
+    <svg class="bi bi-check-lg" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"></path>
+    </svg>
+</span> *@

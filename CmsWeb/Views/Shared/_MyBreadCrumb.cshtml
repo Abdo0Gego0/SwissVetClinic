@@ -1,0 +1,36 @@
+﻿
+
+    <script src="~/KendoUi/js/jquery.min.js"></script>
+    <script src="~/KendoUi/js/jszip.min.js"></script>
+    <script src="~/KendoUi/js/kendo.all.min.js"></script>
+    <script src="~/KendoUi/js/kendo.aspnetmvc.min.js"></script>
+
+
+@inject INavService siteMapService
+
+@{
+    List<string> urls = siteMapService.GetSiteMap();
+    string captionEnd = ViewBag.DispalyName == null ? urls[2] : ViewBag.DispalyName;
+    string captionStart = ViewBag.DispalyName == null ? urls[1] : ViewBag.PreviousActionDispalyName;
+    string PreviousAction = ViewBag.PreviousAction == null ? urls[1] : ViewBag.PreviousAction;
+}
+
+
+
+
+
+<div class="demo-section k-content wide">
+    <kendo-breadcrumb name="breadcrumb"
+                      delimiter-icon="line"
+                      navigational="true"
+                      editable="false">
+
+        <kendo-breadcrumb-items>
+            <kendo-breadcrumb-item type="BreadcrumbItemType.RootItem" text="" href="/@urls[0]/@urls[1]/@PreviousAction" show-text="true" icon="home" show-icon="true"></kendo-breadcrumb-item>
+            <kendo-breadcrumb-item type="BreadcrumbItemType.Item" text="@captionStart" href="/@urls[0]/@urls[1]/@PreviousAction"></kendo-breadcrumb-item>
+            <kendo-breadcrumb-item type="BreadcrumbItemType.Item" text="@captionEnd"
+                                   style="color:red !important"
+                                   href="#"></kendo-breadcrumb-item>
+        </kendo-breadcrumb-items>
+    </kendo-breadcrumb>
+</div>

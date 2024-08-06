@@ -1,0 +1,375 @@
+@inject INavService StyleServiceMain
+@inject IUserService _userService
+
+<nav id="sidebar">
+        <div style="min-width: var(--nav-width);
+    max-width: var(--nav-width);background-color:white !important;">
+
+        <center>
+            <img src="~/siteimages/navBarLogo.svg" height="110px" width="140px" />
+
+            <br />
+            <a href="@Localizer["langUrl"]">
+                <img src="~/siteimages/@Localizer["langImage"]" style="padding: 16px 26px 16px 26px;cursor: pointer;">
+            </a>
+        </center>
+    </div>
+
+
+    <div class="pt-5">
+
+        <a href="@Url.Action("MyAccount","Home", new {area="CenterAdmin"})" class="img logo rounded-circle mt-2 mb-2" style="border-style: double;border-color:black; background-image: url(@_userService.GetUserProfileImage());"></a>
+
+        <label class="AccountName">@_userService.GetUserFirstName()</label>
+        <br />
+
+        <ul class="list-unstyled components mb-5">
+
+
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Home"},new List<string>{"Index"},"active","")">
+                <a href="@Url.Action("Index","Home",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Dashboard.svg' />
+                    @Localizer["Dashborad"]
+                 </a>
+            </li>
+
+@* 
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Clinic"},new List<string>{"IndexSpeicality"},"active","")">
+                <a href="@Url.Action("IndexSpeicality","Clinic",new {area="Center"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Centers.svg' />
+                    Clinic Speicality
+                </a>
+            </li>
+ *@
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Center"},new List<string>{"Index"},"active","")">
+                <a href="@Url.Action("Index","Center",new {area="CenterAdmin",fromDashboard=1})">
+                    <img style="width:24px;height:24px" src='~/navimages/Clinics.svg' />
+
+
+                    @Localizer["My Center"]
+
+
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Patient"},new List<string>{"IndexPatient","Create_Patient","Edit_Patient","Create_Patient_Records"},"active","")">
+                <a href="@Url.Action("IndexPatient","Patient",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Subscribers.svg' />
+
+                    @Localizer["Subscribers"]
+
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Employee"},new List<string>{"IndexEmployee","Create_Employee","Edit_Employee"},"active","")">
+                <a href="@Url.Action("IndexEmployee","Employee",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Employees.svg' />
+
+
+                    @Localizer["Employees"]
+
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Outcome"},new List<string>{"Index"},"active","")">
+                <a href="@Url.Action("Index","Outcome",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Accounting.svg' />
+                    @Localizer["Outcome"]
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Receipt"}, new List<string>{"Index"}, "active", "")">
+                <a href="@Url.Action("Index", "Receipts", new { area = "CenterAdmin" })">
+                    <img style="width:24px;height:24px" src='~/navimages/Accounting.svg' />
+                    @Localizer["Receipt"]
+                    <span id="newBillsSpan" class="SideBarNotification">+3</span>
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Reports"},new List<string>{"Index"},"active","")">
+                <a href="@Url.Action("Index","Reports",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Reports.svg' />
+
+
+                    @Localizer["Reports"]
+
+                </a>
+            </li>
+            
+            <hr />
+
+            <kendo-expansionpanel name="sub01111111" title="@Localizer["Clinics"]" sub-title="" expanded="false" style="background:var(--site-navbar-bg-color);border:none;padding: 0px">
+    <content>
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"BookingPolicy"},new List<string>{"Index"},"active","")">
+                <a href="@Url.Action("Index","BookingPolicy",new {area="CenterAdmin",fromDashboard=1})">
+                    <img style="width:24px;height:24px" src='~/navimages/Centers.svg' />
+
+                    @Localizer["Booking Policy"]
+
+                </a>
+            </li>
+
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Clinic"},new List<string>{"IndexServices"},"active","")">
+                <a href="@Url.Action("IndexServices","Clinic",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Clinics.svg' />
+
+
+                    @Localizer["Services"]
+
+
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Clinic"},new List<string>{"IndexSpeicality"},"active","")">
+                <a href="@Url.Action("IndexSpeicality","Clinic",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Clinics.svg' />
+                    
+
+                    @Localizer["Clinic Speicality"]
+
+
+                </a>
+            </li>
+
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Clinic"},new List<string>{"IndexClinic","Create_Clinic","Edit_Clinic"},"active","")">
+                <a href="@Url.Action("IndexClinic","Clinic",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Clinics.svg' />
+                    
+
+                    @Localizer["Clinics"]
+
+
+                </a>
+            </li>
+
+                <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"CenterMedicine"},new List<string>{"Index"},"active","")">
+                <a href="@Url.Action("Index","CenterMedicine",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Clinics.svg' />
+
+
+                            @Localizer["Medicines"]
+
+
+                </a>
+            </li>
+
+
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Doctor"},new List<string>{"IndexSpeicality"},"active","")">
+                <a href="@Url.Action("IndexSpeicality","Doctor",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Doctors.svg' />
+                    
+
+                    @Localizer["Doctor Speicality"]
+
+                </a>
+            </li>
+
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Doctor"},new List<string>{"IndexDoctors","Create_Doctor","Edit_Doctor","Certificate_Doctor"},"active","")">
+                <a href="@Url.Action("IndexDoctors","Doctor",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Doctors.svg' />
+                    
+
+                    @Localizer["Doctors"]
+
+                </a>
+            </li>
+
+
+
+
+
+
+
+
+
+@*             <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"TherapyPlan"},new List<string>{"IndexGoals"},"active","")">
+                <a href="@Url.Action("IndexGoals","TherapyPlan",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Centers.svg' />
+                    Therapy Goals
+                </a>
+            </li>
+
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"TherapyPlan"},new List<string>{"IndexPlan","Create_Plan","Edit_Plan"},"active","")">
+                <a href="@Url.Action("IndexPlan","TherapyPlan",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Centers.svg' />
+                    Therapy Plans
+                </a>
+            </li> *@
+
+
+    
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Appointment"},new List<string>{"Timeline"},"active","")">
+                <a href="@Url.Action("Timeline","Appointment",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Calendar.svg' />
+                    
+
+                    @Localizer["Calendar"]
+
+                </a>
+            
+            </li>
+
+
+                <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Bills"},new List<string>{"Index"},"active","")">
+                    <a href="@Url.Action("Index","Bills",new {area="CenterAdmin"})">
+                        <img style="width:24px;height:24px" src='~/navimages/Accounting.svg' />
+
+
+                            @Localizer["Bills"]
+                        <span id="newBillsSpan" class="SideBarNotification">+3</span>
+
+                    </a>
+
+                </li>
+
+                <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Store Bills"},new List<string>{"Index"},"active","")">
+                    <a href="@Url.Action("Index","StoreBill",new {area="CenterAdmin"})">
+                        <img style="width:24px;height:24px" src='~/navimages/Accounting.svg' />
+
+
+                            @Localizer["Store Bills"]
+                        <span id="newBillsSpan" class="SideBarNotification">+3</span>
+
+                    </a>
+
+                </li>
+
+                </content>
+            </kendo-expansionpanel>
+            <hr />
+
+
+            <kendo-expansionpanel name="sub12222222222" title="@Localizer["Store"]" sub-title="" expanded="false" style="background:var(--site-navbar-bg-color);border:none;padding: 0px">
+                <content>
+
+                <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"CenterCategories"},new List<string>{"Index","Edit_Bill"},"active","")">
+                    <a href="@Url.Action("Index","CenterCategories",new {area="CenterAdmin",fromDashboard=1})">
+                        <img style="width:24px;height:24px" src='~/navimages/Centers.svg' />
+                        @Localizer["Categories"]
+                    </a>
+                </li>
+
+                <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"CenterProducts"},new List<string>{"Index","Create_SubProduct"},"active","")">
+                    <a href="@Url.Action("Index","CenterProducts",new {area="CenterAdmin",fromDashboard=1})">
+                        <img style="width:24px;height:24px" src='~/navimages/Centers.svg' />
+                            @Localizer["Products"]
+                    </a>
+                </li>
+
+                <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Orders"},new List<string>{"Index"},"active","")">
+                    <a href="@Url.Action("Index","Orders",new {area="CenterAdmin"})">
+                        <img style="width:24px;height:24px" src='~/navimages/Orders.svg' />
+                            @Localizer["Orders"]
+
+                        <span id="newOrdersSpan" class="SideBarNotification">+3</span>
+
+                    </a>
+                </li>
+
+                </content>
+            </kendo-expansionpanel>
+            <hr />
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Notification"},new List<string>{"IndexPolicy"},"active","")">
+                <a href="@Url.Action("IndexPolicy","Notification",new {area="CenterAdmin",fromDashboard=1})">
+                    <img style="width:24px;height:24px" src='~/navimages/Centers.svg' />
+
+
+
+                    @Localizer["Notification Policy"]
+
+
+                </a>
+            </li>
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Banner"},new List<string>{"Index"},"active","")">
+                <a href="@Url.Action("Index","Banner",new {area="CenterAdmin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Banners.svg' />
+
+
+                    @Localizer["Banners"]
+
+                </a>
+            </li>
+
+            <hr />
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Setting"},new List<string>{"AboutUs"},"active","")">
+                <a href="@Url.Action("AboutUs","Setting",new {area="Admin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/About Us.svg' />
+
+
+                    @Localizer["About Us"]
+
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Setting"},new List<string>{"TermsAndConditions"},"active","")">
+                <a href="@Url.Action("TermsAndConditions","Setting",new {area="Admin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Terms & Conditions.svg' />
+
+
+                    @Localizer["Terms and Conditions"]
+
+
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Setting"},new List<string>{"SystemConfig"},"active","")">
+                <a href="@Url.Action("SystemConfig","Setting",new {area="Admin"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Settings.svg' />
+
+                    @Localizer["Settings"]
+
+
+                </a>
+            </li>
+
+            <hr />
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"LogIn"},new List<string>{"logOut"},"active","")">
+                <a href="@Url.Action("logOut","LogIn",new {area="Auth"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Logout.svg' />
+                    
+
+                    @Localizer["Logout"]
+
+
+                </a>
+            </li>
+
+
+        </ul>
+
+    </div>
+</nav>
+
+
+<style>
+
+    
+
+    #sidebar .k-expander-title {
+        color:white !important;
+    }
+
+    #sidebar .k-expander-header {
+        background: #163c7af5 !important;
+    }
+
+
+    #sidebar .k-i-arrow-chevron-down{
+        color: white !important;
+    }
+
+    #sidebar  .k-i-arrow-chevron-up{
+        color: white !important;
+    }
+
+</style>
+

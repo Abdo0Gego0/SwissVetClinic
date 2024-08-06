@@ -1,0 +1,79 @@
+﻿@model Banner
+
+<div class="bannerContainer" >
+
+    <div class="row" style="width:100%;align-items:center;justify-content:center">
+
+        <input hidden asp-for="Image64" />
+
+        <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg" style="cursor:pointer; "></div>
+
+
+
+        <br />
+        <br />
+        <br />
+
+        <center>
+            <div>
+                <span>
+                    <i style="background-image:url('/AdminDashboard/images/gallery-export.svg');display: inline-block;width:24px;height:24px"></i>
+                    <span class="uploadPicture"
+                          onclick="document.getElementById('ImageFile').click()">
+                        @Localizer["ChooseImage"]
+                    </span>
+                </span>
+                <input type="file" asp-for="ImageFile" onchange="preview()" accept="image/*" style="display:none">
+            </div>
+        </center>
+    </div>
+
+    <br />
+    <br />
+    <br />
+
+        <div class="row mb-3">
+        <div class="col-md-12">
+            <label style="display:flex" class="dateLabel">@Html.Raw(Localizer["BannerText"])</label>
+
+             <input class="form-control" asp-for="BannerText" />
+
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label style="display:flex" class="dateLabel">@Html.Raw(Localizer["StartDate"])</label>
+            @(Html.Kendo().DateTimePickerFor(m => m.StartDate).HtmlAttributes(new { @required = true }).Format("{0:yyyy-MM-dd HH:mm}"))
+        </div>
+        <div class="col-md-6">
+            <label style="display:flex" class="dateLabel">@Html.Raw(Localizer["EndDate"])</label>
+            @(Html.Kendo().DateTimePickerFor(m => m.EndDate).HtmlAttributes(new { @required = true }).Format("{0:yyyy-MM-dd HH:mm}"))
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    function getBase64(file) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result);
+            $("#Image64").val(reader.result).trigger("change");
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+
+    function preview() {
+        var file = document.getElementById('ImageFile').files[0];
+        document.getElementById('prevImg').style.backgroundImage = "url('" + URL.createObjectURL(file) + "')";
+
+        getBase64(file);
+
+    }
+
+</script>

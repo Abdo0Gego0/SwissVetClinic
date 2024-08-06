@@ -1,0 +1,154 @@
+﻿@model SubscriptionPlanDto
+
+
+@inject ISelectListService slSrvc
+
+<form asp-action="EditPlan" asp-controller="SubscriptionPlan" method="post">
+    <input asp-for="Id" hidden />
+
+    <div class="container">
+
+       <div class="row">
+            <div class="col-md-12">
+                <label class="fieldLabel">
+                    Name
+                </label>
+                <input class="form-control fieldInput" asp-for="NameEn" required />
+                <br />
+
+            </div>
+           <div class="col-md-12">
+
+                <label class="fieldLabel">
+                    Description
+                </label>
+
+                @(Html.Kendo().Editor()
+                    .Name("DescriptionEn")
+                    .HtmlAttributes(new { style = "width: 100% !important; height:200px;font-size:18px", id = "DescriptionEn", name = "DescriptionEn",@required=true })
+                    .Tools(tools => tools
+                    .Clear()
+                    .Bold().Italic().Underline()
+                    .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+                    .InsertUnorderedList().InsertOrderedList()
+                    .Outdent().Indent()
+                    .CreateLink().Unlink()
+                    .InsertImage()
+                    .TableEditing()
+                    .FontName()
+                    .FontSize()
+                    .ForeColor().BackColor()
+                    .Undo().Redo()
+                    .FormatPainter()
+                    .InsertLowerRomanList()
+                    .InsertUpperRomanList()
+                    .CleanFormatting()
+                    .Separator()
+                    .ViewHtml()
+                    .Strikethrough()
+
+                    )
+                    )
+
+           </div>
+       </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div dir="rtl">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">
+                       الاسم
+                    </label>
+                </div>
+                <input class="form-control fieldInput" asp-for="NameAr" required />
+                <br />
+
+            </div>
+            <div class="col-md-12">
+
+                <div dir="rtl">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">
+                        الوصف
+                    </label>
+                </div>
+
+                @(Html.Kendo().Editor()
+                    .Name("DescriptionAr")
+                    
+                    .HtmlAttributes(new { style = "width: 100% !important; height:200px;font-size:18px", id = "DescriptionAr", name = "DescriptionAr", @required = true })
+                    .Tools(tools => tools
+                    .Clear()
+                    .Bold().Italic().Underline()
+                    .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+                    .InsertUnorderedList().InsertOrderedList()
+                    .Outdent().Indent()
+                    .CreateLink().Unlink()
+                    .InsertImage()
+                    .TableEditing()
+                    .FontName()
+                    .FontSize()
+                    .ForeColor().BackColor()
+                    .Undo().Redo()
+                    .FormatPainter()
+                    .InsertLowerRomanList()
+                    .InsertUpperRomanList()
+                    .CleanFormatting()
+                    .Separator()
+                    .ViewHtml()
+                    .Strikethrough()
+
+                    )
+                    )
+
+
+
+            </div>
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fieldLabel">Price Recuency Interval</label>
+                    <select required class="form-control" asp-for="PriceRecuencyInterval" asp-items="@slSrvc.PriceRecuencyIntervalSL()">
+                        <option selected>Select Price Recuency Interval</option>
+                    </select>
+                    
+                </div>
+            </div>
+        </div>
+        <br />
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <label class="fieldLabel">
+                    Price
+                </label>
+                <input class="form-control fieldInput" asp-for="PriceAmount" required />
+
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <label class="fieldLabel">
+                    Free Days
+                </label>
+                <input class="form-control fieldInput" asp-for="FreeDays" required />
+            </div>
+        </div>
+        <br />
+        <br />
+
+
+        <button type="submit" class="form-control addCtrl"> @Localizer["Save"]</button>
+
+    </div>
+
+
+</form>
+

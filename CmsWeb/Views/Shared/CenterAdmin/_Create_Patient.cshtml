@@ -1,0 +1,192 @@
+﻿@model PetOwner
+
+@inject ISelectListService slSrvc
+@inject IUserService _userService
+
+<center>
+    <h3 class="text-danger">@ViewBag.ErrorMessage</h3>
+</center>
+
+<form asp-action="Create_Patient" asp-controller="Patient" method="post" id="myForm" enctype='multipart/form-data'>
+
+    <div class="container">
+
+
+        <input asp-for="MedicalCenterId" value="@_userService.GetMyCenterIdWeb()" hidden />
+
+        <div class="row" style="width:100%;align-items:center;justify-content:center">
+
+            <center>
+
+
+            <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg1" style="cursor:pointer;">
+            </div>
+
+                <div>
+                    <span>
+                        <i class="fa fa-camera"></i>
+                        <span class="uploadPicture"
+                              onclick="document.getElementById('ImageFile').click()">
+                            @Localizer["ChooseImage"]
+                        </span>
+                    </span>
+                    <input type="file" asp-for="ImageFile" onchange="preview1()" accept="image/*" style="display:none">
+                </div>
+            </center>
+        </div>
+
+        <hr />
+
+        <p class="text-center mb-6">@Localizer["BasicInfo"]</p>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="fieldLabel" asp-for="FirstName"></label>
+                <input class="form-control fieldInput" asp-for="FirstName" />
+                <span class="text-danger" asp-validation-for="FirstName"></span>
+
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="MiddleName"></label>
+                <input class="form-control fieldInput" asp-for="MiddleName"  />
+                <span class="text-danger" asp-validation-for="MiddleName"></span>
+
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="LastName"></label>
+                <input class="form-control fieldInput" asp-for="LastName"  />
+                <span class="text-danger" asp-validation-for="LastName"></span>
+
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="MotherName"></label>
+                <input class="form-control fieldInput" asp-for="MotherName" />
+                <span class="text-danger" asp-validation-for="MotherName"></span>
+
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="NationalCardId"></label>
+                <input class="form-control fieldInput" asp-for="NationalCardId"  />
+                <span class="text-danger" asp-validation-for="NationalCardId"></span>
+
+            </div>
+
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="Nationality"></label>
+                <input class="form-control fieldInput" asp-for="Nationality"  />
+
+            </div>
+
+            <div class="col-md-4">
+                <label class="fieldLabel" asp-for="PassportNumber"></label>
+                <input class="form-control fieldInput" asp-for="PassportNumber"  />
+
+            </div>
+@*             <div class="col-md-4">
+                <div class="form-group">
+                    <label class="fieldLabel" asp-for="BloodType"></label>
+                    <select required class="form-control" asp-for="BloodType" asp-items="@slSrvc.BloodTypeSL()">
+                        <option >---</option>
+                    </select>
+                </div>
+            </div> *@
+
+        </div>
+
+
+        <hr />
+
+        <p class="text-center mb-6">@Localizer["Account Info"]</p>
+        <div class="row">
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="PersonEmail"></label>
+                <input class="form-control fieldInput" asp-for="PersonEmail" />
+                <span class="text-danger" asp-validation-for="PersonEmail"></span>
+            </div>
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="PersonPhone"></label>
+                <input class="form-control fieldInput" asp-for="PersonPhone" />
+                <span class="text-danger" asp-validation-for="PersonPhone"></span>
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="PersonUserName"></label>
+                <input class="form-control fieldInput" asp-for="PersonUserName" />
+                <span class="text-danger" asp-validation-for="PersonUserName"></span>
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="Password"></label>
+                <input class="form-control fieldInput" asp-for="Password" value="@ViewBag.Password" />
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+
+        </div>
+
+
+@*         <hr />
+
+        <p class="text-center mb-6">@Localizer["Insurance Info"]</p>
+        <div class="row">
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="InsuranceId"></label>
+                <input class="form-control fieldInput" asp-for="InsuranceId" />
+                <span class="text-danger" asp-validation-for="InsuranceId"></span>
+            </div>
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="InsuranceCompany"></label>
+                <input class="form-control fieldInput" asp-for="InsuranceCompany" />
+                <span class="text-danger" asp-validation-for="InsuranceCompany"></span>
+            </div>
+
+        </div> *@
+
+
+        <hr />
+
+
+            <br />
+            <br />
+            <br />
+        <button type="submit" class="form-control addCtrl"> @Localizer["Save and continue"]</button>
+
+    </div>
+
+
+</form>
+
+
+<script>
+    function preview1(evt) {
+        var filee = event.target.files[0];
+        document.getElementById('prevImg1').style.backgroundImage = "url('" + URL.createObjectURL(filee) + "')";
+    }
+</script>
+
+<script id="Temp_Destroy" type="text/kendo-tmpl">
+    <span class="k-grid-delete" style="font-size:24px;cursor:pointer;color:red"><i class="fa fa-trash"></i></span>
+</script>
+
+
+<script>
+
+    function onEditPopUp(e) {
+        e.container.find(".k-grid-update").text("@Html.Raw(Localizer["Save"])");
+        e.container.find(".k-grid-cancel").text("@Html.Raw(Localizer["Cancel"])");
+
+        if (!e.model.isNew()) {
+            e.container.kendoWindow("title", "@Html.Raw(Localizer["Edit"])");
+            var prevImg = $('#prevImg');
+            prevImg.css('background-image', 'url(' + e.model.ImageFullPath + ')');
+
+        }
+        else {
+            e.container.kendoWindow("title", "@Html.Raw(Localizer["New"])");
+        }
+    }
+</script>

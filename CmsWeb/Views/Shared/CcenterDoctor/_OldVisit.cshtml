@@ -1,0 +1,948 @@
+﻿@model PatientVisit
+
+@inject ISelectListService slSrvc
+@inject IUserService _userService
+
+
+
+@{
+    string taskFilesName = Model.PetOwnerId.ToString().Replace("-", "");
+}
+
+
+
+<center>
+    <h3 class="text-danger">@ViewBag.ErrorMessage</h3>
+</center>
+
+<form asp-action="StartVisit" asp-controller="Appointment" method="post" id="myForm" enctype='multipart/form-data'>
+
+
+    <div class="container" style="margin:0px !important; min-width:100% !important; padding:0px !important">
+
+
+        @{
+            if (Model.IsFirstVisit)
+            {
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+
+                        <h1 class="form-control" style="background:var(--warning);box-shadow: 0px 3px 8px 2px var(--red); text-align:@Localizer["float"]">
+                            @Localizer["First Visit"]
+
+                        </h1>
+                    </div>
+
+                    <div class="col-md-5 mb-3 durationClass" style="letter-spacing:0px">
+                        @Model.ServiceName()
+
+                    </div>
+
+
+                    @*<div class="col-md-3 mb-3 justify-content-center" style="display:flex">
+            <input name="Duration" id="Duration" class="durationClass"  />
+
+            </div>*@
+
+                </div>
+
+
+                <hr />
+            }
+            else
+            {
+
+                <div class="row">
+                    <div class="col-md-5 mb-3 durationClass" style="letter-spacing:0px">
+                        @Model.ServiceName()
+
+                    </div>
+
+                    @* <div class="col-md-3 mb-3 justify-content-center" style="display:flex">
+            <input name="Duration" id="Duration" class="durationClass" />
+
+            </div>*@
+
+
+
+                </div>
+
+                <hr />
+
+
+            }
+        }
+
+
+
+
+
+        <input asp-for="MedicalCenterId" value="@_userService.GetMyCenterIdWeb()" hidden />
+
+        <div id="profile" class="widget" style="text-align:@Localizer["float"]">
+            <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                @Localizer["Patient Info"]
+            </h3>
+            <div>
+                <h4>@Model.PetOwner.FullName</h4>
+                <h4># &nbsp; @Model.PetOwner.GeneralNumber</h4>
+                <br />
+                <div class="profile-photo"></div>
+                <h4>@Localizer["PetName"]</h4>
+                @{
+                    try
+                    {
+                        <p>@Model.Pet.BloodType</p>
+                    }
+                    catch
+                    {
+                        <p></p>
+                    }
+                }
+                <br />
+                <h4>@Localizer["Sex"]</h4>
+                @{
+                    try
+                    {
+                        <center>
+                            <select disabled="true" class="form-control fieldLabel" asp-for="@Model.Pet.Sex" asp-items="@slSrvc.SexSL()" style="width:40%"></select>
+                        </center>
+                    }
+                    catch
+                    {
+                        <p></p>
+                    }
+                }
+                <br />
+
+
+            </div>
+        </div>
+
+        <div>
+
+
+
+            <div id="main-content">
+                <div id="news" class="widget" style="padding:0px; width:100% !important">
+                    <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                        @Localizer["Medical Evaluation"]
+                    </h3>
+
+                    <div class="container" style="padding:0px;">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <label class="fieldLabel" style="color:rgba(38, 102, 238, 1)   !important"> @Localizer["Vaccinated"]</label>
+                                @(Html.Kendo().RadioGroup()
+                                    .Name("Vaccinated")
+                                    .Items(i =>
+                                    {
+                                        i.Add().Label(Localizer["YES"]).Value("1");
+                                        i.Add().Label(Localizer["NO"]).Value("2");
+
+                                    })
+                                    .Value(Model.Vaccinated.ToString())
+
+                                    )
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Body Condition"]</label>
+                                @(Html.Kendo().RadioGroup()
+                                    .Name("BodyCondition")
+                                    .Items(i =>
+                                    {
+                                        i.Add().Label(Localizer["Emaciated"]).Value("1");
+                                        i.Add().Label(Localizer["Underweight"]).Value("2");
+                                        i.Add().Label(Localizer["Ideal"]).Value("3");
+                                        i.Add().Label(Localizer["Overweight"]).Value("4");
+                                        i.Add().Label(Localizer["Obese"]).Value("5");
+                                    })
+                                    .Value(Model.BodyCondition.ToString())
+
+                                    )
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Behavior"]</label>
+                                @(Html.Kendo().RadioGroup()
+                                    .Name("Behavior")
+                                    .Items(i =>
+                                    {
+                                        i.Add().Label(Localizer["Friendly"]).Value("1");
+                                        i.Add().Label(Localizer["Aggressive"]).Value("2");
+                                    })
+                                    .Value(Model.Behavior.ToString())
+
+                                    )
+                            </div>
+
+
+                            <table>
+                                <tr>
+                                    <td>
+@*                                         <select class="form-select" asp-for="Weight" asp-items="@slSrvc.WeightSL()">
+                                            <option value="">Weight (KG)</option>
+
+                                        </select> *@
+                                        <input class="form-control fieldInput" asp-for="Weight" placeholder="@Localizer["Weight"]" />
+
+                                    </td>
+
+                                    <td>
+                                        <input class="form-control fieldInput" asp-for="Temperature" placeholder="@Localizer["Temperature"]" />
+
+@*                                         <select class="form-select" asp-for="Temperature" asp-items="@slSrvc.TemperatureSL()">
+                                            <option value="">Temp (C)</option>
+
+                                        </select> *@
+                                    </td>
+
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div id="news" class="widget" style="padding:0px; width:100% !important">
+                    <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                        @Localizer["Diagnosis"]
+                    </h3>
+
+                    <div class="container" style="padding:0px;">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Prognosis"]</label>
+
+                                @(Html.Kendo().RadioGroup()
+                                    .Name("Prognosis")
+                                    .Items(i =>
+                                    {
+                                        i.Add().Label(Localizer["Excellent"]).Value("1");
+                                        i.Add().Label(Localizer["Good"]).Value("2");
+                                        i.Add().Label(Localizer["Fair"]).Value("3");
+                                        i.Add().Label(Localizer["Poor"]).Value("4");
+                                        i.Add().Label(Localizer["Hopeless"]).Value("5");
+                                    })
+                                    .Value(Model.Prognosis.ToString())
+
+                                    )
+
+                            </div>
+
+                            <div class="col-md-8">
+                                <table>
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Abdomen"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("Abdomen")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Value(Model.Abdomen.ToString())
+
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["SKIN"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("SKIN")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Value(Model.SKIN.ToString())
+
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Ears"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("Ears")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Value(Model.Ears.ToString())
+
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["HeartRate"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("HeartRate")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Value(Model.HeartRate.ToString())
+
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["MuscSkel"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("MuscSkel")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Value(Model.MuscSkel.ToString())
+
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+        <div>
+
+            <br />
+            <hr />
+            <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                @Localizer["Other Measurements"]
+            </h3>
+            <div class="@Localizer["k-rtl"]">
+                @(
+                    Html.Kendo().Grid<VisitMeasurement>()
+                    .Name("gridVisitMeasurement")
+                    .ToolBar
+                    (
+                    toolbar =>
+                    {
+
+
+                        toolbar.Search().Text(Localizer["Search"]);
+                    }).HtmlAttributes(new { @class = "myToolBar" })
+
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.Id).Visible(false);
+                        columns.Bound(p => p.Type);
+                        columns.Bound(p => p.Value);
+
+                        columns.Command(command =>
+                        {
+                            command.Destroy().TemplateId("Temp_Destroy");
+                        }).Width(250).Title(" ");
+                    }
+
+                    )
+                    .Mobile(MobileMode.Auto)
+                    .Editable(ed =>
+                    {
+                        ed.Mode(GridEditMode.InCell);
+
+                        ed.DisplayDeleteConfirmation(false);
+                    })
+
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(25)
+                    .Responsive(true)
+                    .Info(true)
+                    .Numeric(true)
+                    )
+                    .Sortable()
+                    .Navigatable()
+                    .Resizable(r => r.Columns(true))
+                    .Reorderable(r => r.Columns(true))
+                    .Filterable(filt =>
+                    {
+                        filt.Messages(msg => msg.And(Localizer["And"]));
+                        filt.Messages(msg => msg.Or(Localizer["Or"]));
+                        filt.Messages(msg => msg.Equals(Localizer["Equal"]));
+                        filt.Messages(msg => msg.Clear(Localizer["Cancel"]));
+                        filt.Messages(msg => msg.Filter(Localizer["Search"]));
+                        filt.Messages(msg => msg.Info(""));
+
+                        filt.Operators(op => op.ForDate(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Equal"]);
+                            fs.IsEqualTo(Localizer["Not Equal"]);
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+                        }
+                        )
+                        );
+
+                        filt.Operators(op => op.ForString(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.StartsWith(Localizer["Starts with"]);
+                            fs.EndsWith(Localizer["Ends with"]);
+                            fs.Contains(Localizer["Contains"]);
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+                            fs.DoesNotContain(Localizer["Does not Contain"]);
+
+                        }
+                        )
+                        );
+
+
+                        filt.Operators(op => op.ForNumber(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+
+                        }
+                        )
+                        );
+
+
+
+                    })
+                    .Scrollable()
+
+
+                    .HtmlAttributes(new { @class = "custom-grid", @style = "height:300px" }) // Add a custom class
+
+                    .DataSource(
+                    dataSource => dataSource
+
+                    .Ajax()
+                    .Batch(true)
+                    .PageSize(20)
+                    .Model(model => model.Id(p => p.Id))
+                    .Read(read => read.Action("VisitMeasurement_Read", "Appointment", new { VisitId = @Model.Id }).Type(HttpVerbs.Get))
+
+                    .Destroy(destroy =>
+                    {
+                        destroy.Action("Destroy_VisitMeasurement", "Appointment");
+                    })
+
+
+                    .Create(destroy =>
+                    {
+                        destroy.Action("Create_VisitMeasurement", "Appointment", new { PetOwnerId = @Model.PetOwnerId, VisitId = @Model.Id, BaseClinicId = @Model.BaseClinicId });
+                    })
+
+                    .Update(destroy =>
+                    {
+                        destroy.Action("Update_VisitMeasurement", "Appointment");
+                    })
+
+                    .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+                    )
+                    @*.Events(events => events.Edit("onEdit"))*@
+                    .Events(events => events.DataBound("onDataBound"))
+                    )
+
+            </div>
+
+
+        </div>
+        <br />
+        <br />
+
+
+
+
+        <div>
+
+            <br />
+            <hr />
+            <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                @Localizer["Treatment and Management"]
+            </h3>
+            <div class="@Localizer["k-rtl"]">
+                @(
+                    Html.Kendo().Grid<VisitTreatment>()
+                    .Name("gridVisitTreatment")
+                    .ToolBar
+                    (
+                    toolbar =>
+                    {
+
+
+                        toolbar.Search().Text(Localizer["Search"]);
+                    }).HtmlAttributes(new { @class = "myToolBar" })
+
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.Id).Visible(false);
+                        columns.Bound(p => p.Name);
+                        columns.Bound(p => p.Note);
+
+                        columns.Command(command =>
+                        {
+                            command.Destroy().TemplateId("Temp_Destroy");
+                        }).Width(250).Title(" ");
+                    }
+
+                    )
+                    .Mobile(MobileMode.Auto)
+                    .Editable(ed =>
+                    {
+                        ed.Mode(GridEditMode.InCell);
+
+                        ed.DisplayDeleteConfirmation(false);
+                    })
+
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(25)
+                    .Responsive(true)
+                    .Info(true)
+                    .Numeric(true)
+                    )
+                    .Sortable()
+                    .Navigatable()
+                    .Resizable(r => r.Columns(true))
+                    .Reorderable(r => r.Columns(true))
+                    .Filterable(filt =>
+                    {
+                        filt.Messages(msg => msg.And(Localizer["And"]));
+                        filt.Messages(msg => msg.Or(Localizer["Or"]));
+                        filt.Messages(msg => msg.Equals(Localizer["Equal"]));
+                        filt.Messages(msg => msg.Clear(Localizer["Cancel"]));
+                        filt.Messages(msg => msg.Filter(Localizer["Search"]));
+                        filt.Messages(msg => msg.Info(""));
+
+                        filt.Operators(op => op.ForDate(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Equal"]);
+                            fs.IsEqualTo(Localizer["Not Equal"]);
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+                        }
+                        )
+                        );
+
+                        filt.Operators(op => op.ForString(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.StartsWith(Localizer["Starts with"]);
+                            fs.EndsWith(Localizer["Ends with"]);
+                            fs.Contains(Localizer["Contains"]);
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+                            fs.DoesNotContain(Localizer["Does not Contain"]);
+
+                        }
+                        )
+                        );
+
+
+                        filt.Operators(op => op.ForNumber(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+
+                        }
+                        )
+                        );
+
+
+
+                    })
+                    .Scrollable()
+
+
+                    .HtmlAttributes(new { @class = "custom-grid", @style = "height:300px" }) // Add a custom class
+
+                    .DataSource(
+                    dataSource => dataSource
+
+                    .Ajax()
+                    .Batch(true)
+                    .PageSize(20)
+                    .Model(model => model.Id(p => p.Id))
+                    .Read(read => read.Action("VisitTreatment_Read", "Appointment", new { VisitId = @Model.Id }).Type(HttpVerbs.Get))
+
+                    .Destroy(destroy =>
+                    {
+                        destroy.Action("Destroy_VisitTreatment", "Appointment");
+                    })
+
+
+                    .Create(destroy =>
+                    {
+                        destroy.Action("Create_VisitTreatment", "Appointment", new { PetOwnerId = @Model.PetOwnerId, VisitId = @Model.Id, BaseClinicId = @Model.BaseClinicId });
+                    })
+
+                    .Update(destroy =>
+                    {
+                        destroy.Action("Update_VisitTreatment", "Appointment");
+                    })
+
+                    .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+                    )
+                    @*.Events(events => events.Edit("onEdit"))*@
+                    .Events(events => events.DataBound("onDataBound"))
+                    )
+
+            </div>
+
+
+        </div>
+        <br />
+        <hr />
+
+        @*         <h3 style="text-align:@Localizer["float"]">@Localizer["Session Video"]</h3>
+
+
+        <div id="videoPreview">
+        <video controls style="height:500px;width:500px">
+        <source src="/visit/@Model.VisitVideo" />
+        </video>
+        </div> *@
+
+    </div>
+
+
+
+
+</form>
+
+
+
+
+
+<style>
+
+    .custom-grid .k-grid-pager {
+        border-bottom: 1px solid var(--toolbar-bg-color) !important;
+    }
+
+    .k-window-titlebar {
+        font-size: 35px !important;
+        border-color: inherit !important;
+        color: white !important;
+        /* background-color: var(--site-navbar-bg-color); */
+        background-color: black !important;
+        font-weight: bold;
+    }
+
+    #example {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        overflow: hidden;
+    }
+
+    .dash-head {
+        max-width: 970px;
+        height: 80px;
+        background-color: #222;
+        position: relative;
+    }
+
+        .dash-head .k-rpanel-toggle {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 20px;
+            left: 20px;
+        }
+
+    .panel-wrap {
+        max-width: 968px;
+        background-color: #f5f5f5;
+        border: 1px solid #e5e5e5;
+        position: relative;
+    }
+
+    #slidebar {
+        margin: 0;
+        padding: 20px 0 20px 20px;
+        vertical-align: top;
+    }
+
+    @@media (max-width: 1000px) {
+        #slidebar {
+            background: #fff;
+            padding: 20px;
+            border-left: 1px solid #e5e5e5;
+            /* show sidebar in container, demo only*/
+            position: absolute;
+            top: 0;
+            bottom: 0;
+        }
+
+            #slidebar.k-rpanel-expanded {
+                box-shadow: 0 0 10px rgba(0,0,0,.3);
+            }
+    }
+
+    #main-content {
+        overflow: hidden;
+        margin: 0;
+        padding: 20px;
+        min-height: 580px;
+        vertical-align: top;
+    }
+
+    /* WIDGETS */
+    .widget {
+        margin: 0 0 20px;
+        padding: 0;
+        background-color: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 3px;
+    }
+
+        .widget div {
+            padding: 10px;
+            min-height: 50px;
+        }
+
+        .widget h3 {
+            font-size: 12px;
+            padding: 8px 10px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e7e7e7;
+        }
+
+            .widget h3 span {
+                float: right;
+            }
+
+                .widget h3 span:hover {
+                    cursor: pointer;
+                    background-color: #e7e7e7;
+                    border-radius: 20px;
+                }
+
+    /* PROFILE */
+    .profile-photo {
+        width: 80px;
+        height: 80px;
+        margin: 10px auto;
+        border-radius: 100px;
+        border: 1px solid #e7e7e7;
+        background: url(@Url.Content(Model.Pet.ImageFullPath)) no-repeat 50% 50%;
+    }
+
+    #profile div {
+        text-align: center;
+    }
+
+    #profile h4 {
+        width: auto;
+        margin: 0 0 5px;
+        font-size: 1.2em;
+        color: #1f97f7;
+    }
+
+    #profile p {
+        margin: 0 0 10px;
+    }
+
+    /* BLOGS & NEWS */
+    #blogs div,
+    #news div {
+        padding: 0 20px 20px;
+    }
+
+    #teammates h4,
+    #blogs h4,
+    #news h4 {
+        width: auto;
+        margin: 20px 0 2px;
+        font-size: 1.4em;
+        color: #1f97f7;
+        font-weight: normal;
+    }
+
+    .blog-info {
+        margin: 0 0 10px;
+        font-size: .9em;
+        color: #787878;
+    }
+
+    #slidebar #blogs h4 {
+        font-size: 1em;
+    }
+
+    #slidebar #blogs p {
+        display: none;
+    }
+
+    #slidebar #blogs .blog-info {
+        display: block;
+    }
+
+    #main-content #news h4 {
+        font-size: 1.2em;
+        line-height: 1.4em;
+    }
+
+        #main-content #news h4 span {
+            display: block;
+            float: left;
+            width: 100px;
+            color: #000;
+            padding-right: 10px;
+        }
+
+    #slidebar #news h4 {
+        font-size: 1em;
+    }
+
+        #slidebar #news h4 span {
+            display: block;
+            margin-bottom: 3px;
+            color: #000;
+        }
+
+    /* TEAMMATES */
+    .team-mate:after {
+        content: ".";
+        display: block;
+        height: 0;
+        line-height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+
+    #teammates .team-mate h4 {
+        font-size: 1.4em;
+        font-weight: normal;
+        margin-top: 12px;
+    }
+
+    .team-mate p {
+        margin: 0;
+    }
+
+    .team-mate img {
+        float: left;
+        margin: 0 15px 0 0;
+        border: 1px solid #e7e7e7;
+        border-radius: 60px;
+    }
+
+
+    .k-dialog .k-overlay {
+        display: none !important;
+    }
+
+</style>
+
+
+
+
+<script>
+
+    $("#sidebar").addClass("active");
+
+
+    document.getElementById("sidebarCollapse").addEventListener("click", function () {
+
+        var sidebar = document.getElementById('sidebar');
+
+        toggleNavBar(sidebar, "active")
+        return 0;
+
+    });
+
+
+    function toggleNavBar(el, classname) {
+        if (el.classList.contains(classname)) {
+            el.classList.remove(classname)
+        }
+        else {
+            el.classList.add(classname)
+        }
+        return 0;
+    }
+
+
+
+</script>
+
+
+
+
+<script id="Temp_Destroy" type="text/kendo-tmpl">
+    <span class="k-grid-delete" style="font-size:24px;cursor:pointer;color:red"><i class="fa fa-trash"></i></span>
+</script>
+
+<script id="Temp_Edit" type="text/kendo-tmpl">
+    <span class="k-grid-edit"   style="font-size:24px;cursor:pointer;color:rgba(1, 81, 83, 1)"><i class="fas fa-edit"></i></span>
+</script>

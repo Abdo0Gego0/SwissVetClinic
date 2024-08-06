@@ -1,0 +1,123 @@
+﻿@model Pet
+@inject IUserService _userService
+@inject ISelectListService slctSrvc
+<div class="bannerContainer">
+
+    <div class="row" style="width:100%;align-items:center;justify-content:center">
+        <input hidden asp-for="Image64" /> 
+        <input hidden asp-for="PetOwnerId" /> 
+        <input hidden asp-for="MedicalCenterId" value="@_userService.GetMyCenterIdWeb()" />
+        <center>
+
+        @{
+            try{
+            if (!string.IsNullOrEmpty(Model.ImageName))
+            {
+                <div onclick="document.getElementById('ImageFile').click()" class="picCircle"
+                id="prevImg12" style="cursor:pointer;background-image:url(@Model.ImageFullPath) !important">
+                </div>
+            }
+            else
+            {
+                <div onclick="document.getElementById('ImageFile').click()" class="picCircle"
+                id="prevImg12" style="cursor:pointer;">
+                    </div>
+                }
+            }
+            catch
+            {
+                <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg12" style="cursor:pointer;">
+                </div>
+            }
+        }
+        <br />
+        <br />
+        <br />
+            <div>
+                <span>
+                    <i style="background-image:url('/AdminDashboard/images/gallery-export.svg');display: inline-block;width:24px;height:24px"></i>
+                    <span class="uploadPicture"
+                          onclick="document.getElementById('ImageFile').click()">
+                        @Localizer["ChooseImage"]
+                    </span>
+                </span>
+                <input type="file" asp-for="ImageFile" onchange="preview12()"  accept="image/*" style="display:none">
+            </div>
+        </center>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row mb-3">
+        <div class="col-md-6 mb-3">
+            <label class="fieldLabel" asp-for="PetName"></label>
+            <input class="form-control fieldInput" asp-for="PetName" />
+            <span class="text-danger" asp-validation-for="PetName"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label class="fieldLabel" asp-for="PetType"></label>
+            <input class="form-control fieldInput" asp-for="PetType" />
+            <span class="text-danger" asp-validation-for="PetType"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label class="fieldLabel" asp-for="BloodType"></label>
+            <input class="form-control fieldInput" asp-for="BloodType" />
+            <span class="text-danger" asp-validation-for="BloodType"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="fieldLabel" asp-for="LifeStyle"></label>
+            <input class="form-control fieldInput" asp-for="LifeStyle" />
+            <span class="text-danger" asp-validation-for="LifeStyle"></span>
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="fieldLabel" asp-for="Breed"></label>
+            <input class="form-control fieldInput" asp-for="Breed" />
+            <span class="text-danger" asp-validation-for="Breed"></span>
+        </div>    
+        
+        <div class="col-md-6 mb-3">
+            <label class="fieldLabel" asp-for="Sex"></label>
+            <select asp-for="Sex" asp-items="@slctSrvc.SexSL()" class="form-select fieldLabel">
+                
+            </select>
+            <span class="text-danger" asp-validation-for="Sex"></span>
+        </div>
+
+
+        <div class="col-md-6 mb-3">
+            <label style="display:flex" class="dateLabel">@Html.Raw(Localizer["BirthDate"])</label>
+            @(Html.Kendo().DateTimePickerFor(m => m.BirthDate).HtmlAttributes(new { @required = true, @class = "fieldInput" }).Format("{0:yyyy-MM-dd HH:mm}"))
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    function getBase6412(file) {
+        debugger;
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result);
+            $("#Image64").val(reader.result).trigger("change");
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+
+    function preview12() {
+        debugger;
+
+        var file = document.getElementById('ImageFile').files[0];
+        document.getElementById('prevImg12').style.backgroundImage = "url('" + URL.createObjectURL(file) + "')";
+
+        getBase6412(file);
+
+    }
+
+</script>

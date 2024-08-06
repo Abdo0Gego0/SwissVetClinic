@@ -1,0 +1,126 @@
+﻿
+@inject ISelectListService slSrvc
+
+@model Product
+
+<center>
+    <h3 class="text-danger">@ViewBag.ErrorMessage</h3>
+</center>
+
+<form asp-action="Create_Product" asp-controller="CenterProducts" method="post" enctype='multipart/form-data'>
+
+    <div class="container">
+        <h1 class="LoginTitle">@Localizer["Item Card"]</h1>
+    </div>
+    <hr />
+
+    <input asp-for="ProductTranslation[0].LangCode" hidden value="en-US" />
+    <input asp-for="ProductTranslation[1].LangCode" hidden value="ar" />
+
+    <div class="container">
+
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fieldLabel" asp-for="ProductCategoriesId"></label>
+                    <select class="form-control form-select" asp-for="ProductCategoriesId" asp-items="@slSrvc.CategoriesSL()">
+                    </select>
+                    <span class="text-danger" asp-validation-for="ProductCategoriesId"></span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <hr />
+
+
+
+
+        <div dir="ltr">
+
+
+
+
+
+
+            <label class="fieldLabel" style="margin:0px; direction:ltr !important">
+                Basic Info
+            </label>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">Name</label>
+                    <input type="text" class="form-control fieldInput" style="direction:ltr !important" asp-for="ProductTranslation[0].Name" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="ProductTranslation[0].Name"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">SKU</label>
+                    <input type="text" class="form-control fieldInput" style="direction:ltr !important" asp-for="ProductTranslation[0].SKU" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="ProductTranslation[0].SKU"></span>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">Description</label>
+                    <input type="text" class="form-control fieldInput" style="direction:ltr !important" asp-for="ProductTranslation[0].Description" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="ProductTranslation[0].Description"></span>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">KeyWords</label>
+                    <input type="text" class="form-control fieldInput" style="direction:ltr !important" asp-for="ProductTranslation[0].KeyWords" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="ProductTranslation[0].KeyWords"></span>
+                </div>
+
+
+            </div>
+        </div>
+        <br />
+        <br />
+        <hr />
+
+        <div dir="rtl">
+            <label class="fieldLabel" style="margin:0px;" dir="rtl">
+                المعلومات العامة
+            </label>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl" >الاسم</label>
+                    <input type="text" class="form-control fieldInput" asp-for="ProductTranslation[1].Name" />
+                    <span class="text-danger" asp-validation-for="ProductTranslation[1].Name"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="fieldLabel" style="direction:rtl !important">SKU</label>
+                    <input type="text" class="form-control fieldInput" style="direction:ltr !important" asp-for="ProductTranslation[0].SKU" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="ProductTranslation[0].SKU"></span>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl" >الوصف</label>
+                    <input type="text" class="form-control fieldInput" asp-for="ProductTranslation[1].Description" />
+                    <span class="text-danger" asp-validation-for="ProductTranslation[1].Description"></span>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">كلمات مفتاحية</label>
+                    <input type="text" class="form-control fieldInput" asp-for="ProductTranslation[1].KeyWords" />
+                    <span class="text-danger" asp-validation-for="ProductTranslation[1].KeyWords"></span>
+                </div>
+            </div>
+        </div>
+
+
+        <br />
+        <br />
+        <hr />
+        <br />
+        <button type="submit" class="form-control addCtrl"> @Localizer["SaveAndContinue"]</button>
+
+
+
+    </div>
+
+
+</form>
+

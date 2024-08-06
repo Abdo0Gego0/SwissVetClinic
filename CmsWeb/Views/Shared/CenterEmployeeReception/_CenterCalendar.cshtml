@@ -1,0 +1,421 @@
+﻿@using CmsWeb.Views.Shared.CenterAdmin
+@* @(await Html.RenderComponentAsync<_B_CenterCalendar>(RenderMode.Server)) *@
+
+@inject IMedicalCenterService medicalCenterService
+@inject ISelectListService slSrvc
+
+@inject IMedicalCenterService medicalCenterService
+@inject ISelectListService slSrvc
+@inject IUserService userSrvc
+@inject INavService StyleServiceMain
+
+
+@{
+
+    List<BaseClinic> clinics = new ApplicationDbContext().BaseClinic
+    .Where(a => a.MedicalCenterId == (Guid)userSrvc.GetMyCenterIdWeb())
+    .Select(a => a.GetModelByLnag("ar")).ToList();
+
+}
+<br />
+<br />
+
+<li style="list-style:none;">
+    <a href="@Url.Action("Index","Bills",new {area="CenterEmployeeReception"})" target="_blank" style="font-size:20px; font-weight:bold;">
+        <img style="width:36px;height:36px" src='~/navimages/Accounting.svg' />
+
+
+        @Localizer["Bills and Diagnosis"]
+        <span id="newBillsSpan1" class="SideBarNotification">+3</span>
+
+    </a>
+
+</li>
+
+<br />
+
+<div class="container justify-content-center" style="align-items:center;">
+    <div class="row mb-4">
+        @{
+            foreach (BaseClinic item in clinics)
+            {
+                <div class="col-md-3  mb-4">
+                    <div class="classClinic classFree" id="@item.Id">
+                        @item.BaseClinicTranslation[0].Name
+
+                        <h1 id="@item.Id clinicSpan" class="clinicSpan" style="display:none">
+                            العيادة مشغولة
+                        </h1>
+
+                    </div>
+                </div>
+
+            }
+        }
+    </div>
+</div>
+
+<hr />
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <button type="button" class="addCtrl" onclick="Create_Patient()"><i class="fa fa-plus">&nbsp;</i>@Localizer["New Patient"]</button>
+        </div> 
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+
+            <label class="fieldLabel">@Localizer["Choose Clinic"]</label>
+
+            <select class="form-select" name="clinicFilter" id="clinicFilter" asp-items="@slSrvc.ClinicsSL()" onchange="clinicFilter()">
+                <option value="" selected> @Localizer["All Clinics"]</option>
+            </select>
+
+
+
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="fieldLabel" style="margin:5px"> @Localizer["Group Orientation"]</label>
+            @(
+                Html.Kendo().Switch()
+                .Name("switchGroup")
+                .Checked(true)
+                .Messages(c => c.Checked(Localizer["Horizontal"]).Unchecked(Localizer["Vertical"])).HtmlAttributes(new { @style = "width:150px;float:" + Localizer["float"] + ";" })
+                .Events(ev => ev.Change("changeGroupingDirection"))
+
+                )
+
+        </div>
+    </div>
+</div>
+
+<div class="@Localizer["k-rtl"]">
+
+
+    @(
+        Html.Kendo().Scheduler<AppointmentViewModel>()
+        .Timezone(medicalCenterService.GetMyCenterTimeZoneId())
+        .EventTemplate(
+        "<div class='movie-template' style='min-height:30px;min-width:80;background-color:#=Color# !important'>" +
+        "<p>" +
+        
+
+        "#= kendo.toString(start, 'hh:mm') #" +
+        "</p>" +
+        
+        "</div>")
+        .Name("scheduler")
+        .Date(DateTime.Now)
+        .Messages(msg =>
+        {
+            msg.DeleteWindowTitle(Html.Raw(Localizer["Delete"]).ToString());
+            msg.Editor(ed1 => ed1.EditorTitle(Html.Raw(Localizer["AppEditor"]).ToString()));
+            msg.ShowFullDay(Html.Raw(Localizer["ShowFullDay"]).ToString());
+            msg.ShowWorkDay(Html.Raw(Localizer["ShowWorkDay"]).ToString());
+            msg.Cancel(Html.Raw(Localizer["Cancel"]).ToString()); msg.Destroy(Html.Raw(Localizer["Delete"]).ToString()); msg.Search(Html.Raw(Localizer["Search"]).ToString()); msg.NoData(Html.Raw(Localizer["NoData"]).ToString()); msg.Refresh(Html.Raw(Localizer["Refresh"]).ToString()); msg.Save(Html.Raw(Localizer["Save"]).ToString()); msg.Today(Html.Raw(Localizer["Today"]).ToString());
+        })
+        @*  .Toolbar(t => t.Search())  *@
+        .StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00))
+            .Height(600)
+
+            .Views(views =>
+            {
+
+                views.DayView(dayView =>
+                {
+                    //dayView.Selected(true);
+                    dayView.ShowWorkHours();
+                    dayView.WorkDayStart(8,0,0);
+                    dayView.WorkDayEnd(22,0,0);
+                });
+
+                views.WeekView(WeekView =>
+                {
+                    WeekView.Selected(true);
+                    WeekView.WorkDayStart(8 , 0, 0);
+                    WeekView.WorkDayEnd  (22, 0, 0);
+                    WeekView.ShowWorkHours();
+                }
+                );
+            views.MonthView();
+            views.YearView();
+            @*         views.AgendaView();
+    views.TimelineView(); *@
+        })
+        .Editable(ed => ed.TemplateName("AppointmentEditor"))
+        .Editable(ed => ed.Confirmation(Localizer["Do you want to delete this item?"]))
+
+        .CurrentTimeMarker(a => a.UseLocalTimezone(false))
+        .Group(group => group.Resources("BaseClinicId").Orientation(SchedulerGroupOrientation.Horizontal))
+        
+        .Resources(resource =>
+        {
+            resource.Add(m => m.BaseClinicId)
+            .Title(Localizer["Clinic"])
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .DataSource(d => d
+            .Custom()
+            .Schema(s => s
+            .Model(m => m.Id("Value"))
+            .Data("Data")
+            )
+            .Transport(t =>
+            {
+                t.Read("ReadClinic", "Appointment");
+            })
+
+            );
+
+            resource.Add(m => m.PetOwnerId)
+            .Title(Localizer["Patient"])
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .DataSource(d => d
+            .Custom()
+            .Schema(s => s
+            .Model(m => m.Id("Value"))
+            .Data("Data")
+            )
+            .Transport(t =>
+            {
+                t.Read("ReadPatient", "Appointment");
+            })
+
+
+            );
+            resource.Add(m => m.CenterServicesId)
+            .Title(Localizer["Services"])
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .DataSource(d => d
+            .Custom()
+            .Schema(s => s
+            .Model(m => m.Id("Id"))
+            .Data("Data")
+            )
+            .Transport(t =>
+            {
+                t.Read("ReadServices", "Appointment");
+            })
+
+
+            );
+
+        })
+        
+        .Events(e =>
+        {
+            e.Navigate("scheduler_navigate");
+            e.Remove("scheduler_remove");
+            e.Edit("scheduler_edit");
+            
+
+        })
+        .DataSource(d => d
+
+        .Events(e => e.Error("onError"))
+
+        .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+            m.Field(f => f.Title).DefaultValue("...");
+            m.Field(f => f.Description).DefaultValue("...");
+            m.Field(f => f.Timezone).DefaultValue("Asia/Dubai");
+            m.Field(f => f.StartTimezone).DefaultValue("Asia/Dubai");
+            m.Field(f => f.EndTimezone).DefaultValue("Asia/Dubai");
+            m.Field(f => f.IsFirstVisit).DefaultValue(true);
+        })
+        .Read("Timeline_Read", "Appointment")
+        .Create("Timeline_Create", "Appointment")
+        .Destroy("Timeline_Destroy", "Appointment")
+        .Update("Timeline_Update", "Appointment")
+
+        )
+
+
+        )
+
+</div>
+
+<script type="text/javascript">
+
+
+
+    function changeGroupingDirection(e) {
+
+        var scheduler = $("#scheduler").data("kendoScheduler");
+
+
+        if (e.checked) {
+            scheduler.options.group.orientation = "vertical"; //"horizontal"
+        }
+        else {
+            scheduler.options.group.orientation = "horizontal"; //"vertical"
+        }
+        scheduler.view(scheduler.view().name);
+
+
+
+    }
+
+
+    function scheduler_navigate(e) {
+        var selectedClinic = $("#clinicFilter").val();
+
+        
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+        schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic, view: e.view, date: e.date };
+        schedulerDataSource.read();
+    }
+
+    function scheduler_remove(e) {
+        if (e.event.IsStarted) {
+            alert("This appointment cannot be deleted, because the session is started!!");
+            return;
+        }
+
+        if (e.event.IsFinished) {
+            alert("This appointment cannot be deleted, because the session is finished!!");
+            return;
+
+        }
+
+        debugger
+    }
+
+    function scheduler_edit(e) {
+        if (e.event.IsStarted) {
+            alert("This appointment cannot be updated, because the session is started!!");
+            return;
+        }
+
+        if (e.event.IsFinished) {
+            alert("This appointment cannot be updated, because the session is finished!!");
+            return;
+
+        }
+
+        debugger
+    }
+
+    function clinicFilter() {
+        var selectedClinic = $("#clinicFilter").val();
+        var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic };
+        schedulerDataSource.read();
+    }
+
+    function onError(e) {
+        // this.cancelChanges();
+
+        // var errorMessage = "";
+        // if (e.errors) {
+        //     for (var error in e.errors) {
+        //         errorMessage += e.errors[error].errors[0] + " ";
+        //     }
+        // }
+
+        // alert(errorMessage);
+    }
+
+</script>
+
+<script>
+
+    function onAdditionalDataClinic() {
+        return {
+            text: $("#BaseClinicName").val()
+        };
+    }
+
+    function onSelectClinic(e) {
+        var dataItem = this.dataItem(e.item.index());
+        $("#BaseClinicId").val(e.dataItem.Id).trigger("change");
+
+    }
+
+</script>
+
+
+<script>
+
+    function onAdditionalDataPatien() {
+        return {
+            text: $("#PatienName").val()
+        };
+    }
+
+    function onSelectPatient(e) {
+        var dataItem = this.dataItem(e.item.index());
+        $("#PetOwnerId").val(e.dataItem.Id).trigger("change");
+    }
+
+    function filterPets() {
+        return {
+            ownerId: $("#PetOwnerId").val()
+        };
+    }
+
+</script>
+
+
+<script>
+
+    function Create_Patient() {
+        var url = "/CenterEmployeeReception/Patient/Create_Patient/";
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.click();
+
+    }
+    function sendViaWhatsapp() {
+        
+        var phone = document.getElementById("phone").value;
+        var title = document.getElementsByName("title")[0].value;
+        var description = document.getElementsByName("description")[0].value;
+        var start = document.getElementsByName("start")[0].value;
+        var end = document.getElementsByName("end")[0].value;
+        var message = "Title: " + title + "%0a" +
+                      "\nDescription: " + description + "%0a" +
+                      "\nStart: " + start + "%0a" +
+                      "\nEnd: " + end;
+        var url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + message;
+        window.open(url);
+    }
+
+</script>
+
+
+
+

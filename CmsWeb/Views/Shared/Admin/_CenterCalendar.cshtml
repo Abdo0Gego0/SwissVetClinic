@@ -1,0 +1,275 @@
+﻿@using CmsWeb.Views.Shared.CenterAdmin
+@* @(await Html.RenderComponentAsync<_B_CenterCalendar>(RenderMode.Server)) *@
+
+@inject IMedicalCenterService medicalCenterService
+@inject ISelectListService slSrvc
+
+@inject IMedicalCenterService medicalCenterService
+@inject ISelectListService slSrvc
+@inject IUserService userSrvc
+
+
+
+<br />
+<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 mb-3">
+                        <label class="fieldLabel">@Localizer["Choose Clinic"]</label>
+            
+            <select class="form-select" name="clinicFilter" id="clinicFilter" asp-items="@slSrvc.SystemClinicsSL()" onchange="clinicFilter()">
+                <option value="" selected> @Localizer["All Clinics"]</option>
+                
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label  class="fieldLabel"> @Localizer["Group Orientation"]</label>
+            @(
+                Html.Kendo().Switch()
+                .Name("switchGroup")
+                .Checked(true)
+                .Messages(c => c.Checked(Localizer["Horizontal"]).Unchecked(Localizer["Vertical"])).HtmlAttributes(new { @style = "width:150px;float:" + Localizer["float"] + ";" })
+                .Events(ev => ev.Change("changeGroupingDirection"))
+
+                )
+
+        </div>
+    </div>
+</div>
+
+
+
+@(Html.Kendo().Scheduler<AppointmentViewModel>()
+  .Timezone(medicalCenterService.GetMyCenterTimeZoneId())  
+          .EventTemplate(
+                "<div class='movie-template' style='min-height:100px;background-color:#=Color# !important'>" +
+                    "<p>" +
+                    "#= PatientName # " +
+
+                        "#= kendo.toString(start, 'hh:mm') # - #= kendo.toString(end, 'hh:mm') #" +
+                    "</p>" +
+                    "<h3>#= title #</h3>" +
+                "</div>")
+    .Name("scheduler")
+    .Date(DateTime.Now)
+    @* .Toolbar(t => t.Search()) *@
+    .StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00))
+    .Height(600)
+    .Views(views =>
+    {
+        views.DayView(dayView =>
+        {
+            dayView.Selected(true);
+            dayView.ShowWorkHours();
+            dayView.WorkDayStart(8, 0, 0);
+            dayView.WorkDayEnd(22, 0, 0);
+        });
+        views.WeekView(WeekView =>
+{
+    WeekView.WorkDayStart(8, 0, 0);
+    WeekView.WorkDayEnd(22, 0, 0);
+    WeekView.ShowWorkHours();
+}
+);
+        views.WeekView();
+        views.MonthView();
+        views.YearView();
+@*         views.AgendaView();
+        views.TimelineView(); *@
+    })
+     .Editable(ed => ed.TemplateName("AppointmentEditor"))  
+    .CurrentTimeMarker(a=>a.UseLocalTimezone(false))
+         .Group(group => group.Resources("BaseClinicId").Orientation(SchedulerGroupOrientation.Vertical)) 
+
+    .Resources(resource =>
+    {
+    resource.Add(m => m.BaseClinicId)
+            .Title(Localizer["Clinic"])
+                
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .DataSource(d => d
+            .Custom()
+            .Schema(s => s
+.Model(m => m.Id("Value"))
+.Data("Data")
+            )
+            .Transport(t =>
+            {
+                t.Read("ReadClinic", "Appointment");
+            })
+
+        );
+
+    resource.Add(m => m.PetOwnerId)
+.Title(Localizer["Patient"])
+        
+.DataTextField("Text")
+.DataValueField("Value")
+.DataSource(d => d
+.Custom()
+.Schema(s => s
+    .Model(m => m.Id("Value"))
+    .Data("Data")
+)
+.Transport(t =>
+{
+    t.Read("ReadPatient", "Appointment");
+})
+    
+
+);
+        
+    })
+        .Events(e =>
+    {
+        e.Navigate("scheduler_navigate");
+    })
+    .DataSource(d => d
+
+        .Events(e => e.Error("onError"))
+        
+        .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+            m.Field(f => f.Title).DefaultValue("...");
+            m.Field(f => f.Description).DefaultValue("...");
+            m.Field(f => f.Timezone).DefaultValue("Asia/Dubai");
+            m.Field(f => f.StartTimezone).DefaultValue("Asia/Dubai");
+            m.Field(f => f.EndTimezone).DefaultValue("Asia/Dubai");
+            m.Field(f => f.IsFirstVisit).DefaultValue(true);
+        })
+        .Read("Timeline_Read", "Appointment")
+        .Create("Timeline_Create", "Appointment")
+        .Destroy("Timeline_Destroy", "Appointment")
+        .Update("Timeline_Update", "Appointment")
+
+    )
+
+    
+)
+
+
+    <script type="text/javascript">
+
+
+
+
+    function changeGroupingDirection(e) {
+
+        var scheduler = $("#scheduler").data("kendoScheduler");
+
+
+        if (e.checked) {
+            scheduler.options.group.orientation = "vertical"; //"horizontal"
+        }
+        else {
+            scheduler.options.group.orientation = "horizontal"; //"vertical"
+        }
+        scheduler.view(scheduler.view().name);
+
+
+
+    }
+
+    function scheduler_navigate(e) {
+        var selectedClinic = $("#clinicFilter").val();
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+        schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic, view: e.view, date: e.date };
+        schedulerDataSource.read();
+    }
+
+
+
+
+
+    function scheduler_remove(e) {
+        if (e.event.IsStarted || e.event.IsFinished) {
+            alert("This appointment cannot be deleted, because the session is started!!");
+            return;
+        }
+
+        debugger
+    }
+
+    function clinicFilter() {
+        var selectedClinic = $("#clinicFilter").val();
+        var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic };
+        schedulerDataSource.read();
+    }
+
+    function onError(e) {
+        // this.cancelChanges();
+
+        // var errorMessage = "";
+        // if (e.errors) {
+        //     for (var error in e.errors) {
+        //         errorMessage += e.errors[error].errors[0] + " ";
+        //     }
+        // }
+
+        // alert(errorMessage);
+    }
+
+    </script>
+
+<script>
+
+    function onAdditionalDataClinic() {
+        return {
+            text: $("#BaseClinicName").val()
+        };
+    }
+
+    function onSelectClinic(e) {
+        var dataItem = this.dataItem(e.item.index());
+        $("#BaseClinicId").val(e.dataItem.Id).trigger("change");
+
+    }
+
+</script>
+
+
+<script>
+
+    function onAdditionalDataPatien() {
+        return {
+            text: $("#PatienName").val()
+        };
+    }
+
+    function onSelectPatient(e) {
+        var dataItem = this.dataItem(e.item.index());
+        $("#PetOwnerId").val(e.dataItem.Id).trigger("change");
+
+    }
+
+</script>

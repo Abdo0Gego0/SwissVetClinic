@@ -1,0 +1,160 @@
+﻿
+@model CenterAdmin
+
+@inject ISelectListService slSrvc
+
+<center>
+    <h3 class="text-danger">@ViewBag.ErrorMessage</h3>
+</center>
+
+<form asp-action="CreateCenterAdmin" asp-controller="AllCenter" method="post" id="myForm" enctype='multipart/form-data'>
+
+    <div class="container">
+
+
+        <div class="row" style="width:100%;align-items:center;justify-content:center">
+
+
+            <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg" style="cursor:pointer;">
+            </div>
+
+            <center>
+                <div>
+                    <span>
+                        <i class="fa fa-camera"></i>
+                        <span class="uploadPicture"
+                              onclick="document.getElementById('ImageFile').click()">
+                             @Localizer["Choose Admin Image"]
+                           
+                        </span>
+                    </span>
+                    <input type="file" asp-for="ImageFile" onchange="preview()" accept="image/*" style="display:none">
+                </div>
+            </center>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fieldLabel" asp-for="MedicalCenterId"></label>
+                    <select class="form-control" asp-for="MedicalCenterId" asp-items="@slSrvc.CentersSL()">
+                        <option> @Localizer["Select Medical Center"]</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="MedicalCenterId"></span>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <p class="text-center mb-6"> @Localizer["Admin info from passport"]</p>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="fieldLabel" asp-for="FirstName"></label>
+                <input class="form-control fieldInput" asp-for="FirstName" />
+                <span class="text-danger" asp-validation-for="FirstName"></span>
+
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="MiddleName"></label>
+                <input class="form-control fieldInput" asp-for="MiddleName"  />
+                <span class="text-danger" asp-validation-for="MiddleName"></span>
+
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="LastName"></label>
+                <input class="form-control fieldInput" asp-for="LastName"  />
+                <span class="text-danger" asp-validation-for="LastName"></span>
+
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="NationalCardId"></label>
+                <input class="form-control fieldInput" asp-for="NationalCardId"  />
+                <span class="text-danger" asp-validation-for="NationalCardId"></span>
+
+            </div>
+
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="Nationality"></label>
+                <input class="form-control fieldInput" asp-for="Nationality"  />
+                <span class="text-danger" asp-validation-for="Nationality"></span>
+
+            </div>
+
+            <div class="col-md-4">
+                <label class="fieldLabel" asp-for="PassportNumber"></label>
+                <input class="form-control fieldInput" asp-for="PassportNumber"  />
+                <span class="text-danger" asp-validation-for="PassportNumber"></span>
+
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="JobCardNumber"></label>
+                <input class="form-control fieldInput" asp-for="JobCardNumber"  />
+                <span class="text-danger" asp-validation-for="JobCardNumber"></span>
+
+            </div>
+
+        </div>
+
+
+        <hr />
+
+        <p class="text-center mb-6">@Localizer["Account Info"]</p>
+        <div class="row">
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="PersonEmail"></label>
+                <input class="form-control fieldInput" asp-for="PersonEmail" />
+                <span class="text-danger" asp-validation-for="PersonEmail"></span>
+            </div>
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="PersonPhone"></label>
+                <input class="form-control fieldInput" asp-for="PersonPhone" />
+                <span class="text-danger" asp-validation-for="PersonPhone"></span>
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="PersonUserName"></label>
+                <input class="form-control fieldInput" asp-for="PersonUserName" />
+                <span class="text-danger" asp-validation-for="PersonUserName"></span>
+            </div>
+
+            <div class="col-md-4  mb-3">
+                <label class="fieldLabel" asp-for="Password"></label>
+                <input class="form-control fieldInput" asp-for="Password" value="@ViewBag.Password" />
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+
+        </div>
+
+
+        <hr />
+
+
+
+        <br />
+        <br />
+        <br />
+        <button type="submit" class="form-control addCtrl"> @Localizer["Save"]</button>
+
+    </div>
+
+
+</form>
+
+
+<script>
+    function preview(evt) {
+        var filee = event.target.files[0];
+        document.getElementById('prevImg').style.backgroundImage = "url('" + URL.createObjectURL(filee) + "')";
+    }
+</script>
+
+<script id="Temp_Destroy" type="text/kendo-tmpl">
+    <span class="k-grid-delete" style="font-size:24px;cursor:pointer;color:red"><i class="fa fa-trash"></i></span>
+</script>

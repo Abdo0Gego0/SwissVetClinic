@@ -1,0 +1,16 @@
+﻿@model List<CmsDataAccess.DbModels.BillProduct>
+
+
+@foreach (var product in Model)
+{
+    <tr>
+        <td>
+            @product.Product.ProductTranslation
+            .FirstOrDefault(pt => pt.LangCode == "en-US")?.Name ?? "Unknown"
+        </td>
+        <td>@product.Quantity</td>
+        <td>@product.Price</td>
+        <td>@product.Discount</td>
+        <td>@product.Tax</td>
+    </tr>
+}

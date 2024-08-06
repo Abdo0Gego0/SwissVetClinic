@@ -1,0 +1,312 @@
+﻿@using CmsDataAccess.ChartModels
+
+
+@(Html.Kendo().TileLayout()
+        .Name("tilelayout")
+        .Columns(6)
+        .RowsHeight("235px")
+        .ColumnsWidth("300px")
+        .Containers(c =>
+        {
+            c.Add().Header(h => h.Text("Customer Growth")).BodyTemplateId("customer-growth").ColSpan(6).RowSpan(2);
+            //c.Add().Header(h => h.Text("Average Orders")).BodyTemplateId("average-orders").ColSpan(6).RowSpan(2); 
+            //c.Add().Header(h => h.Text("Top Customers")).BodyTemplateId("top-customers").ColSpan(6).RowSpan(2);
+            c.Add().Header(h => h.Text("Top Products")).BodyTemplateId("top-products").ColSpan(6).RowSpan(2);
+            c.Add().Header(h => h.Text("Visits")).BodyTemplateId("visits-chart").ColSpan(3).RowSpan(2);
+
+        })
+        .Reorderable()
+        .Resizable()
+        .Events(e => e.Resize("onTileResize"))
+    )
+
+
+<script id="average-orders" type="text/x-kendo-template">
+    @(
+        Html.Kendo().StockChart<StockDataPoint>()
+            
+            .Pannable(true)
+                          .Name("stockChart")
+                          .Title("Average Orders Value")
+                          
+                          .DataSource(ds => ds.Read(read => read
+                                      .Action("Read_StockData", "Reports")
+                          ))
+                          .DateField("Date")
+                                   .Panes(panes =>
+            {
+                panes.Add("volumePane").Title("Sales").Height(250);
+            })
+            .CategoryAxis(axis => axis.Pane("volumePane"))
+        .ValueAxis(axis =>
+            {
+                // Default value axis (hide it)
+                axis.Numeric()
+                    .Visible(false);
+
+                // Custom value axis for AED
+                axis.Numeric("aedAxis")
+                    .Title("AED")
+                    .Labels(labels => labels.Format("{0} AED")) // Custom format for AED
+                    .Line(line => line.Visible(false))
+                    .Pane("volumePane") // Ensure it is on the same pane
+                    .Visible(true); // Make sure the AED axis is visible
+            })
+            .Series(series =>
+            {
+                series.Column(s => s.Value)
+                            .Tooltip(tooltip => tooltip.Format("{0} AED"));
+            })
+            .ValueAxis(ax=>ax.Visible(false))
+            .Navigator(nav => nav
+                .Series(series =>
+                {
+                    series.Area(s => s.Value);
+                })
+                .Select(
+                    DateTime.Now.AddYears(-1),
+                        DateTime.Now.AddYears(1)
+                )
+            ).ToClientTemplate()
+      )
+
+</script>
+
+
+<script id="customer-growth" type="text/x-kendo-template">
+    @(Html.Kendo().Chart<CustomerCount>()
+           .Name("chart")
+           @* .Title("Gross domestic product growth /GDP annual %/") *@
+           .Legend(legend => legend
+               .Position(ChartLegendPosition.Top)
+           )
+           .ChartArea(chartArea => chartArea
+               .Background("transparent")
+           )
+
+           .CategoryAxis(axis => axis
+               .Name("series-axis")
+               .Line(line => line.Visible(false))
+           )
+           .CategoryAxis(axis => axis
+               .Name("label-axis")
+               @* .Categories("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct","Nov","Dec") *@
+           )
+
+                               .DataSource(ds => ds.Read(read => read.Action("CustomersGrowth_Read", "Reports")))
+            .Series(series =>
+            {
+                    series.Column(model => model.Old).Name("Old Customers").Border(b=>b.Opacity(0)).CategoryField("Month").Color("rgba(215, 219, 236, 1)");
+                    series.Column(model => model.New).Name("New Customers").Border(b => b.Opacity(0)).CategoryField("Month").Color("rgba(30, 94, 255, 1)");
+            })
+
+           .ValueAxis(axis => axis
+               .Numeric()
+                   @* .Labels(labels => labels.Format("{0}%")) *@
+
+                   // Move the label-axis all the way down the value axis
+                   .AxisCrossingValue(0, int.MinValue)
+           )
+
+           .ToClientTemplate()
+       )
+</script>
+
+
+<script id="top-customers" type="text/x-kendo-template">
+    @(
+Html.Kendo().Grid<TopCustomers>().Name("gridTopCustomers")
+        .ToolBar
+        (
+        toolbar =>
+        {
+
+        }).HtmlAttributes(new { @class = "myToolBar" })
+
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.Name).Filterable(false);
+                        columns.Bound(p => p.OrdersCount).Filterable(false);
+                        columns.Bound(p => p.OrdersValue).Filterable(false);
+
+
+                }
+
+                    )
+                .Mobile(MobileMode.Auto)
+
+                        .Editable(ed =>
+        {
+            ed.Mode(GridEditMode.PopUp); ed.DisplayDeleteConfirmation(true);
+
+            ed.DisplayDeleteConfirmation(Localizer["Do you want to delete this item?"]);
+
+
+        })
+
+                .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(true)
+                .ButtonCount(25)
+                .Responsive(true)
+                .Info(true)
+                .Numeric(true)
+                )
+                .Sortable()
+                .Navigatable()
+                .Resizable(r => r.Columns(true))
+                .Reorderable(r => r.Columns(true))
+
+                .Scrollable()
+
+
+                .HtmlAttributes(new { @class = "custom-grid" }) // Add a custom class
+
+                  .DataSource(
+            dataSource => dataSource
+
+            .Ajax()
+            .PageSize(20)
+                    .Read(read => read.Action("CustomersOrders_Read", "Reports").Type(HttpVerbs.Get))
+
+            .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+            )
+            .Events(events => events.DataBound("onDataBound"))
+                .ToClientTemplate()
+
+ 
+)
+
+</script>
+
+
+<script id="prodPhoto" type="text/x-kendo-template">
+    <div class='prof-photo'
+    style='background-image: url(" + @Url.Content("#: SubProductImage[0] ==null ? xx : SubProductImage[0].ImageFullPath #") + ");'></div>
+    </script>
+
+<script id="top-products" type="text/x-kendo-template">
+    @(
+        Html.Kendo().Grid<TopProducts>().Name("gridTopProducts")
+                .ToolBar
+                (
+                toolbar =>
+                {
+
+                }).HtmlAttributes(new { @class = "myToolBar" })
+
+                        .Columns(columns =>
+                        {
+                            columns.Bound(p => p.SubProductImage[0].ImageFullPath).ClientTemplateId("prodPhoto").Title(" ");
+                        columns.Bound(p => p.Name).Filterable(false);
+                        columns.Bound(p => p.OrdersCount).Filterable(false);
+                        columns.Bound(p => p.OrdersValue).Filterable(false);
+                    }
+
+                        )
+                    .Mobile(MobileMode.Auto)
+
+                            .Editable(ed =>
+            {
+                ed.Mode(GridEditMode.PopUp); ed.DisplayDeleteConfirmation(true);
+
+                ed.DisplayDeleteConfirmation(Localizer["Do you want to delete this item?"]);
+
+
+            })
+
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(25)
+                    .Responsive(true)
+                    .Info(true)
+                    .Numeric(true)
+                    )
+                    .Sortable()
+                    .Navigatable()
+                    .Resizable(r => r.Columns(true))
+                    .Reorderable(r => r.Columns(true))
+
+                    .Scrollable()
+
+
+                    .HtmlAttributes(new { @class = "custom-grid" }) // Add a custom class
+
+                    .DataSource(
+            dataSource => dataSource
+
+            .Ajax()
+            @* .Batch(true) *@
+            .PageSize(20)
+                        .Read(read => read.Action("TopProducts_Read", "Reports").Type(HttpVerbs.Get))
+                    ).ToClientTemplate()
+
+
+    )
+
+</script>
+
+
+<script id="pieDetails" type="text/x-kendo-template">
+    "#= category # - #= kendo.format('{0:P}', percentage)#"
+    </script>
+
+<script id="visits-chart" type="text/x-kendo-template">
+
+    @(Html.Kendo().Chart<VisitCount>()
+               .Name("chartVisits")
+               .Title("Visists")
+               @* .HtmlAttributes(new { @class = "small-chart" }) *@
+               .Legend(legend => legend
+                   .Visible(true)
+               )
+               .DataSource(ds =>
+               {
+                       ds.Read(read => read.Action("Visits_Read", "Reports"));
+               }
+               )
+               .Series(series => series
+                       .Pie(model => model.value, model => model.category)
+                       .ColorField("Color")
+                       .Padding(0)
+               )
+               .Tooltip(tooltip => tooltip
+                   .Visible(true)
+                   .Format("{0:N0}")
+                   .TemplateId("pieDetails")
+               )
+               .ToClientTemplate()
+           )
+</script>
+
+<script>
+    function onTileResize(e) {
+        if (e.container) {
+            // for widgets that do not auto resize
+            // https://docs.telerik.com/kendo-ui/styles-and-layout/using-kendo-in-responsive-web-pages
+            kendo.resize(e.container, true);
+        }
+    }
+
+    $(window).on("resize", function () {
+        kendo.resize($(".k-chart, .k-grid"));
+    });
+
+    $(document).ready(function () {
+        kendo.resize($("#tilelayout"));
+        $(document).bind("kendo:skinChange", updateTheme);
+    });
+
+    function updateTheme() {
+        var charts = $(".k-chart");
+        $.each(charts, function (i, elem) {
+            var theme = kendoTheme;
+            if (kendoTheme == "material-v2" || kendoTheme == "default-v2" || kendoTheme == "bootstrap-v4") {
+                theme = "sass";
+            }
+            $(elem).getKendoChart().setOptions({ theme: theme });
+        });
+    }
+</script>

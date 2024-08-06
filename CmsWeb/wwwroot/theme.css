@@ -1,0 +1,26 @@
+﻿
+:root {
+    --site-blue: #2666EE;
+    --input-background: #B6C6E8;
+    --site-light-pink: #2666EE;
+    --site-dark-pink: #E496A7;
+    --site-gray: #595854;
+    --site-black: #000000;
+    --site-logo: '/siteimages/logo.svg';
+    --site-light-gray: #7D7D7D;
+    --site-navbar-bg-color: #2666EE;
+    --site-navbar-color: white;
+    --site-navbar-active-color: #163C7A80;
+    --nav-width: 230px;
+    --nav-negative-width: -230px;
+    --button-radius: 12px;
+    --grid-bg-color: #F2F3F8;
+    --toolbar-bg-color: #F2F3F8;
+    --header-bg-color: #7A9EEA;
+}
+
+@font-face {
+}
+
+* {
+}

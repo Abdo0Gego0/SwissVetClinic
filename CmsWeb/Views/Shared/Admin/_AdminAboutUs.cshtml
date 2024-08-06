@@ -1,0 +1,89 @@
+﻿@model AboutUsDto
+
+@{
+    Layout = "../../../Views/Shared/_CenterAdminLayout.cshtml";
+}
+<br />
+<br />
+<form asp-action="AboutUs" asp-controller="Setting" method="post">
+<input asp-for="Id" hidden/>
+    <label class="fieldLabel" style="direction:ltr !important; text-align:left !important">
+    About Us
+</label>
+<center>
+
+@(Html.Kendo().Editor()
+                .Name("AboutUsTextEn")
+                .HtmlAttributes(new { style = "width: 90% !important; height:200px;font-size:18px", id = "AboutUsTextEn", name = "AboutUsTextEn" })
+                .Tools(tools => tools
+                .Clear()
+                .Bold().Italic().Underline()
+                .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+                .InsertUnorderedList().InsertOrderedList()
+                .Outdent().Indent()
+                .CreateLink().Unlink()
+                .InsertImage()
+                .TableEditing()
+                .FontName()
+                .FontSize()
+                .ForeColor().BackColor()
+                .Undo().Redo()
+                .FormatPainter()
+                .InsertLowerRomanList()
+                .InsertUpperRomanList()
+                .CleanFormatting()
+                .Separator()
+                .ViewHtml()
+                .Strikethrough()
+
+                )
+                )
+
+<span class="text-danger" asp-validation-for="AboutUsTextEn"></span>
+
+                <br />
+
+
+<div dir="rtl">
+    <label class="fieldLabel" dir="rtl">
+        من نحن
+    </label>
+</div>
+
+
+@(Html.Kendo().Editor()
+    .Name("AboutUsTextAr")
+    .HtmlAttributes(new { style = "width: 90% !important; height:200px;font-size:18px", id = "AboutUsTextAr", name = "AboutUsTextAr" })
+    .Tools(tools => tools
+    .Clear()
+    .Bold().Italic().Underline()
+    .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+    .InsertUnorderedList().InsertOrderedList()
+    .Outdent().Indent()
+    .CreateLink().Unlink()
+    .InsertImage()
+    .TableEditing()
+    .FontName()
+    .FontSize()
+    .ForeColor().BackColor()
+    .Undo().Redo()
+    .FormatPainter()
+    .InsertLowerRomanList()
+    .InsertUpperRomanList()
+    .CleanFormatting()
+    .Separator()
+    .ViewHtml()
+    .Strikethrough()
+
+    )
+    )
+
+<span class="text-danger" asp-validation-for="AboutUsTextAr"></span>
+
+    <br />
+
+    <button type="submit" class="form-control addCtrl">
+        @Localizer["Save"]
+    </button>
+    </center>
+</form>

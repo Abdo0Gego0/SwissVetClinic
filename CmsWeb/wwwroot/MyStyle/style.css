@@ -1,0 +1,131 @@
+
+.durationClass {
+    border: none;
+    font-family: fantasy;
+    font-size: 24px;
+    letter-spacing: 5px;
+    box-shadow: 0px 0px 11px -1px;
+    text-align: center;
+}
+
+
+.classClinic {
+    min-height: 75px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+    color: white;
+    text-align: center;
+    display:flex;
+    border-radius:24px;
+    z-index:10 !important;
+}
+
+.classFree {
+    background-color: #28bfba;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 3px 3px 13px 6px gray;
+    transition: background-color 5s linear;
+}
+
+
+
+.classBusy {
+    background-color: red;
+    font-size: 20px;
+    font-weight: bold;
+    opacity: 0.8;
+    transition: background-color 5s linear;
+}
+
+
+.parentRow {
+    place-content: center;
+}
+
+.childRow {
+    box-shadow: 6px 6px 7px 0px var(--site-light-pink);
+    width: 100%;
+    background-color: #163c7af5;
+    align-items: center;
+    border-radius: 20px;
+}
+
+.childCol {
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.childImg {
+    max-width: 100%
+}
+
+[dir="ltr"] .fieldLabel {
+    font-family: "Inter";
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: left;
+    color:black !important;
+}
+
+[dir="rtl"] .fieldLabel {
+    font-family: "Inter";
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: right;
+    direction: rtl !important;
+    justify-content: flex-start;
+    display: flex;
+    color:black !important;
+/*    margin-right: 85px;*/
+}
+
+.fieldInput {
+    background: white !important;
+    /* border-radius: 12px !important; */
+    font-size: 16px !important;
+    color: black !important;
+    border-color: black !important;
+}
+
+.my-checkBox
+{
+    font-size:20px !important;
+}
+
+.picCircle {
+    background-size: contain;
+    /*	border: 1px solid var(--darkGreen);
+	border-radius: 50%;*/
+    margin-top: 5px;
+    display: inline-flex;
+    background-repeat: no-repeat;
+    height: 256px;
+    width: 256px;
+    padding: 0 10px;
+    background-image: url('/siteimages/uploadImage.svg')
+}
+
+.myEditStyle
+{
+    font-size:20px;
+    color:var(--site-light-pink);
+}
+
+.SideBarNotification {
+    color: white;
+    background-color: red;
+    border-radius: 40%;
+    padding: 5px;
+    border-style: none;
+    display:none;
+}
+

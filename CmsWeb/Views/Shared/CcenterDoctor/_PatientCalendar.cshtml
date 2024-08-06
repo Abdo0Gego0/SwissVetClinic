@@ -1,0 +1,289 @@
+﻿@model Pet
+
+@removeTagHelper "*, Microsoft.AspNet.Mvc.Razor"
+@removeTagHelper "*, Microsoft.AspNetCore.Mvc.Razor"
+
+@{
+    Layout = null;
+}
+
+@using CmsWeb.Views.Shared.CenterAdmin
+@using Microsoft.EntityFrameworkCore
+@* @(await Html.RenderComponentAsync<_B_CenterCalendar>(RenderMode.Server)) *@
+
+@inject IMedicalCenterService medicalCenterService
+@inject ISelectListService slSrvc
+@inject IUserService userSrvc
+
+
+
+<link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+
+
+<script src="~/KendoUi/js/jquery.min.js"></script>
+
+
+
+
+
+@* For Kendo UI*@
+<script src="~/MyJs/grid.js"></script>
+<script src="~/KendoUi/js/jszip.min.js"></script>
+<script src="~/KendoUi/js/kendo.all.min.js"></script>
+<script src="~/KendoUi/js/kendo.aspnetmvc.min.js"></script>
+<script src="~/KendoUi/js/kendo.timezones.min.js"></script>
+
+@* End  Kendo UI*@
+
+<link href="~/MyKendoUi/kednoedit.css" rel="stylesheet" asp-append-version="true" />
+<link href="~/theme.css" rel="stylesheet" asp-append-version="true" />
+<link href="~/Auth/auth.css" rel="stylesheet" asp-append-version="true" />
+<link href="~/MyStyle/style.css" rel="stylesheet" asp-append-version="true" />
+<link rel="icon" href='/siteimages/logo.svg' sizes="36x24" />
+
+@* https://blazor.syncfusion.com/documentation/appearance/themes#cdn-reference *@
+
+
+
+
+
+@* <link href="_content/Syncfusion.Blazor.Themes/bootstrap5.css" rel="stylesheet" /> *@
+
+
+
+
+@{
+
+    List<BaseClinic> clinics = new ApplicationDbContext().BaseClinic
+    .Where(a => a.MedicalCenterId == (Guid)userSrvc.GetMyCenterIdWeb())
+    .Select(a=> a.GetModelByLnag("ar")).ToList();
+
+}
+
+
+
+
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+            <label class="fieldLabel">@Localizer["Choose Clinic"]</label>
+            <select class="form-select" name="clinicFilter" id="clinicFilter" asp-items="@slSrvc.ClinicsSL()" onchange="clinicFilter()">
+                <option value="" selected> @Localizer["All Clinics"]</option>
+            </select>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label class="fieldLabel">@Localizer["Only Appointments of This Patient"]</label>
+            @(Html.Kendo().Switch()
+                .Name("switch")
+                .Messages(c => c.Checked(Localizer["YES"]).Unchecked(Localizer["NO"])).HtmlAttributes(new { @style = "float:" + Localizer["float"] + ";" })
+                
+                .Events(ev => ev.Change("onChange"))
+
+                )
+
+        </div>
+
+
+
+        <div class="col-md-4 mb-3">
+            <label class="fieldLabel"> @Localizer["Group Orientation"]</label>
+            
+            @(
+                Html.Kendo().Switch()
+                    .Name("switchGroup")
+                    .Checked(true)
+                .Messages(c => c.Checked(Localizer["Horizontal"]).Unchecked(Localizer["Vertical"])).HtmlAttributes(new { @style = "width:150px;float:" + Localizer["float"] + ";" })
+                
+                .Events(ev => ev.Change("changeGroupingDirection"))
+
+                )
+
+        </div>
+
+
+
+
+     </div>
+</div>
+
+
+
+
+@(Html.Kendo().Scheduler<AppointmentViewModel>()
+  .Timezone(medicalCenterService.GetMyCenterTimeZoneId())  
+          .EventTemplate(
+                "<div class='movie-template' style='min-height:100px;background-color:#=Color# !important'>" +
+                    "<p>" +
+                    "#= PatientName # " +
+
+                        "#= kendo.toString(start, 'hh:mm') # - #= kendo.toString(end, 'hh:mm') #" +
+                    "</p>" +
+
+                    "<p>" +
+                    "#= PetName_ # " +
+                    "</p>" +
+
+                    "<h3>#= ServiceName #</h3>" +
+                "</div>")
+    .Name("scheduler")
+    .Date(DateTime.Now)
+@* .Toolbar(t => t.Search()) *@
+.StartTime(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00))
+    .Height(600)
+    .Views(views =>
+    {
+        views.DayView(dayView =>
+        {
+            dayView.Selected(true);
+            dayView.ShowWorkHours();
+            dayView.WorkDayStart(8, 0, 0);
+            dayView.WorkDayEnd(22, 0, 0);
+        }); 
+        views.WeekView(WeekView =>
+{
+    WeekView.WorkDayStart(8, 0, 0);
+    WeekView.WorkDayEnd(22, 0, 0);
+    WeekView.ShowWorkHours();
+}
+);
+        views.MonthView();
+        views.YearView();
+        
+@*         views.AgendaView();
+        views.TimelineView(); *@
+    })
+    
+     .Editable(ed => ed.TemplateName("DoctorAppointmentEditor"))
+        .Editable(ed => ed.Confirmation(Localizer["Do you want to delete this item?"]))
+
+    .CurrentTimeMarker(a=>a.UseLocalTimezone(false))
+         .Group(group => group.Resources("BaseClinicId").Orientation(SchedulerGroupOrientation.Horizontal)) 
+
+        .Resources(resource =>
+        {
+            resource.Add(m => m.BaseClinicId)
+            .Title(Localizer["Clinic"])
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .DataSource(d => d
+            .Custom()
+            .Schema(s => s
+            .Model(m => m.Id("Value"))
+            .Data("Data")
+            )
+            .Transport(t =>
+            {
+                t.Read("ReadClinic", "Appointment", new { area = "CenterEmployeeReception" });
+            })
+
+            );
+
+            resource.Add(m => m.PetOwnerId)
+            .Title(Localizer["Patient"])
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .DataSource(d => d
+            .Custom()
+            .Schema(s => s
+            .Model(m => m.Id("Value"))
+            .Data("Data")
+            )
+            .Transport(t =>
+            {
+                t.Read("ReadPatient", "Appointment", new { area = "CenterEmployeeReception" });
+            })
+
+
+            );
+            resource.Add(m => m.CenterServicesId)
+            .Title(Localizer["Services"])
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .DataSource(d => d
+            .Custom()
+            .Schema(s => s
+            .Model(m => m.Id("Id"))
+            .Data("Data")
+            )
+            .Transport(t =>
+            {
+                t.Read("ReadServices", "Appointment", new { area = "CenterEmployeeReception" });
+            })
+
+
+            );
+
+        })
+
+
+    .Events(e =>
+    {
+        e.Navigate("scheduler_navigate");
+        e.Remove("scheduler_remove");
+        e.Edit("scheduler_edit");
+
+
+
+    })
+    .DataSource(d => d
+
+        .Events(e => e.Error("onError"))
+        
+        .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+        .Model(m =>
+        {
+            m.Id(f => f.Id);
+            m.Field(f => f.Title).DefaultValue("...");
+            m.Field(f => f.PetOwnerId).DefaultValue(Model.Id);
+            m.Field(f => f.SessionDuration).DefaultValue(30);
+            m.Field(f => f.IsFirstVisit).DefaultValue(false);
+            m.Field(f => f.IsStarted).DefaultValue(false);
+            m.Field(f => f.IsFinished).DefaultValue(false);
+            m.Field(f => f.Description).DefaultValue("...");
+            m.Field(f => f.Timezone).DefaultValue("Asia/Dubai");
+            m.Field(f => f.StartTimezone).DefaultValue("Asia/Dubai");
+            m.Field(f => f.EndTimezone).DefaultValue("Asia/Dubai");
+        })
+        .Read("Timeline_Read", "Appointment")
+        .Create("Timeline_Create", "Appointment")
+        .Destroy("Timeline_Destroy", "Appointment")
+        .Update("Timeline_Update", "Appointment")
+
+    )
+
+    
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

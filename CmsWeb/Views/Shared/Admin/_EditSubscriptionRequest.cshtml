@@ -1,0 +1,269 @@
+﻿@model SubscriptionApplication
+
+
+@inject ISelectListService slSrvc
+
+
+
+    <div class="container">
+
+
+
+        <label class="SectionTilte">@Localizer["Basic Info"]</label>
+        <br />
+        <br />
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="FirstName" disabled placeholder="XXXXX">
+                    <label for="Firstname">First name</label>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="MiddleName" disabled placeholder="XXXXX">
+                    <label for="Middlename">Middle name</label>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="LastName" disabled placeholder="XXXXX">
+                    <label for="Lastname">Last name</label>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="Nationality" disabled placeholder="XXXXX">
+                    <label for="Nationality">Nationality</label>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="PassportNumber" disabled placeholder="XXXXX">
+                    <label for="PassportNumber">Passport number</label>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="NationalCardId" disabled placeholder="XXXXX">
+                    <label for="NationalCardId">National card Id</label>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <label class="SectionTilte">@Localizer["Contact info"]</label>
+        <br />
+        <br />
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="SubscriberPhone" disabled placeholder="XXXXX">
+                    <label for="SubscriberPhone">Subscriber phone</label>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="SubscriberEmail" disabled placeholder="XXXXX">
+                    <label for="SubscriberEmail">Subscriber email</label>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <label class="SectionTilte">Business Info</label>
+        <br />
+        <br />
+
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="LicenseNumber" disabled placeholder="XXXXX">
+                    <label for="LicenseNumber">License number</label>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="LicenseExpireDate" disabled placeholder="XXXXX">
+                    <label for="LicenseExpireDate">License expire date</label>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="form-floating mb-3">
+                    <input type="datetime" class="form-control accountInput" asp-for="CenterName" disabled required placeholder="XXXXX">
+                    <label for="CenterName">Center name</label>
+                </div>
+            </div>
+
+
+            <div class="col-md-8">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control accountInput" asp-for="CenterAddress" disabled placeholder="XXXXX">
+                    <label for="CenterAddress">Center address</label>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <label class="SectionTilte">Documnets</label>
+        <br />
+        <br />
+        <div class="row">
+            
+            <label class="SectionTilte">Passport</label>
+
+            @{
+                if (!string.IsNullOrEmpty(Model.PassportImageName))
+                {
+                    string ext = System.IO.Path.GetExtension(Model.PassportImageFullPath);
+                    ext = ext.Replace(".", "");
+
+                    if (ext.ToLower() == "pdf")
+                    {
+                                    <div id="pdfViewer1">
+                                    </div>
+                                    <script>
+                                        $.when(
+                                            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"),
+                                            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js")
+                                        )
+                                            .done(function () {
+                                                window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+                                            }).then(function () {
+                                                $("#pdfViewer1").kendoPDFViewer({
+                                                    pdfjsProcessing: {
+                                                        file: "@Model.PassportImageName"
+                                                    },
+                                                    width: "100%",
+                                                    height: 1200
+                                                });
+                                            })
+                                    </script>
+                    }
+                    else
+                    {
+                                    <img  src="@Model.PassportImageFullPath" id="prevImg1" style="max-width:800px;cursor:pointer;" />
+                    }
+
+                }
+            }
+
+        </div>
+
+        <br />
+
+
+        <div class="row">
+            <label class="SectionTilte">License</label>
+
+            @{
+                if (!string.IsNullOrEmpty(Model.LicenseImageName))
+                {
+                    string ext = System.IO.Path.GetExtension(Model.LicenseImageFullPath);
+                    ext = ext.Replace(".", "");
+
+                    if (ext.ToLower() == "pdf")
+                    {
+                                    <div id="pdfViewer2">
+                                    </div>
+                                    <script>
+                                        $.when(
+                                            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"),
+                                            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js")
+                                        )
+                                            .done(function () {
+                                                window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+                                            }).then(function () {
+                                                $("#pdfViewer2").kendoPDFViewer({
+                                                    pdfjsProcessing: {
+                                                        file: "@Model.LicenseImageFullPath"
+                                                    },
+                                                    width: "100%",
+                                                    height: 1200
+                                                });
+                                            })
+                                    </script>
+                    }
+                    else
+                    {
+                                    <img src="@Model.LicenseImageFullPath" id="prevImg1" style="max-width:800px;cursor:pointer;" />
+                    }
+                }
+            }
+        </div>
+
+        <br />
+
+
+
+
+
+    </div>
+
+<hr />
+
+@{
+    if (Model.Accepted!=1)
+    {
+        <form asp-action="Accept" asp-controller="NewSubscription" method="post">
+            <input asp-for="Id" hidden />
+            <button type="submit" class="form-control addCtrl"> Accept</button>
+        </form>
+        <br />
+        <hr />
+
+        <form asp-action="Reject" asp-controller="NewSubscription" method="post">
+            <input asp-for="Id" hidden />
+
+            <button onclick="confirmReject()" id="btn1" type="button" class="form-control addCtrl" style="background-color:coral  !important;"> Reject</button>
+            <br />
+            <label id="lbl1" style="display:none;color:black">Reason for rejection</label>
+            <textarea id="txt1" name="rejectReason" class="form-control" style="display:none">
+
+            </textarea>
+            <br />
+            <div class="form-check">
+                <input name="finalReject" id="finalReject" class="form-check-input my-checkBox" type="checkbox" />
+                <label class="form-check-label fieldLabel"> Reject  permanently</label>
+            </div>
+            <br />
+
+            <button id="btn2" type="submit" class="form-control addCtrl" style="background-color:red !important; display:none"> Confirm</button>
+
+        </form>
+    }
+
+}
+
+
+
+<script>
+
+    function confirmReject()
+    {
+            $("#lbl1").show();
+            $("#txt1").show();
+            $("#btn2").show();
+            $("#btn1").hide();
+    }
+
+</script>
+
+
+
+

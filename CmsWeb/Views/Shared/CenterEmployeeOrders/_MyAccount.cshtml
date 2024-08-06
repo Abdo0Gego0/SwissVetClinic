@@ -1,0 +1,231 @@
+﻿<!-- google font -->
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+@model Employee
+
+
+@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+
+
+<br />
+
+
+<h2 class="text-danger">@ViewBag.ErrorMessage</h2>
+
+
+
+<form asp-action="updateProfilePicture" method="post" enctype='multipart/form-data' class="k-form k-form-vertical" style="width:90% !important">
+        <div class=" container">
+            <div class="row" style="width:100%;align-items:center;justify-content:center">
+            <center>
+
+                <input asp-for="ImageName" hidden>
+
+
+                @{
+                    if (!string.IsNullOrEmpty(Model.ImageName))
+                    {
+                        <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg" style="cursor:pointer;background-image:url(@Model.ImageFullPath) !important">
+                        </div>
+                    }
+                    else
+                    {
+                        <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg" style="cursor:pointer;">
+                        </div>
+                    }
+                }
+
+                    <div>
+                        <span>
+                            <i style="background-image:url('/AdminDashboard/images/gallery-export.svg');display: inline-block;width:24px;height:24px"></i>
+                            <span
+                                  onclick="document.getElementById('ImageFile').click()">
+
+
+                            @Localizer["ChooseImage"]
+
+                            </span>
+                        </span>
+
+                        <input type="file" id="ImageFile" onchange="preview()" accept="image/*" style="display:none" name="ImageFile">
+                    </div>
+                </center>
+            </div>
+        </div>
+        <center>
+            <button type="submit" class="form-control addCtrl " style="width:25% !important">
+            @Localizer["Edit"]
+
+
+            </button>
+        </center>
+        <br />
+
+</form>
+
+<br />
+
+<hr />
+
+
+<form  asp-action="UpdateAccountInfo" method="post" enctype='multipart/form-data' class="k-form k-form-vertical" style="width:90% !important">
+
+    @Html.Hidden("PreviousEmail", Model.PersonEmail)
+    @Html.Hidden("PreviousUsername", Model.PersonUserName)
+
+
+        <div class="demo-section k-content wide  k-rtl" style="border-radius:12px;">
+
+            <div class="container">
+                <h1 class="LoginTitle">
+                @Localizer["Account Info"]
+
+                </h1>
+
+            <div class="row" style="align-items:center; width:100%">
+
+                <div class="mb-3 col-12">
+
+                    <div class="row">
+                        <div class="mb-3 col-6">
+
+                            <label class="fieldLabel" asp-for="@Model.PersonEmail"></label>
+
+                            <input type="email" style="direction:ltr !important" class="form-control fieldInput" asp-for="@Model.PersonEmail" placeholder="@Localizer["Email"]">
+                            <span class="text-danger" asp-validation-for="@Model.PersonEmail"></span>
+
+                        </div>
+
+                        <div class="mb-3 col-6">
+
+                            <label class="fieldLabel" asp-for="@Model.PersonPhone"></label>
+
+                            <input type="tel" style="direction:ltr !important" class="form-control fieldInput" asp-for="@Model.PersonPhone" placeholder="@Localizer["Phone"]">
+                        </div>
+
+                        <div class="mb-3 col-6">
+
+                            <label class="fieldLabel" asp-for="@Model.PersonUserName"></label>
+
+                            <input class="form-control fieldInput" asp-for="@Model.PersonUserName" placeholder="@Localizer["UserName"]">
+                            <span class="text-danger" asp-validation-for="@Model.PersonUserName"></span>
+                        </div>
+
+
+                        <div class="mb-3 col-6" style="display:none">
+
+                            <label class="fieldLabel" asp-for="@Model.Password"></label>
+                            <input type="password" asp-for="@Model.Password">
+                            <span class="text-danger" asp-validation-for="@Model.Password"></span>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+        <center>
+            <button type="submit" class="form-control addCtrl " style="width:25% !important">
+
+                @Localizer["Edit"]
+
+            </button>
+        </center>
+        <br />
+    </div>
+</form>
+
+<br />
+<hr />
+
+
+<form id="signUpForm1" asp-action="ChangePassword" method="post" enctype='multipart/form-data' class="k-form k-form-vertical" style="width:90% !important">
+
+    <div class="demo-section k-content wide  k-rtl" style="border-radius:12px;">
+
+        <div class="container">
+            <h1 class="LoginTitle">
+
+                @Localizer["ChangePassword"]
+
+            </h1>
+
+            <div class="row" style="align-items:center; width:100%">
+
+
+                <div class="mb-3 col-12">
+
+                    <div class="row">
+                        <div class="mb-3 col-6">
+                            <label class="fieldLabel" style="display:inline-block;">
+                              
+                                @Localizer["OldPassword"]
+
+                                </label>
+                            <input style="direction:ltr !important" class="form-control fieldInput" name="oldPassword" />
+                        </div>
+
+                        <div class="mb-3 col-6">
+                            <label class="fieldLabel">
+                                
+                                @Localizer["NewPassword"]
+
+
+                            </label>
+                            <input style="direction:ltr !important" class="form-control fieldInput" name="newPassword" />
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <center>
+            <button type="submit" class="form-control addCtrl " style="width:25% !important">
+
+                @Localizer["SaveNewPassword"]
+
+            </button>
+        </center>
+        <br />
+    </div>
+</form>
+
+
+
+
+<style>
+    .table-bordered > :not(caption) > * > * {
+        border-width: 0px;
+    }
+</style>
+<script>
+    function onDone(e) {
+        e.originalEvent.preventDefault();
+        var validator = $("#signUpForm").kendoValidator().data("kendoValidator");
+
+        if (validator.validate()) {
+            //kendo.alert("تم إضافة المركز بنجاح");
+            $("#signUpForm").submit();
+        }
+    }
+</script>
+
+
+
+
+<script>
+
+
+    function preview(evt) {
+        var filee = event.target.files[0];
+        document.getElementById('prevImg').style.backgroundImage = "url('" + URL.createObjectURL(filee) + "')";
+
+    }
+</script>
+

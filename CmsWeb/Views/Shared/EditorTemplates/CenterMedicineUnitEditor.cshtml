@@ -1,0 +1,29 @@
+﻿@* @(Html.Kendo().DropDownList()
+    .Name("CenterMedicineUnitId")
+    .DataTextField("Text")
+    .DataValueField("CenterMedicineUnitId")
+    .CascadeFrom("CenterMedicineListId")
+    .DataSource(source =>
+    {
+        source.Read(read =>
+        {
+            read.Action("GetCenterMedicineUnits", "Appointment")
+                .Data("filterCenterMedicineUnits");
+        });
+    })
+
+    .HtmlAttributes(new { data_bind = "value: CenterMedicineUnitId", @class = "center-medicine-unit" })
+)
+ *@
+
+@inject ISelectListService slSrvc
+
+@model Guid
+
+@(
+        Html.Kendo().DropDownListFor(m => m)
+        
+            .BindTo(slSrvc.CenterMedicineUnitSL())
+            .DataTextField("Name")
+            .DataValueField("Id")
+)

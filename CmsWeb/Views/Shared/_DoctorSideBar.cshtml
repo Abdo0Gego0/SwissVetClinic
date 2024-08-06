@@ -1,0 +1,104 @@
+﻿@inject INavService StyleServiceMain
+@inject IUserService _userService
+
+
+
+<nav id="sidebar">
+
+    <div style="min-width: var(--nav-width);
+    max-width: var(--nav-width);background-color:white !important;">
+
+        <center>
+            <img src="~/siteimages/logoWithText.svg" height="107px" width="71px" />
+            <br />
+            <a href="@Localizer["langUrl"]">
+                <img src="~/siteimages/@Localizer["langImage"]" style="padding: 16px 26px 16px 26px;cursor: pointer;">
+            </a>
+        </center>
+
+    </div>
+
+    <div class="pt-5">
+
+        <a href="@Url.Action("MyAccount","Home", new {area="Doctor"})" class="img logo rounded-circle mt-2 mb-2" style="border-style: double;border-color:black; background-image: url(@_userService.GetUserProfileImage());"></a>
+
+        <label class="AccountName">@_userService.GetUserFirstName()</label>
+        <br />
+
+        @{
+            if (_userService.GetMyClinicId()==null)
+            {
+                <text>
+                <ul class="list-unstyled components mb-5" style="display:none">
+                </text>
+             }
+             else
+             {
+                <text>
+
+                    <ul class="list-unstyled components mb-5">
+                </text>
+
+             }
+
+        }
+
+
+
+
+        <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Home"},new List<string>{"Index"},"active","")">
+            <a href="@Url.Action("Index","Home",new {area="Doctor"})">
+                <img style="width:24px;height:24px" src='~/navimages/Calendar.svg' />
+                
+
+                @Localizer["Home"]
+
+
+            </a>
+        </li>
+
+
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Appointment"},new List<string>{"Timeline"},"active","")">
+                <a href="@Url.Action("Timeline","Appointment",new {area="Doctor"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Calendar.svg' />
+                    
+
+                @Localizer["Calendar"]
+
+                </a>
+            </li>
+
+
+        @* <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Patient"},new List<string>{"IndexPatient","Create_Patient","Edit_Patient","Create_Patient_Records"},"active","")">
+                <a href="@Url.Action("IndexPatient","Patient",new {area="Doctor"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Patients.svg' />
+                    
+
+                @Localizer["Patients"]
+
+                </a>
+            </li>*@
+
+
+            
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"LogIn"},new List<string>{"logOut"},"active","")">
+                <a href="@Url.Action("logOut","LogIn",new {area="Auth"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Logout.svg' />
+                    
+
+                @Localizer["Logout"]
+
+                </a>
+            </li>
+
+
+        </ul>
+
+    </div>
+</nav>
+
+
+
+

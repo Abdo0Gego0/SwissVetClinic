@@ -1,0 +1,127 @@
+﻿@model Pet
+
+@inject ISelectListService slSrvc
+
+@removeTagHelper "*, Microsoft.AspNet.Mvc.Razor"
+@removeTagHelper "*, Microsoft.AspNetCore.Mvc.Razor"
+
+@{
+    Layout = null;
+    string taskFilesName = Model.Id.ToString().Replace("-","");
+}
+
+@(Html.Kendo().Window()
+    .Name("window")
+    .Title("Image Preview")
+    .Visible(false)
+    .Content(@<text>
+    <img id="imagePreview" src="#" alt="Image Preview" />
+</text>)
+    .Draggable()
+    .Resizable()
+    .Actions(actions => actions.Pin().Minimize().Maximize().Close())
+)
+
+
+@(Html.Kendo().Window()
+    .Name("windowVideo")
+    .Title("Video")
+    .Visible(false)
+    .Content(@<text>
+    <div id="videoPreview">
+        <video controls>
+            <source  type="video/mp4" />
+        </video>
+    </div>
+</text>)
+    .Draggable()
+    .Resizable()
+    .Actions(actions => actions.Pin().Minimize().Maximize().Close())
+)
+
+
+
+@(Html.Kendo().Window()
+    .Name("windowPdf")
+    .Title("Pdf Preview")
+    .Visible(false)
+    .Content(@<text>
+
+    <div id="example">
+        <kendo-pdfviewer name="pdfviewer">
+            <pdfjs-processing file="@(Url.Content("~/sample.pdf"))" id="pdfPreview" error="" />
+            <toolbar enabled="true">
+                <pdfviewer-toolbar-items>
+                    <pdfviewer-toolbar-item command="PageChangeCommand" type="pager" name="pager"></pdfviewer-toolbar-item>
+                    <pdfviewer-toolbar-item type="spacer" name="spacer"></pdfviewer-toolbar-item>
+                    <pdfviewer-toolbar-item command="OpenCommand" type="button" name="open" icon="folder-open"></pdfviewer-toolbar-item>
+                    <pdfviewer-toolbar-item command="DownloadCommand" type="button" name="download" icon="download"></pdfviewer-toolbar-item>
+                </pdfviewer-toolbar-items>
+            </toolbar>
+        </kendo-pdfviewer>
+    </div>
+
+
+</text>)
+    .Draggable()
+    .Resizable()
+    .Actions(actions => actions.Pin().Minimize().Maximize().Close())
+)
+
+
+<style>
+
+
+/*     .k-dialog {
+        display: none !important;
+    }
+
+    .k-overlay {
+        display: none !important;
+    } */
+
+    html body #pdfviewer {
+        width: 100% !important;
+    }
+</style>
+
+
+@(Html.Kendo().FileManager().Name("filemanager")
+    .DataSource(ds =>
+        {
+            ds.Read(operation => operation
+            .Type(HttpVerbs.Post)
+            .Action("Read", "FileManagerData", new { area = "FilesAndImages" ,customPath=taskFilesName })
+        );
+            ds.Destroy(operation => operation
+                .Type(HttpVerbs.Post)
+                .Action("Destroy", "FileManagerData" ,new { area = "FilesAndImages" ,customPath=taskFilesName })
+            );
+            ds.Create(operation => operation
+                .Type(HttpVerbs.Post)
+                .Action("Create", "FileManagerData" ,new { area = "FilesAndImages" ,customPath=taskFilesName })
+            );
+            ds.Update(operation => operation
+                .Type(HttpVerbs.Post)
+                .Action("Update", "FileManagerData" ,new { area = "FilesAndImages" ,customPath=taskFilesName })
+            );
+        })
+    .ContextMenu(context => context.Items(items => items.Add("rename")))
+    .ContextMenu(context => context.Items(items => items.Add("delete")))
+    .UploadUrl("Upload", "FileManagerData", new { area = "FilesAndImages", customPath = taskFilesName })
+    .Toolbar(tb => tb.Items(items =>
+    {
+        items.Add("createFolder");
+        items.Add("upload");
+        items.Add("sortField");
+        items.Add("changeView");
+        items.Add("spacer");
+        items.Add("details");
+        items.Add("search");
+    }))
+    .Events(events => events
+        .Open("onOpen")
+    )
+)
+
+

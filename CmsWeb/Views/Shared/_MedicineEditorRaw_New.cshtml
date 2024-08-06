@@ -1,0 +1,215 @@
+﻿
+
+<form asp-action="Create_Medicine" id="myForm1" asp-controller="CenterMedicine" method="post" enctype='multipart/form-data'>
+
+
+
+
+
+    <div class="container">
+
+        <br />
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label class="fieldLabel">@Localizer["Name_"]</label>
+                <input type="text" class="form-control fieldInput" style="direction:ltr !important" name="Name" />
+            </div>
+
+        </div>
+        <hr />
+        <br />
+
+        <div class="@Localizer["k-rtl"]">
+            @(
+                Html.Kendo().Grid<CenterMedicineUnit>()
+                .Name("gridCenterMedicineUnit")
+                            .ToolBar
+                            (
+                            toolbar =>
+                            {
+                                toolbar.Create().Text(@Localizer["Add new"]).IconClass("k-icon k-i-plus k-button-icon").HtmlAttributes(new { @class = "addCtrl" });
+
+                            }).HtmlAttributes(new { @class = "myToolBar" })
+
+                            .Columns(columns =>
+                            {
+                                columns.Bound(p => p.Id).Visible(false);
+                    columns.Bound(p => p.SmallestUnit);
+                    columns.Bound(p => p.PricePerUnit);
+
+                                columns.Command(command =>
+                                {
+                                    command.Destroy().TemplateId("Temp_Destroy");
+                                }).Width(80).Title(" ");
+                            }
+
+                            )
+                            .Mobile(MobileMode.Auto)
+
+
+                            .Pageable(pageable => pageable
+                            .Refresh(true)
+                            .PageSizes(true)
+                            .ButtonCount(25)
+                            .Responsive(true)
+                            .Info(true)
+                            .Numeric(true)
+                            )
+                            .Sortable()
+                            .Navigatable()
+                            .Resizable(r => r.Columns(true))
+                            .Reorderable(r => r.Columns(true))
+                            .Filterable(filt =>
+                            {
+                                filt.Messages(msg => msg.And(Localizer["And"]));
+                                filt.Messages(msg => msg.Or(Localizer["Or"]));
+                                filt.Messages(msg => msg.Equals(Localizer["Equal"]));
+                                filt.Messages(msg => msg.Clear(Localizer["Cancel"]));
+                                filt.Messages(msg => msg.Filter(Localizer["Search"]));
+                                filt.Messages(msg => msg.Info(""));
+
+                                filt.Operators(op => op.ForDate(
+                                fs =>
+                                {
+                                    fs.Clear();
+                                    fs.IsNotEqualTo(Localizer["Equal"]);
+                                    fs.IsEqualTo(Localizer["Not Equal"]);
+                                    fs.IsLessThan(Localizer["Smaller"]);
+                                    fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                                    fs.IsGreaterThan(Localizer["Greater"]);
+                                    fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+                                }
+                                )
+                                );
+
+                                filt.Operators(op => op.ForString(
+                                fs =>
+                                {
+                                    fs.Clear();
+                                    fs.StartsWith(Localizer["Starts with"]);
+                                    fs.EndsWith(Localizer["Ends with"]);
+                                    fs.Contains(Localizer["Contains"]);
+                                    fs.IsNotEqualTo(Localizer["Not Equal"]);
+                                    fs.IsEqualTo(Localizer["Equal"]);
+                                    fs.DoesNotContain(Localizer["Does not Contain"]);
+
+                                }
+                                )
+                                );
+
+
+                                filt.Operators(op => op.ForNumber(
+                                fs =>
+                                {
+                                    fs.Clear();
+                                    fs.IsNotEqualTo(Localizer["Not Equal"]);
+                                    fs.IsEqualTo(Localizer["Equal"]);
+
+                                    fs.IsLessThan(Localizer["Smaller"]);
+                                    fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                                    fs.IsGreaterThan(Localizer["Greater"]);
+                                    fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+
+                                }
+                                )
+                                );
+
+
+
+                            })
+                            .Scrollable()
+                .Editable(ed =>
+                {
+                    ed.Mode(GridEditMode.InCell);
+
+                    ed.DisplayDeleteConfirmation(false);
+                })
+
+                            .HtmlAttributes(new { @class = "custom-grid", @style = "height:350px" }) // Add a custom class
+
+                            .DataSource(
+                            dataSource => dataSource
+
+                            .Ajax()
+                            .Batch(true)
+                            .PageSize(20)
+                            .Model(model => model.Id(p => p.Id))
+                
+
+
+                .Destroy(destroy =>
+                {
+                    destroy.Action("Destroy_PatientAllergy", "PatientX");
+                })
+
+
+
+
+                .Update(destroy =>
+                {
+                    destroy.Action("Update_PatientAllergy", "PatientX");
+                })
+
+                .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+                )
+                .Events(events => events.DataBound("onDataBound"))
+                )
+        </div>
+
+
+        <hr />
+        <br />
+
+
+        <button type="button" onclick="onDone()" class="form-control addCtrl"> @Localizer["Save"]</button>
+
+    </div>
+
+
+</form>
+
+<script>
+
+    function onDone() {
+        var validator = $("#myForm1").kendoValidator().data("kendoValidator");
+
+        var grid = $("#gridCenterMedicineUnit").data("kendoGrid");
+
+        var f = document.getElementById("myForm1");
+
+
+        var gridData = grid.dataSource.data();
+        var formData = [];
+
+        debugger;
+
+        for (var i = 0; i < gridData.length; i++) {
+
+            var inputItemName = document.createElement("input");
+            inputItemName.type = "hidden";
+            inputItemName.name = "CenterMedicineUnit[" + i + "].SmallestUnit";
+            inputItemName.value = gridData[i].SmallestUnit;
+            f.appendChild(inputItemName);
+
+
+            var inputItemName1 = document.createElement("input");
+            inputItemName1.type = "hidden";
+            inputItemName1.name = "CenterMedicineUnit[" + i + "].PricePerUnit";
+            inputItemName1.value = gridData[i].PricePerUnit;
+            f.appendChild(inputItemName1);
+
+
+
+            debugger;
+
+        }
+
+        if (validator.validate()) {
+            $("#myForm1").submit();
+        }
+    }
+
+
+</script>

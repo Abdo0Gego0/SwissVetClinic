@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="6.0.0-preview.4.21253.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Quartz" Version="3.8.0" />
+    <PackageReference Include="Stripe.net" Version="43.15.0" />
+    <PackageReference Include="Telerik.UI.for.AspNet.Core" Version="2023.1.117" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CmsDataAccess\CmsDataAccess.csproj" />
+    <ProjectReference Include="..\NoificationManager\NoificationManager.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Kendo.Mvc">
+      <HintPath>Kendo.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

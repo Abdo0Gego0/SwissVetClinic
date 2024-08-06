@@ -1,0 +1,100 @@
+﻿@model CenterServices
+
+<div class="bannerContainer" >
+
+    <div class="row" style="width:100%;align-items:center;justify-content:center">
+
+        <input hidden asp-for="Image64" />
+        <center>
+
+        <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg" style="cursor:pointer; "></div>
+
+
+        <br />
+        <br />
+        <br />
+
+      
+            <div>
+                <span>
+                    <i style="background-image:url('/AdminDashboard/images/gallery-export.svg');display: inline-block;width:24px;height:24px"></i>
+                    <span class="uploadPicture"
+                          onclick="document.getElementById('ImageFile').click()">
+                        @Localizer["ChooseImage"]
+                    </span>
+                </span>
+                <input type="file" asp-for="ImageFile" onchange="preview()" accept="image/*" style="display:none">
+            </div>
+        </center>
+    </div>
+
+    <br />
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <label class="fieldLabel">
+                Name
+            </label>
+            <input class="form-control fieldInput" asp-for="CenterServicesTranslation[0].Name" />
+            <span class="text-danger" asp-validation-for="CenterServicesTranslation[0].Name"></span>
+
+        </div>
+        <br />
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <div dir="rtl">
+                <label class="fieldLabel" style="margin:0px;" dir="rtl">
+                    الاسم
+                </label>
+                <input class="form-control fieldInput" asp-for="CenterServicesTranslation[1].Name" />
+                <span class="text-danger" asp-validation-for="CenterServicesTranslation[1].Name"></span>
+
+            </div>
+            <br />
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <div dir="rtl">
+                <label class="fieldLabel" asp-for="Price">
+                    
+                </label>
+                <input class="form-control fieldInput" asp-for="Price" />
+                <span class="text-danger" asp-validation-for="Price"></span>
+
+            </div>
+            <br />
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    function getBase64(file) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result);
+            $("#Image64").val(reader.result).trigger("change");
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+
+    function preview() {
+        var file = document.getElementById('ImageFile').files[0];
+        document.getElementById('prevImg').style.backgroundImage = "url('" + URL.createObjectURL(file) + "')";
+
+        getBase64(file);
+
+    }
+
+</script>

@@ -1,0 +1,274 @@
+﻿
+.ContainerWithBg {
+    height: 100vh;
+    background-image: url('/siteimages/loginBg.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0px;
+    max-width:100vw !important;
+
+}
+
+.ContainerWithBg1 {
+    height: 100vh;
+    background-image: url('/siteimages/loginBg.svg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0px;
+    max-width: 100vw !important;
+}
+
+[dir="ltr"] .loginForm {
+    margin-left:10%;
+}
+
+[dir="rtl"] .loginForm {
+    margin-right: 10%;
+}
+
+.LoginTitle {
+    font-family: Poppins;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 39px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: black;
+}
+
+.loginBtn {
+    background-color: var(--site-light-pink);
+    color: white;
+    border-radius: 24px;
+    font-size: 18px;
+    font-weight: bold;
+    width: 50%;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset !important;
+}
+
+.loginInput {
+    background: var(--input-background) !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+    color: white !important;
+    box-shadow: 0px 3px 4px 1px var(--input-background);
+}
+
+.loginPassword {
+    background: var(--input-background) !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+    color: white !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    box-shadow: 0px 3px 4px 1px var(--input-background);
+}
+.passwordEye {
+    color: white !important;
+    border-top-right-radius: 26px !important;
+    border-bottom-right-radius: 26px !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    background: var(--input-background) !important;
+    box-shadow: 0px 3px 4px 1px var(--input-background);
+}
+
+
+
+.input-group-addon {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.25;
+    color: white;
+    text-align: center;
+    background: var(--input-background) !important;
+    border-radius: 12px;
+    box-shadow: 0px 3px 4px 1px var(--input-background);
+}
+
+
+[dir="ltr"] .forgotPassword {
+    color: #727272;
+    text-align: left !important;
+    font-family: 'Inter';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 16px;
+}
+
+
+[dir="rtl"] .forgotPassword {
+    color: #727272;
+    text-align: right !important;
+    font-family: 'Inter';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 16px;
+}
+
+[dir="ltr"] .divSubscriber {
+align-items:flex-start;
+}
+
+[dir="rtl"] .divSubscriber {
+    align-items: flex-end;
+}
+
+
+.notRegistered{
+    color: var(--site-light-gray);
+}
+
+.subcribe
+{
+    font-weight:bold;
+    color:black;
+    text-decoration:none;
+}
+
+.accountInput {
+    background: var(--site-blue) !important;
+    border-radius: 12px !important;
+    font-size: 16px !important;
+    color: white !important;
+}
+
+.SectionTilte {
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: left;
+    font-weight:bold;
+}
+
+
+
+
+
+.files input {
+    outline: 2px dashed #92b0b3;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    padding: 120px 0px 85px 35%;
+    text-align: center !important;
+    margin: 0;
+    width: 100% !important;
+}
+
+    .files input:focus {
+        outline: 2px dashed #92b0b3;
+        outline-offset: -10px;
+        -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+        transition: outline-offset .15s ease-in-out, background-color .15s linear;
+        border: 1px solid #92b0b3;
+    }
+
+.files {
+    position: relative;
+}
+
+    .files:after {
+        pointer-events: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 50px;
+        right: 0;
+        height: 56px;
+        content: "";
+        background-image: url(https://image.flaticon.com/icons/png/128/109/109612.png);
+        display: block;
+        margin: 0 auto;
+        background-size: 100%;
+        background-repeat: no-repeat;
+    }
+
+.color input {
+    background-color: #eeeeee;
+}
+
+.passportFile:before {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    pointer-events: none;
+    width: 100%;
+    right: 0;
+    height: 57px;
+    content: " Upload passport. ";
+    display: block;
+    margin: 0 auto;
+    color: #2ea591;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.licensesFile:before {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    pointer-events: none;
+    width: 100%;
+    right: 0;
+    height: 57px;
+    content: " Upload license. ";
+    display: block;
+    margin: 0 auto;
+    color: #2ea591;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+
+
+
+
+
+.newPassportFile:before {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    pointer-events: none;
+    width: 50%;
+    right: 0;
+    height: 57px;
+    content: " Upload new passport. ";
+    display: block;
+    margin: 0 auto;
+    color: #2ea591;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.newLicensesFile:before {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    pointer-events: none;
+    width: 50%;
+    right: 0;
+    height: 57px;
+    content: " Upload new license. ";
+    display: block;
+    margin: 0 auto;
+    color: #2ea591;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-align: center;
+}

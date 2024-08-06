@@ -1,0 +1,264 @@
+﻿
+@inject ISelectListService slSrvc
+
+@model MedicalCenter
+
+<form asp-action="EditCenter" asp-controller="AllCenter" method="post" enctype='multipart/form-data'>
+
+    <div class="container">
+         <h1 class="LoginTitle">@Localizer["Center Details"]</h1>
+    </div>
+    <hr />
+
+    <div class="container">
+
+        <div class="row" style="width:100%;align-items:center;justify-content:center">
+
+            <input asp-for="ImageName" hidden>
+            <input asp-for="Id" hidden>
+
+            <input asp-for="MedicalCenterTranslation[0].LangCode" hidden value="en-US" />
+            <input asp-for="MedicalCenterTranslation[1].LangCode" hidden value="ar" />
+
+            <input asp-for="MedicalCenterTranslation[0].MedicalCenterId" hidden>
+            <input asp-for="MedicalCenterTranslation[1].MedicalCenterId" hidden>
+
+            <input asp-for="MedicalCenterTranslation[0].Id" hidden>
+            <input asp-for="MedicalCenterTranslation[1].Id" hidden>
+
+            <input asp-for="Address.Id" hidden> 
+            <input asp-for="Address.AddressTranslation[0].Id" hidden>
+            <input asp-for="Address.AddressTranslation[1].Id" hidden>
+
+
+            <input asp-for="Address.AddressTranslation[0].LangCode" hidden value="en-US" />
+            <input asp-for="Address.AddressTranslation[1].LangCode" hidden value="ar" />
+
+            @{
+                if (!string.IsNullOrEmpty(Model.ImageName))
+                {
+                    <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg" style="cursor:pointer;background-image:url(@Model.ImageFullPath) !important">
+                    </div>
+                }
+                else
+                {
+                    <div onclick="document.getElementById('ImageFile').click()" class="picCircle" id="prevImg" style="cursor:pointer;">
+                    </div>
+                }
+            }
+
+            <center>
+                <div>
+                    <span>
+                        <i class="fa fa-camera"></i>
+                        <span class="uploadPicture"
+                              onclick="document.getElementById('ImageFile').click()">
+                            @Localizer["Choose Clinic Image"]
+                        </span>
+                    </span>
+                    <input type="file" asp-for="ImageFile" onchange="preview()" accept="image/*" style="display:none">
+                </div>
+            </center>
+        </div>
+        <br />
+        <br />
+        <br />
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="fieldLabel" asp-for="TimeZone"></label>
+                    <select class="form-control" asp-for="TimeZone" asp-items="@slSrvc.TimeZonesSL()">
+                        <option selected>@Localizer["Select Time Zone"]</option>
+                    </select>
+                    <span class="text-danger" asp-validation-for="TimeZone"></span>
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+
+        <div dir="ltr">
+
+            <label class="fieldLabel" style="margin:0px; direction:ltr !important">
+                Basic Info
+            </label>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">Name</label>
+                    <input type="text" class="form-control fieldInput" style="direction:ltr !important" asp-for="MedicalCenterTranslation[0].Name" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="MedicalCenterTranslation[0].Name"></span>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">Description</label>
+                    <input type="text" class="form-control fieldInput" style="direction:ltr !important" asp-for="MedicalCenterTranslation[0].Description" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="MedicalCenterTranslation[0].Description"></span>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <hr />
+
+        <div dir="rtl">
+            <label class="fieldLabel" style="margin:0px;" dir="rtl">
+                المعلومات العامة
+            </label>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">الاسم</label>
+                    <input type="text" class="form-control fieldInput" asp-for="MedicalCenterTranslation[1].Name" />
+                    <span class="text-danger" asp-validation-for="MedicalCenterTranslation[1].Name"></span>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">الوصف</label>
+                    <input type="text" class="form-control fieldInput" asp-for="MedicalCenterTranslation[1].Description" />
+                    <span class="text-danger" asp-validation-for="MedicalCenterTranslation[1].Description"></span>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <hr />
+
+        <div dir="ltr">
+
+            <label class="fieldLabel" style="margin:0px;direction:ltr !important">
+                Address
+            </label>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">Full Address</label>
+                    <input type="text" style="direction:ltr !important" class="form-control fieldInput" asp-for="Address.AddressTranslation[0].FullAddress" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="Address.AddressTranslation[0].FullAddress"></span>
+                </div>
+
+                <div class="col-md-4  mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">Country</label>
+                    <input type="text" style="direction:ltr !important" class="form-control fieldInput" asp-for="Address.AddressTranslation[0].Country" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="Address.AddressTranslation[0].Country"></span>
+                </div>
+
+                <div class="col-md-4  mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">City</label>
+                    <input type="text" style="direction:ltr !important" class="form-control fieldInput" asp-for="Address.AddressTranslation[0].City" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="Address.AddressTranslation[0].City"></span>
+                </div>
+
+                <div class="col-md-4  mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">Street</label>
+                    <input type="text" style="direction:ltr !important" class="form-control fieldInput" asp-for="Address.AddressTranslation[0].Street" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="Address.AddressTranslation[0].Street"></span>
+                </div>
+
+                <div class="col-md-4  mb-3">
+                    <label class="fieldLabel" style="direction:ltr !important">Building</label>
+                    <input type="text" style="direction:ltr !important" class="form-control fieldInput" asp-for="Address.AddressTranslation[0].Building" />
+                    <span class="text-danger" style="direction:ltr !important" asp-validation-for="Address.AddressTranslation[0].Building"></span>
+                </div>
+
+
+            </div>
+        </div>
+        <hr />
+        <br />
+        <br />
+
+        <div dir="rtl">
+            <label class="fieldLabel" style="margin:0px;" dir="rtl">
+                العنوان
+            </label>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">العنوان الكامل</label>
+                    <input type="text" class="form-control fieldInput" asp-for="Address.AddressTranslation[1].FullAddress" />
+                    <span class="text-danger" asp-validation-for="Address.AddressTranslation[1].FullAddress"></span>
+                </div>
+
+                <div class="col-md-4  mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">الدولة</label>
+                    <input type="text" class="form-control fieldInput" asp-for="Address.AddressTranslation[1].Country" />
+                    <span class="text-danger" asp-validation-for="Address.AddressTranslation[1].Country"></span>
+                </div>
+
+                <div class="col-md-4  mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">المدينة</label>
+                    <input type="text" class="form-control fieldInput" asp-for="Address.AddressTranslation[1].City" />
+                    <span class="text-danger" asp-validation-for="Address.AddressTranslation[1].City"></span>
+                </div>
+
+                <div class="col-md-4  mb-3">
+                    <label class="fieldLabel" style="margin:0px;" dir="rtl">الشارع</label>
+                    <input type="text" class="form-control fieldInput" asp-for="Address.AddressTranslation[1].Street" />
+                    <span class="text-danger" asp-validation-for="Address.AddressTranslation[1].Street"></span>
+                </div>
+
+                <div class="col-md-4  mb-3">
+                    <label class="fieldLabel" style="margin:0px;">البناء</label>
+                    <input type="text" class="form-control fieldInput" asp-for="Address.AddressTranslation[1].Building" />
+                    <span class="text-danger" asp-validation-for="Address.AddressTranslation[1].Building"></span>
+                </div>
+
+            </div>
+        </div>
+
+        <br />
+        <br />
+        <hr />
+  
+
+
+
+
+
+
+        <br />
+        <br />
+        <br />
+
+        <div class="row">
+            <div class="col-md-4">
+                <button type="submit" class="form-control addCtrl"> @Localizer["Edit"]</button>
+
+            </div>
+            <div class="col-md-4">
+                <button type="button" onclick="deleteCenter()" class="form-control addCtrl" style="background-color:red !important">  @Localizer["Delete"]</button>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+</form>
+
+<script>
+    function preview(evt) {
+        var filee = event.target.files[0];
+        document.getElementById('prevImg').style.backgroundImage = "url('" + URL.createObjectURL(filee) + "')";
+    }
+
+
+    function deleteCenter()
+    {
+        var url = "/Admin/AllCenter/Delete_Clinic/" + '@Model.Id';
+        var a = document.createElement('a');
+        a.href = url;
+        a.click();
+    }
+
+</script>

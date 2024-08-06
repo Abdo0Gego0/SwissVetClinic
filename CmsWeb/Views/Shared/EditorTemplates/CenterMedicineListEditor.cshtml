@@ -1,0 +1,17 @@
+﻿@inject ISelectListService slSrvc
+
+
+@model Guid
+
+@(
+        Html.Kendo().DropDownListFor(m => m)
+        .BindTo(slSrvc.CenterMedicineSL())
+
+        .DataTextField("Name")
+        .DataValueField("Id")
+
+        
+            .Events(ev => ev.Change("gridEditNew"))
+
+
+        )

@@ -1,0 +1,326 @@
+﻿@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "../../../Views/Shared/_AuthLayout.cshtml";
+}
+
+@model SubscriptionApplication
+
+@inject ISelectListService slSrvc
+
+@{
+
+    if (Model.Accepted == 1)
+    {
+        <form asp-action="ChoosePlan" asp-controller="Home" method="post" enctype='multipart/form-data'>
+            <br />
+
+            <center>
+                <img src="~/siteimages/logoWithText.svg" />
+                <br />
+                <br />
+
+                <h1 class="LoginTitle">Congratulations your application had been approved</h1>
+
+                <button type="submit" class="form-control addCtrl"> Continue to choose subscription plan</button>
+
+
+             </center>
+
+        </form>
+    }
+    else
+    {
+        <form asp-action="SubmissionAction" asp-controller="Home" method="post" enctype='multipart/form-data'>
+
+            <input asp-for="Id" hidden />
+            <div class="container">
+                <br />
+                <center>
+                    <img src="~/siteimages/logoWithText.svg" />
+                    <br />
+                    <br />
+
+
+                    <select class="form-control" disabled asp-for="Accepted" asp-items="@slSrvc.ApplicationStatusSL()">
+                    </select>
+                    <br />
+                    <textarea asp-for="ResponseFromAdmin" class="form-control">
+
+                    </textarea>
+
+                </center>
+
+                <br />
+                <br />
+                <hr />
+                <center>
+                    <br />
+                    <h1 class="LoginTitle">Your application details</h1>
+                </center>
+                <br />
+
+                <label class="SectionTilte">@Localizer["Basic Info"]</label>
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="FirstName" placeholder="XXXXX">
+                            <label for="Firstname">First name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="MiddleName" placeholder="XXXXX">
+                            <label for="Middlename">Middle name</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="LastName" placeholder="XXXXX">
+                            <label for="Lastname">Last name</label>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="Nationality" placeholder="XXXXX">
+                            <label for="Nationality">Nationality</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="PassportNumber" placeholder="XXXXX">
+                            <label for="PassportNumber">Passport number</label>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="NationalCardId" placeholder="XXXXX">
+                            <label for="NationalCardId">National card Id</label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <label class="SectionTilte">@Localizer["Contact info"]</label>
+                <br />
+                <br />
+
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="SubscriberPhone" placeholder="XXXXX">
+                            <label for="SubscriberPhone">Subscriber phone</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="SubscriberEmail" placeholder="XXXXX">
+                            <label for="SubscriberEmail">Subscriber email</label>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <label class="SectionTilte">Business Info</label>
+                <br />
+                <br />
+
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="LicenseNumber" placeholder="XXXXX">
+                            <label for="LicenseNumber">License number</label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="LicenseExpireDate" placeholder="XXXXX">
+                            <label for="LicenseExpireDate">License expire date</label>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="form-floating mb-3">
+                            <input type="datetime" class="form-control accountInput" asp-for="CenterName" placeholder="XXXXX">
+                            <label for="CenterName">Center name</label>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-8">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control accountInput" asp-for="CenterAddress" placeholder="XXXXX">
+                            <label for="CenterAddress">Center address</label>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                <label class="SectionTilte">Documnets</label>
+                <br />
+                <br />
+                <div class="row">
+
+                    <label class="SectionTilte">Passport</label>
+
+                    @{
+                        if (Model.PassportImageName != null)
+                        {
+                            if (!string.IsNullOrEmpty(Model.PassportImageName))
+                            {
+                                string ext = System.IO.Path.GetExtension(Model.PassportImageFullPath);
+                                ext = ext.Replace(".", "");
+
+                                if (ext.ToLower() == "pdf")
+                                {
+                                    <div id="pdfViewer1">
+                                    </div>
+                                    <script>
+                                        $.when(
+                                            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"),
+                                            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js")
+                                        )
+                                            .done(function () {
+                                                window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+                                            }).then(function () {
+                                                $("#pdfViewer1").kendoPDFViewer({
+                                                    pdfjsProcessing: {
+                                                        file: "@Model.PassportImageName"
+                                                    },
+                                                    width: "100%",
+                                                    height: 1200
+                                                });
+                                            })
+                                    </script>
+                                }
+                                else
+                                {
+                                    <img src="@Model.PassportImageFullPath" id="prevImg1" style="max-width:800px;cursor:pointer;" />
+                                }
+
+                            }
+                        }
+                    }
+
+                    <div class="row">
+                        <div class="form-group files color newPassportFile">
+                            <input type="file" name="PassportImageFile" />
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <br />
+
+
+                <div class="row">
+                    <label class="SectionTilte">License</label>
+
+                    @{
+                        if (Model.PassportImageName != null)
+                        {
+                            if (!string.IsNullOrEmpty(Model.LicenseImageName))
+                            {
+                                string ext = System.IO.Path.GetExtension(Model.LicenseImageFullPath);
+                                ext = ext.Replace(".", "");
+
+                                if (ext.ToLower() == "pdf")
+                                {
+                                    <div id="pdfViewer2">
+                                    </div>
+                                    <script>
+                                        $.when(
+                                            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.js"),
+                                            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js")
+                                        )
+                                            .done(function () {
+                                                window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.2/pdf.worker.js';
+                                            }).then(function () {
+                                                $("#pdfViewer2").kendoPDFViewer({
+                                                    pdfjsProcessing: {
+                                                        file: "@Model.LicenseImageFullPath"
+                                                    },
+                                                    width: "100%",
+                                                    height: 1200
+                                                });
+                                            })
+                                    </script>
+                                }
+                                else
+                                {
+                                    <img src="@Model.LicenseImageFullPath" id="prevImg1" style="max-width:800px;cursor:pointer;" />
+                                }
+                            }
+                        }
+                    }
+
+                    <div class="row">
+                        <div class="form-group files color newLicensesFile">
+                            <input type="file" name="LicenseImageFile" />
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <br />
+
+                        @{
+                            if (Model.Accepted != 1 && Model.Accepted != -2)
+                            {
+                                <button type="submit" class="form-control addCtrl"> Edit submission</button>
+                            }
+
+                        }
+
+                        <br />
+                        <br />
+                    </div>
+                </div>
+
+
+
+                <br />
+                <br />
+
+            </div>
+
+        </form>
+    }
+
+}
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+    function preview(evt) {
+        var filee = event.target.files[0];
+        document.getElementById('prevImg').style.backgroundImage = "url('" + URL.createObjectURL(filee) + "')";
+    }
+</script>
+

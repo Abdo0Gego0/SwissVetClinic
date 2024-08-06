@@ -1,0 +1,179 @@
+﻿@model IEnumerable<CmsDataAccess.DbModels.Receipt>
+
+@{
+    ViewData["Title"] = "Receipts";
+}
+
+<div class="container mt-4">
+    <h3>@ViewData["Title"]</h3>
+    <hr />
+
+    <!-- Toolbar with Add New Button -->
+    <div class="mb-3">
+        <a href="@Url.Action("Create", "Receipts", new { area = "CenterEmployeeReception" })" class="btn btn-primary">
+            Add New
+        </a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Created At</th>
+                    <th>Amount of Items</th>
+                    <th>Total Price</th>
+                    <th>Receipt Photo</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var receipt in Model)
+                {
+                    <tr>
+                        <td>@receipt.CompanyName</td>
+                        <td>@receipt.ReceiptDate.ToString("MM/dd/yyyy HH:mm")</td>
+                        <td>@receipt.TotalAmount</td>
+                        <td>@receipt.TotalPrice.ToString("F2") AED</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(receipt.PhotoName))
+                            {
+                                <a href="@Url.Action("DownloadPhoto", "Receipts", new { fileName = receipt.PhotoName })" download>
+                                    Receipt Image
+                                </a>
+                            }
+                            else
+                            {
+                                <span>No photo available</span>
+                            }
+                        </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="openEditModal('@receipt.Id')">
+                                Edit
+                            </button>
+                            @using (Html.BeginForm("DeleteConfirmed", "Receipts", new { area = "CenterEmployeeReception" }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@receipt.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this receipt?');">
+                                    Delete
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning" role="alert">
+            No receipts available.
+        </div>
+    }
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Receipt</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" asp-action="Edit" asp-controller="Receipts" asp-area="CenterEmployeeReception" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="editId" name="Id" />
+                    <div class="form-group">
+                        <label for="CompanyName">Company Name</label>
+                        <input type="text" class="form-control" id="CompanyName" name="CompanyName" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="ReceiptDate">Receipt Date</label>
+                        <input type="datetime-local" class="form-control" id="ReceiptDate" name="ReceiptDate" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="TotalAmount">Total Amount</label>
+                        <input type="number" class="form-control" id="TotalAmount" name="TotalAmount" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="TotalPrice">Total Price</label>
+                        <input type="number" step="0.01" class="form-control" id="TotalPrice" name="TotalPrice" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="ReceiptPhoto">Receipt Photo</label>
+                        <input type="file" class="form-control" id="ReceiptPhoto" name="ReceiptPhoto" />
+                    </div>
+                    <div class="form-group">
+                        <img id="previewPhoto" src="" alt="Preview" style="max-width: 100%; height: auto; display: none;" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openEditModal(receiptId) {
+            $.get('@Url.Action("GetReceipt", "Receipts", new { area = "CenterEmployeeReception" })', { id: receiptId }, function (data) {
+                $('#editId').val(data.id);
+                $('#CompanyName').val(data.companyName);
+                $('#ReceiptDate').val(data.receiptDate);
+                $('#TotalAmount').val(data.totalAmount);
+                $('#TotalPrice').val(data.totalPrice);
+                if (data.receiptPhoto) {
+                    $('#previewPhoto').attr('src', '@Url.Content("~/uploads/Images/")' + data.receiptPhoto).show();
+                } else {
+                    $('#previewPhoto').hide();
+                }
+                $('#editModal').modal('show');
+            });
+        }
+
+        $(document).ready(function () {
+            $('#ReceiptPhoto').change(function () {
+                var file = this.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#previewPhoto').attr('src', e.target.result).show();
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            $('#editForm').submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    success: function (result) {
+                        if (result.success) {
+                            $('#editModal').modal('hide');
+                            location.reload();
+                        } else {
+                            // Display errors
+                            alert('Error: ' + result.errors.join('\n'));
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while saving the changes.');
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+            
+            });
+        });
+    </script>
+}

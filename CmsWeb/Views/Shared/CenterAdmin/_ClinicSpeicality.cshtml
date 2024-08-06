@@ -1,0 +1,153 @@
+﻿<div class="@Localizer["k-rtl"]">
+@(
+Html.Kendo().Grid<ClinicSpecialty>()
+                                        .Name("grid")
+        .ToolBar
+        (
+        toolbar =>
+        {
+
+            toolbar.Create().Text(@Localizer["Add new"]).IconClass("k-icon k-i-plus k-button-icon").HtmlAttributes(new { @class = "addCtrl" });
+            toolbar.Save().SaveText(@Localizer["Save"]).CancelText(@Localizer["Cancel"]).IconClass("fa fa-save").HtmlAttributes(new { @class = "addCtrl" });
+            toolbar.Search().Text(Localizer["Search"]);
+        }).HtmlAttributes(new { @class = "myToolBar" })
+
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.Id).Visible(false);
+                    columns.Bound(p => p.ClinicSpecialtyTranslation[0].Name).Title("Name");
+                    columns.Bound(p => p.ClinicSpecialtyTranslation[1].Name).Title("الاسم");
+
+                    columns.Command(command =>
+                     {
+                         command.Destroy().TemplateId("Temp_Destroy"); 
+                     }).Width(250).Title(" ");
+                }
+
+                    )
+                .Mobile(MobileMode.Auto)
+        .Editable(ed =>
+        {
+            ed.Mode(GridEditMode.InCell);
+
+            ed.DisplayDeleteConfirmation(false);
+        })
+
+                .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(true)
+                .ButtonCount(25)
+                .Responsive(true)
+                .Info(true)
+                .Numeric(true)
+                )
+                .Sortable()
+                .Navigatable()
+                .Resizable(r => r.Columns(true))
+                .Reorderable(r => r.Columns(true))
+        .Filterable(filt =>
+        {
+            filt.Messages(msg => msg.And(Localizer["And"]));
+            filt.Messages(msg => msg.Or(Localizer["Or"]));
+            filt.Messages(msg => msg.Equals(Localizer["Equal"]));
+            filt.Messages(msg => msg.Clear(Localizer["Cancel"]));
+            filt.Messages(msg => msg.Filter(Localizer["Search"]));
+            filt.Messages(msg => msg.Info(""));
+
+            filt.Operators(op => op.ForDate(
+            fs =>
+            {
+                fs.Clear();
+                fs.IsNotEqualTo(Localizer["Equal"]);
+                fs.IsEqualTo(Localizer["Not Equal"]);
+                fs.IsLessThan(Localizer["Smaller"]);
+                fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                fs.IsGreaterThan(Localizer["Greater"]);
+                fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+            }
+            )
+            );
+
+            filt.Operators(op => op.ForString(
+            fs =>
+            {
+                fs.Clear();
+                fs.StartsWith(Localizer["Starts with"]);
+                fs.EndsWith(Localizer["Ends with"]);
+                fs.Contains(Localizer["Contains"]);
+                fs.IsNotEqualTo(Localizer["Not Equal"]);
+                fs.IsEqualTo(Localizer["Equal"]);
+                fs.DoesNotContain(Localizer["Does not Contain"]);
+
+            }
+            )
+            );
+
+
+            filt.Operators(op => op.ForNumber(
+            fs =>
+            {
+                fs.Clear();
+                fs.IsNotEqualTo(Localizer["Not Equal"]);
+                fs.IsEqualTo(Localizer["Equal"]);
+
+                fs.IsLessThan(Localizer["Smaller"]);
+                fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                fs.IsGreaterThan(Localizer["Greater"]);
+                fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+
+            }
+            )
+            );
+
+
+
+        })
+                .Scrollable()
+
+
+                .HtmlAttributes(new { @class = "custom-grid" }) // Add a custom class
+
+                .DataSource(
+        dataSource => dataSource
+
+        .Ajax()
+        .Batch(true)
+        .PageSize(20)
+        .Model(model => model.Id(p => p.Id))
+        .Model(model => model.Field(p => p.MedicalCenterId))
+        .Model(model => model.Field(p => p.ClinicSpecialtyTranslation).DefaultValue(new List<ClinicSpecialtyTranslation> { new ClinicSpecialtyTranslation { LangCode = "en-us", Name = "" }, new ClinicSpecialtyTranslation { LangCode = "ar", Name = "" } }))
+        .Read(read => read.Action("Read", "Clinic").Type(HttpVerbs.Get))
+
+        .Destroy(destroy =>
+        {
+            destroy.Action("Destroy", "Clinic");
+        })
+
+
+        .Create(destroy =>
+        {
+            destroy.Action("Create", "Clinic");
+        })
+
+        .Update(destroy =>
+        {
+            destroy.Action("Update", "Clinic");
+        })
+
+        .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+        )
+        @*.Events(events => events.Edit("onEdit"))*@
+        .Events(events => events.DataBound("onDataBound"))
+)
+</div>
+
+
+<script id="Temp_Destroy" type="text/kendo-tmpl">
+    <span class="k-grid-delete" style="font-size:24px;cursor:pointer;color:red"><i class="fa fa-trash"></i></span>
+</script>
+
+<script id="Temp_Edit" type="text/kendo-tmpl">
+    <span class="k-grid-edit"   style="font-size:24px;cursor:pointer;color:rgba(1, 81, 83, 1)"><i class="fas fa-edit"></i></span>
+</script>

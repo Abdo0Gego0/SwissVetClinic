@@ -1,0 +1,58 @@
+﻿@inject INavService StyleServiceMain
+@inject IUserService _userService
+
+
+
+<nav id="sidebar">
+
+    <div style="min-width: var(--nav-width);
+    max-width: var(--nav-width);background-color:white !important;">
+
+        <center>
+            <img src="~/siteimages/logoWithText.svg" height="107px" width="71px" />
+            <br />
+            <a href="@Localizer["langUrl"]">
+                <img src="~/siteimages/@Localizer["langImage"]" style="padding: 16px 26px 16px 26px;cursor: pointer;">
+            </a>
+        </center>
+    </div>
+
+    <div class="pt-5">
+
+        <a href="@Url.Action("MyAccount","Home", new {area="CenterEmployeeOrders"})" class="img logo rounded-circle mt-2 mb-2" style="border-style: double;border-color:black; background-image: url(@_userService.GetUserProfileImage());"></a>
+
+        <label class="AccountName">@_userService.GetUserFirstName()</label>
+        <br />
+
+        <ul class="list-unstyled components mb-5">
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Index"},new List<string>{"Orders"},"active","")">
+                <a href="@Url.Action("Index","Orders",new {area="CenterEmployeeOrders"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Calendar.svg' />
+                    @Localizer["Orders"]
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"Outcome"},new List<string>{"Index"},"active","")">
+                <a href="@Url.Action("Index","Outcome",new {area="CenterEmployeeOrders"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Accounting.svg' />
+                    @Localizer["Outcome"]
+                </a>
+            </li>
+
+            <li class="@StyleServiceMain.GetStylGetStyleMainNav(new List<string>{"LogIn"},new List<string>{"logOut"},"active","")">
+                <a href="@Url.Action("logOut","LogIn",new {area="Auth"})">
+                    <img style="width:24px;height:24px" src='~/navimages/Logout.svg' />
+                    @Localizer["Logout"]
+                </a>
+            </li>
+
+
+        </ul>
+
+    </div>
+</nav>
+
+
+
+

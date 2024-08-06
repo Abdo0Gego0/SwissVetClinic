@@ -1,0 +1,768 @@
+﻿.k-event {
+    height: fit-content !important;
+    background: transparent !important;
+}
+
+
+.k-tabstrip-item {
+    text-align: center !important;
+    font-family: "Inter" !important;
+    font-size: 15px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 120% !important; /* 19.2px */
+    color: var(--dark-blue) !important;
+}
+
+.k-state-active {
+    text-align: center !important;
+    font-family: "Inter" !important;
+    font-size: 15px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 120% !important; /* 19.2px */
+    color: var(--Button-link) !important;
+}
+
+.k-grid-sessionStudents {
+    background: #3d6d6d57 !important;
+    border-color: none !important;
+    border-radius: 100px !important;
+}
+
+    .k-grid-sessionStudents .span {
+        font-size: 16px !important;
+    }
+
+.pageTitle {
+    color: var(--Typography-Heading1-text-color);
+    font-family: "Inter";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.navBarTitle {
+    color: #FFF;
+    text-align: right;
+    font-family: "Inter";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-right: 20px;
+}
+
+.k-edit-form-container {
+    width: 100% !important;
+}
+
+.k-expander-header {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+.k-grouping-header {
+    display: flex !important;
+}
+
+#signUpForm .k-button-solid-primary {
+    width: 138px;
+    height: 50px;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--button-radius);
+    background: linear-gradient(270deg, #3D6D6D 0%, #2B4C4C 100%);
+    margin: 5px !important;
+    color: #FFF;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "Inter";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px; /* 137.5% */
+}
+
+.newSaveCtrl {
+    width: 138px;
+    height: 50px;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--button-radius);
+    background: linear-gradient(270deg, #3D6D6D 0%, #2B4C4C 100%);
+    margin: 5px !important;
+    color: #FFF;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "Inter";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px; /* 137.5% */
+    border: 0px;
+}
+
+#signUpForm .k-button-solid-base {
+    width: 138px;
+    height: 50px;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--button-radius);
+    border: 1px solid #3D6D6D;
+    color: #2B4C4C;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "Inter";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px; /* 137.5% */
+    background: white;
+}
+
+.k-progressbar .k-state-selected {
+    border-color: #E1BB93 !important;
+    color: #fff;
+    background-color: #E1BB93 !important;
+}
+
+.k-stepper .k-step-done .k-step-indicator {
+    border-color: var(--Button-link) !important;
+    color: #fff;
+    background-color: var(--Button-link) !important;
+}
+
+.k-stepper .k-step-current .k-step-indicator {
+    border-color: var(--Button-link) !important;
+    color: #fff;
+    background-color: var(--Button-link) !important;
+}
+
+.k-wizard-pager {
+    display: none;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+#signUpForm {
+    /*max-width: 500px;*/
+    background-color: #ffffff;
+    /*box-shadow: 6px 6px 6px 6px rgba(19, 80, 81, 0.50) !important;*/
+    margin: 40px auto;
+    padding: 40px;
+    /*box-shadow: 0px 6px 18px rgb(0 0 0 / 9%);*/
+    border-radius: 12px;
+    text-align: right;
+}
+
+    #signUpForm .form-header {
+        gap: 5px;
+        text-align: center;
+        font-size: .9em;
+    }
+
+        #signUpForm .form-header .stepIndicator {
+            position: relative;
+            flex: 1;
+            padding-bottom: 30px;
+        }
+
+            #signUpForm .form-header .stepIndicator.active {
+                font-weight: 600;
+            }
+
+            #signUpForm .form-header .stepIndicator.finish {
+                font-weight: 600;
+                color: #009688;
+            }
+
+            #signUpForm .form-header .stepIndicator::before {
+                content: "";
+                position: absolute;
+                left: 50%;
+                bottom: 0;
+                transform: translateX(-50%);
+                z-index: 9;
+                width: 20px;
+                height: 20px;
+                background-color: #d5efed;
+                border-radius: 50%;
+                border: 3px solid #ecf5f4;
+            }
+
+            #signUpForm .form-header .stepIndicator.active::before {
+                background-color: #a7ede8;
+                border: 3px solid #d5f9f6;
+            }
+
+            #signUpForm .form-header .stepIndicator.finish::before {
+                background-color: #009688;
+                border: 3px solid #b7e1dd;
+            }
+
+            #signUpForm .form-header .stepIndicator::after {
+                content: "";
+                position: absolute;
+                left: 50%;
+                bottom: 8px;
+                width: 100%;
+                height: 3px;
+                background-color: #f3f3f3;
+            }
+
+            #signUpForm .form-header .stepIndicator.active::after {
+                background-color: #a7ede8;
+            }
+
+            #signUpForm .form-header .stepIndicator.finish::after {
+                background-color: #009688;
+            }
+
+            #signUpForm .form-header .stepIndicator:last-child:after {
+                display: none;
+            }
+
+    #signUpForm input {
+        padding: 15px 20px;
+        width: 100%;
+        font-size: 1em;
+        border: 1px solid #e3e3e3;
+        border-radius: 5px;
+    }
+
+        #signUpForm input:focus {
+            border: 1px solid #009688;
+            outline: 0;
+        }
+
+        #signUpForm input.invalid {
+            border: 1px solid #ffaba5;
+        }
+
+    #signUpForm .step {
+        display: none;
+    }
+
+    #signUpForm .form-footer {
+        overflow: auto;
+        gap: 20px;
+    }
+
+        #signUpForm .form-footer button {
+            background-color: #009688;
+            border: 1px solid #009688 !important;
+            color: #ffffff;
+            border: none;
+            padding: 13px 30px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            flex: 1;
+            margin-top: 5px;
+        }
+
+            #signUpForm .form-footer button:hover {
+                opacity: 0.8;
+            }
+
+        #signUpForm .form-footer #prevBtn {
+            background-color: #fff;
+            color: #009688;
+        }
+
+
+.k-grid-myEdit {
+    border: none !important;
+    background: none !important;
+}
+
+
+.prof-photo {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-size: 32px 35px;
+    background-position: center center;
+    vertical-align: middle;
+    line-height: 32px;
+    box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+    margin-right: 5px;
+}
+
+
+
+.k-breadcrumb-item {
+    vertical-align: middle;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    align-items: center;
+    overflow: hidden;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+.myToolBar {
+}
+
+.addCtrl {
+    width: 189px !important;
+    height: 40px !important;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: var(--button-radius) !important;
+    background: var(--site-light-pink) !important;
+    color: #FFF !important;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "Inter" !important;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px; /* 137.5% */
+    border:none !important;
+}
+
+.saveCtrl {
+    font-size: 16px !important;
+    direction: rtl !important;
+    color: white !important;
+    margin-bottom: 25px !important;
+    border-radius: 29px !important;
+    background: var(--dark-blue) !important;
+    border: none !important;
+}
+
+.savePopUp {
+    border: none;
+    padding: 12px;
+    border-radius: 2px !important;
+    width: 94px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+.k-grid-update {
+    background: var(--dark-blue) !important;
+}
+
+.custom-grid {
+    height: 1000px;
+    width: 100%;
+    /*box-shadow: 6px 6px 6px 6px rgba(19, 80, 81, 0.50) !important;*/
+    /*border-radius: 12px !important;*/
+}
+
+
+
+    .custom-grid .k-header {
+        color: #667085 !important;
+        font-family: "Inter" !important;
+        font-size: 14px !important;
+        font-style: normal !important;
+        font-weight: 600 !important;
+        line-height: 18px !important; /* 128.571% */
+        font-style: normal !important;
+        background: var(--header-bg-color) !important;
+        border-right: none !important;
+        border-left: none !important;
+    }
+
+    .custom-grid .k-grid-header {
+        background: var(--header-bg-color) !important;
+    }
+
+    .custom-grid .k-alt {
+        background: white !important;
+    }
+
+
+    .custom-grid .k-auto-scrollable {
+        background: white !important;
+    }
+
+    .custom-grid .k-grid-pager {
+        background: var(--grid-bg-color) !important;
+        /*border-radius: 0px 0px 12px 12px;*/
+    }
+
+
+
+    .custom-grid th {
+    }
+
+
+    .custom-grid .k-grid-content tr {
+        text-align: center;
+        font-size: 14px;
+        /*font-weight:bold;*/
+    }
+
+    .custom-grid thead {
+        background: #F2F3F8;
+    }
+
+
+[dir="ltr"] .custom-grid .k-toolbar {
+    direction: ltr;
+    background: var(--toolbar-bg-color);
+    border: none;
+    /*border-radius: var(--button-radius) !important;*/
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+[dir="rtl"] .custom-grid .k-toolbar {
+    direction: rtl;
+    background: var(--toolbar-bg-color);
+    border: none;
+    /*border-radius: 12px !important;*/
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+
+    .custom-grid .k-grid-content {
+        background: var(--grid-bg-color) !important;
+    }
+
+.k-searchbox {
+    display: flex;
+    width: 405px;
+    padding: 8px 12px;
+    align-items: center;
+    gap: 8px;
+    flex: 1 0 0;
+    border-radius: 12px !important;
+    border: 1px solid var(--Gray-300) !important;
+    background: White !important;
+    color: var(--input-input-placeholder-color) !important;
+    text-align: right;
+    font-family: "Inter";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 171.429% */
+}
+
+
+.k-link {
+    justify-content: center;
+}
+
+.k-pager-numbers .k-state-selected {
+    background-color: var(--header-bg-color) !important;
+    border-radius: 12px;
+    color: white !important;
+}
+
+.k-pager-numbers-wrap .k-link .k-state-selected {
+    color: white !important;
+}
+
+
+
+
+.k-grid-pager .k-picker {
+    background-color: var(--header-bg-color) !important;
+    border-radius: 12px;
+    color: white !important;
+}
+
+
+.k-pager-numbers-wrap .k-state-disabled .k-pager-nav .k-link .k-pager-nav .k-pager-first {
+    color: var(--header-bg-color) !important;
+}
+
+.k-pager-numbers-wrap .k-state-disabled .k-pager-nav .k-link .k-pager-nav .k-pager-last {
+    color: var(--header-bg-color) !important;
+}
+
+.k-grid tbody td:first-child {
+    /*border-left: solid red;*/
+}
+
+.k-grid tbody td:last-child {
+    /*border-right: solid red;*/
+}
+
+.k-grid tbody td {
+    /*border-top: solid red;*/
+    border-bottom: 1px solid #EAECF0 !important;
+    border-left: none !important;
+    border-right: none !important;
+    color: var(--Typography-Heading2-text-color-2);
+    font-family: "Inter";
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+}
+
+.custom-grid .k-command-cell {
+    /*width: 60px !important;*/
+}
+
+.custom-grid .k-i-filter {
+    /*background-image: url('/AdminDashboard/images/filter.svg') !important;
+    background-color: white !important;
+    background-repeat: no-repeat;
+    background-size: cover;*/
+}
+
+    .custom-grid .k-i-filter::before {
+        /*content: none !important;*/
+    }
+
+.editContainer {
+    padding: 6px;
+    gap: 10px;
+    border-radius: 100px;
+    background: rgba(222, 175, 126, 0.10);
+}
+
+.destroysContainer {
+    padding: 6px;
+    gap: 10px;
+    border-radius: 100px;
+    background: rgba(242, 33, 40, 0.10);
+}
+
+.k-i-home::before {
+    color: var(--site-navbar-active-color) !important;
+}
+
+.k-breadcrumb-item {
+    color: var(--site-navbar-active-color) !important;
+    font-family: "Inter" !important;
+    font-size: 14px;
+}
+
+    .k-breadcrumb-item .k-breadcrumb-link {
+        color: var(--site-navbar-active-color) !important;
+        font-family: "Inter" !important;
+        font-size: 14px;
+    }
+
+.k-breadcrumb-last-item .k-breadcrumb-link {
+    color: #797D7D !important;
+    font-family: "Inter" !important;
+    font-size: 14px;
+}
+
+.k-step-text {
+    /*    color: var(--input-body-icon-color);
+    text-align: right;
+    font-family: "Inter";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;*/
+}
+
+.k-stepper .k-step-label .k-step-text {
+    color: var(--input-body-icon-color);
+    font-family: "Inter";
+    max-width: none !important;
+    transform: skew(-10deg) !important;
+}
+
+
+.addNewContact {
+    display: flex;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 8px;
+    border: 1px dashed var(--input-body-border-color-hover);
+    background: #FCF9F5;
+}
+
+.deleteContact {
+    display: flex;
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 8px;
+    border-radius: 8px;
+    background: rgba(252, 71, 85, 0.10);
+    border-color: white;
+    border-width: 0px;
+}
+
+.MyTableTh {
+    color: #667085 !important;
+    font-family: "Inter" !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 18px !important; /* 128.571% */
+    font-style: normal !important;
+    background: white !important;
+    border-right: none !important;
+    border-left: none !important;
+    border: none;
+    border-bottom: 2px solid #dee2e6 !important;
+    text-align: center;
+}
+
+.divDetails {
+    padding: 8px 12px;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 8px;
+    background: var(--Background-background-color-1);
+}
+
+    .divDetails p {
+        color: var(--input-input-placeholder-color);
+        text-align: right;
+        font-family: "Inter";
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin-bottom: 0px;
+    }
+
+    .divDetails h2 {
+        color: var(--Typography-Heading2-text-color-2);
+        text-align: right;
+        font-family: "Inter";
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 150%; /* 24px */
+        margin-bottom: 0px;
+    }
+
+.DetailsSectionSubTitle {
+    text-align: right;
+    color: var(--Button-link);
+    font-family: "Inter";
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.k-window .k-grid-update {
+    width: 138px;
+    height: 50px;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--site-light-pink) !important;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "Inter";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px; /* 137.5% */
+    border:none;
+}
+
+.k-window .k-grid-cancel {
+    width: 138px;
+    height: 50px;
+    padding: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    font-feature-settings: 'clig' off, 'liga' off;
+    font-family: "Inter";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px; /* 137.5% */
+}
+
+.uploadPicture {
+    color: #101828;
+    font-family: "Inter";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 23px; /* 143.75% */
+}
+
+.k-window .k-input-md .k-input-button {
+    background-color: white !important;
+}
+
+.k-window .k-input-md .k-input-button {
+    background-color: white !important;
+}
+
+.k-window .dateLabel {
+    /*color: var(--input-input-placeholder-color);*/
+    color: black !important;
+    text-align: right !important;
+    font-family: "Inter" !important;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 120% !important; /* 19.2px */
+}
+
+.custom-grid .k-column-title {
+    overflow: unset !important;
+    color: black;
+    font-weight: bold;
+    background-color: transparent;
+    font-family: "Inter" !important;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+}
+
+#signUpFormBasic .dateLabel {
+    /*color: var(--input-input-placeholder-color);*/
+    color: black !important;
+    text-align: right !important;
+    font-family: "Inter" !important;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 120% !important; /* 19.2px */
+}
+
+.centeredLabel {
+    /*color: var(--input-input-placeholder-color);*/
+    color: black !important;
+    text-align: center !important;
+    font-family: "Inter" !important;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 120% !important; /* 19.2px */
+}

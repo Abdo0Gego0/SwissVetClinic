@@ -1,0 +1,277 @@
+﻿
+
+<br />
+<br />
+
+@model VisistBill
+
+@inject ISelectListService slSrvc
+
+@{
+    double? totalCost = Model.MedicnieCost + Model.ServiceCost;
+}
+
+
+
+
+<form asp-action="Edit_Bill" asp-controller="Bills" method="post" id="myForm" enctype='multipart/form-data'>
+
+    <div class="container">
+
+        
+        <input asp-for="Id" hidden/>
+
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <h1> # &nbsp; @Model.Number</h1>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                    <select disabled class="form-control" asp-for="PetOwnerId" asp-items="slSrvc.PatientsSL()"></select>
+                </div>    
+                
+                <div class="col-md-6 mb-3">
+                    <select disabled class="form-control" asp-for="DoctorId" asp-items="slSrvc.DoctorSL()"></select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <select disabled class="form-control" asp-for="BaseClinicId" asp-items="slSrvc.ClinicsSL()"></select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <select disabled class="form-control" asp-for="CenterServicesId" asp-items="slSrvc.ServiceTypeSL()"></select>
+                </div>
+            </div>
+
+        </div>
+        <hr />
+        <div class="container">
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="fieldLabel" asp-for="ServiceCost"></label>
+                    <input disabled class="fieldLabel" asp-for="ServiceCost" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="fieldLabel" asp-for="MedicnieCost"></label>
+                    <input disabled class="fieldLabel" asp-for="MedicnieCost" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fieldLabel">@Localizer["TotlaCost"]</label>
+                    <input disabled class="fieldLabel" value="@totalCost" id="totalCost" />
+                    <input disabled class="fieldLabel" value="@totalCost" id="originalCost" hidden/>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="fieldLabel">@Localizer["Discount"]</label>
+                    <input  class="fieldLabel" asp-for="Discount" onchange="calDiscount()"/>
+                </div>
+
+            </div>
+
+            <div class="@Localizer["k-rtl"]">
+                @(
+                    Html.Kendo().Grid<VisitMedicine>()
+                    .Name("gridHours")
+                    .ToolBar
+                    (
+                    toolbar =>
+                    {
+
+                    }).HtmlAttributes(new { @class = "myToolBar" })
+
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.MedicineName);
+                        columns.Bound(p => p.MedicineUnit);
+                        columns.Bound(p => p.Duration);
+                        columns.Bound(p => p.Cost);
+                    }
+
+                    )
+                    .Mobile(MobileMode.Auto)
+                    .Editable(ed =>
+                    {
+                        ed.Mode(GridEditMode.PopUp).TemplateName("OpeningHourEditor");
+                        ed.DisplayDeleteConfirmation(true);
+                    })
+
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(25)
+                    .Responsive(true)
+                    .Info(true)
+                    .Numeric(true)
+                    )
+                    .Sortable()
+                    .Navigatable()
+                    .Resizable(r => r.Columns(true))
+                    .Reorderable(r => r.Columns(true))
+                    .Filterable(filt =>
+                    {
+                        filt.Messages(msg => msg.And(Localizer["And"]));
+                        filt.Messages(msg => msg.Or(Localizer["Or"]));
+                        filt.Messages(msg => msg.Equals(Localizer["Equal"]));
+                        filt.Messages(msg => msg.Clear(Localizer["Cancel"]));
+                        filt.Messages(msg => msg.Filter(Localizer["Search"]));
+                        filt.Messages(msg => msg.Info(""));
+
+                        filt.Operators(op => op.ForDate(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Equal"]);
+                            fs.IsEqualTo(Localizer["Not Equal"]);
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+                        }
+                        )
+                        );
+
+                        filt.Operators(op => op.ForString(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.StartsWith(Localizer["Starts with"]);
+                            fs.EndsWith(Localizer["Ends with"]);
+                            fs.Contains(Localizer["Contains"]);
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+                            fs.DoesNotContain(Localizer["Does not Contain"]);
+
+                        }
+                        )
+                        );
+
+
+                        filt.Operators(op => op.ForNumber(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+
+                        }
+                        )
+                        );
+
+
+
+                    })
+                    .Scrollable()
+
+
+                    .HtmlAttributes(new { @class = "custom-grid", @style = "height:450px;" }) // Add a custom class
+
+                    .DataSource(
+                    dataSource => dataSource
+
+                    .Ajax()
+                    @* .Batch(true) *@
+                    .PageSize(20)
+                    .Model(model => model.Id(p => p.Id))
+
+                    .Read(read => read.Action("Read_VisitMedicine", "Bills", new { PatientVisitId = Model.PatientVisitId }).Type(HttpVerbs.Get))
+
+
+
+                    .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+                    )
+                    @*.Events(events => events.Edit("onEdit"))*@
+                    .Events(events => events.DataBound("onDataBound"))
+                    )
+            </div>
+
+        </div>
+
+        <hr />
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="fieldLabel" asp-for="PaymentType"></label>
+                    <select class="form-select" asp-for="PaymentType" asp-items="slSrvc.PaymentTypeSL()" required></select>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <button type="button" class="form-control addCtrl"  onclick="generatePDF()">Print as PDF</button>
+
+
+            <br />
+        @{
+            if (Model.Status == 1)
+            {
+                    <button type="submit" class="form-control addCtrl"> @Localizer["Close"]</button>
+
+            }
+            else
+            {
+                    <button type="submit" class="form-control addCtrl"> @Localizer["Pay"]</button>
+
+            }
+        }
+        
+
+    </div>
+
+
+</form>
+
+
+
+<script>
+
+    function calDiscount() {
+        console.log("Calculating discount...");
+
+        var discount = parseFloat($("#Discount").val());
+        var serviceCost = parseFloat($("#serviceCost").val());
+        var medicineCost = parseFloat($("#medicineCost").val());
+
+        console.log(`Discount: ${discount}, Service Cost: ${serviceCost}, Medicine Cost: ${medicineCost}`);
+
+        if (isNaN(discount) || isNaN(serviceCost) || isNaN(medicineCost)) {
+            console.error("One or more inputs are not numbers.");
+            return; // Exit the function if any value is not a number
+        }
+
+        var discountedServiceCost = serviceCost - (serviceCost * discount / 100);
+        var newTotalCost = discountedServiceCost + medicineCost;
+
+        console.log(`New Total Cost: ${newTotalCost}`);
+
+        $("#totalCost").val(newTotalCost.toFixed(2));
+    }
+
+
+
+    function generatePDF() {
+
+        var url = "/Auth/WebNotification/Generate_Pdf/@Model.Id";
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = "_blank";
+        a.click();
+
+    }
+
+</script>
+
+
+
+

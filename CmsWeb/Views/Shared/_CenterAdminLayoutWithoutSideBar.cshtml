@@ -1,0 +1,92 @@
+﻿@addTagHelper *, Kendo.Mvc
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyTh</title>
+
+    <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
+
+    <environment names="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+    </environment>
+
+    <script src="~/KendoUi/js/jquery.min.js"></script>
+
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/MyJs/navbar.js"></script>
+
+
+    @* For Kendo UI*@
+    <script src="~/MyJs/grid.js"></script>
+    <script src="~/KendoUi/js/jszip.min.js"></script>
+    <script src="~/KendoUi/js/kendo.all.min.js"></script>
+    <script src="~/KendoUi/js/kendo.aspnetmvc.min.js"></script>
+    @* End  Kendo UI*@
+
+    <link href="~/MyKendoUi/kednoedit.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/theme.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/Auth/auth.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/MyStyle/style.css" rel="stylesheet" asp-append-version="true" />
+    <link rel="icon" href='/siteimages/logo.svg' sizes="36x24" />
+
+
+
+    @* For Navigation Bar*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/NavBar/css/style.css">
+    @* End Navigation Bar*@
+
+</head>
+<body dir="@Localizer["dir"]" style="background-color:white">
+    <div class="wrapper d-flex align-items-stretch">
+        
+            <div id="content" class="p-4 p-md-5">
+                @RenderBody()
+            </div>
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"></script>
+    </environment>
+</body>
+
+
+
+
+
+@* For Navigation Bar*@
+<script src="~/NavBar/js/jquery.min.js"></script>
+<script src="~/NavBar/js/popper.js"></script>
+<script src="~/NavBar/js/bootstrap.min.js"></script>
+<script src="~/NavBar/js/main.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"81c6ce3a3cdce3ab","b":1,"version":"2023.10.0","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
+@* End Navigation Bar*@
+
+@* For Kendo UI*@
+<link href="~/KendoUi/styles/kendo.default-turquoise.min.css" rel="stylesheet" type="text/css" />
+<script src="~/KendoUi/js/jquery.min.js"></script>
+<script src="~/KendoUi/js/jszip.min.js"></script>
+<script src="~/KendoUi/js/kendo.all.min.js"></script>
+<script src="~/KendoUi/js/kendo.aspnetmvc.min.js"></script>
+@* End  Kendo UI*@
+
+
+@RenderSection("Scripts", required: false)
+</html>
+

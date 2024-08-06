@@ -1,0 +1,2043 @@
+﻿<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js" integrity="sha512-+k1pnlgt4F1H8L7t3z95o3/KO+o78INEcXTbnoJQ/F2VqDVhWoaiVml/OEHv9HsVgxUaVW+IbiZPUJQfF/YxZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+@* For Navigation Bar*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="/NavBar/css/style.css">
+@* End Navigation Bar*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@model PatientVisit
+
+@inject ISelectListService slSrvc
+@inject IUserService _userService
+
+
+
+@removeTagHelper "*, Microsoft.AspNet.Mvc.Razor"
+@removeTagHelper "*, Microsoft.AspNetCore.Mvc.Razor"
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowAllergy")
+    .Title(Localizer["Patient Allergy"])
+    
+    .Content(Localizer["loading..."])
+    .LoadContentFrom("windowAllergy", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+
+    .Draggable()
+.Resizable()
+.Width(800)
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowFamily")
+    .Title(Localizer["Family History"])
+    
+
+    .Content(Localizer["loading..."])
+    .LoadContentFrom("windowFamily", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+
+    .Draggable()
+.Resizable()
+.Width(800)
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowMedicalHistor")
+    .Title(Localizer["Medical History"])
+    
+
+    .Content(Localizer["loading..."])
+    .LoadContentFrom("windowMedicalHistor", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+
+    .Draggable()
+.Resizable()
+.Width(800)
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowMedicineHistory")
+    .Title(Localizer["Medicine History"])
+    
+
+    .Content(Localizer["loading..."])
+    .LoadContentFrom("windowMedicineHistory", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+
+    .Draggable()
+.Resizable()
+.Width(800)
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowSurgicalHistory")
+    .Title(Localizer["Surgical History"])
+    
+
+    .Content(Localizer["loading..."])
+    .LoadContentFrom("windowSurgicalHistory", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+
+    .Draggable()
+.Resizable()
+.Width(800)
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowPatientFiles")
+    .Title(Localizer["Patient Files"])
+    
+
+    .Content(Localizer["loading..."])
+    .LoadContentFrom("windowPatientFiles", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+
+    .Draggable()
+.Resizable()
+.Width(800)
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+
+
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowTherapyPlan")
+    .Title(Localizer["Patient Therapy Goals"])
+    
+
+    .Content(Localizer["loading..."])
+    .LoadContentFrom("windowTherapyPlan", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+    .Draggable()
+.Resizable()
+.Width(800)
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowPatientCalendar")
+    .Title(Localizer["Patient Calendar"])
+    
+
+    .Content(Localizer["loading..."])
+    .LoadContentFrom("windowPatientCalendar", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+    .Draggable()
+.Resizable()
+.Width("!00%")
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+@(Html.Kendo().Window()
+    .Visible(false)
+    .Name("windowPatientVisits")
+    .Title(Localizer["Patient Visits"])
+    
+
+    .Content(Localizer["loading..."])
+    
+
+    .LoadContentFrom("windowPatientVisits", "Patient", new { id = Model.PetId })
+    .HtmlAttributes(new { @style = "box-shadow:0px 0px 204px 20px" })
+    .Draggable()
+.Resizable()
+.Width("!00%")
+.Actions(actions => actions.Pin().Minimize().Maximize().Close())
+    .Resizable()
+)
+
+
+
+@{
+    string taskFilesName = Model.PetId.ToString().Replace("-", "");
+}
+
+<script>
+
+
+
+
+    
+    function openAllergy() {
+        $("#windowAllergy").data("kendoWindow").open();
+
+    }
+
+    function openFamilyHistory() {
+        $("#windowFamily").data("kendoWindow").open();
+
+    }
+
+    function openMedicalHistory() {
+        $("#windowMedicalHistor").data("kendoWindow").open();
+
+    }
+
+    function openMedicineHistory() {
+        $("#windowMedicineHistory").data("kendoWindow").open();
+
+    }
+
+    function openSurgicalHistory() {
+        $("#windowSurgicalHistory").data("kendoWindow").open();
+
+    }
+
+    function openPatientFiles() {
+        $("#windowPatientFiles").data("kendoWindow").open();
+
+    }
+
+    function openTherapyPlan() {
+        $("#windowTherapyPlan").data("kendoWindow").open();
+
+    }   
+
+    function openPatientCalendar() {
+        $("#windowPatientCalendar").data("kendoWindow").open();
+
+    }
+
+    function openPatientVisits() {
+        $("#windowPatientVisits").data("kendoWindow").open();
+
+    }
+
+
+    function onOpen(e) {
+
+        var class1 = document.getElementsByClassName('.k-dialog');
+        var class2 = document.getElementsByClassName('.k-overlay');
+
+        for (var i = 0; i < class1.length; i += 1) {
+            class1[i].style.display = 'block';
+        }
+
+        for (var i = 0; i < class2.length; i += 1) {
+            class2[i].style.display = 'block';
+        }
+
+
+
+        if (e.entry.extension == ".png" || e.entry.extension == ".jpg" || e.entry.extension == ".jpeg" || e.entry.extension == ".tif") {
+
+            var relPath = '';
+
+            for (var i = 1; i < e.sender.breadcrumb._segments.length;i++) {
+                relPath = relPath + '/' + e.sender.breadcrumb._segments[i].text
+            }
+
+
+            $("#imagePreview").attr("src", "/visit/@taskFilesName" + relPath + '/' + e.entry.name + e.entry.extension);
+            $("#window").data("kendoWindow").center().open();
+        }
+
+        if (e.entry.extension == ".pdf") {
+
+            var relPath = '';
+
+            for (var i = 1; i < e.sender.breadcrumb._segments.length; i++) {
+                relPath = relPath + '/' + e.sender.breadcrumb._segments[i].text
+            }
+
+
+            var pdfViewer = $("#pdfviewer").data("kendoPDFViewer");
+            var fp = "/visit/@taskFilesName" + relPath + '/' + e.entry.name + e.entry.extension;
+            pdfViewer.fromFile(fp);
+            $("#windowPdf").data("kendoWindow").center().open();
+
+        }
+
+        if (e.entry.extension == ".mp4") {
+
+            var relPath = '';
+
+            for (var i = 1; i < e.sender.breadcrumb._segments.length; i++) {
+                relPath = relPath + '/' + e.sender.breadcrumb._segments[i].text
+            }
+
+            var $video = $('#videoPreview video'),
+            videoSrc = $('source', $video).attr('src', "/visit/@taskFilesName" + relPath + '/' + e.entry.name + e.entry.extension);
+            $video[0].load();
+            $video[0].play();
+
+            $("#windowVideo").data("kendoWindow").center().open();
+
+        }
+
+    }
+
+</script>
+
+
+
+
+
+
+
+
+<center>
+    <h3 class="text-danger">@ViewBag.ErrorMessage</h3>
+</center>
+
+<form asp-action="StartVisit" asp-controller="Appointment" method="post" id="myFormXX" enctype='multipart/form-data' id="myFormXX">
+
+    <input asp-for="Id" hidden />
+    <input asp-for="PetOwnerId" hidden />
+    <input asp-for="BaseClinicId"  hidden/> 
+    <input asp-for="AppointmentId"  hidden/> 
+    <input asp-for="VisistDate"  hidden/> 
+
+    <div class="container" style="margin:0px !important; min-width:100% !important; padding:0px !important">
+
+        
+
+
+        <input asp-for="MedicalCenterId" value="@_userService.GetMyCenterIdWeb()" hidden />
+
+        @{
+            if (Model.IsFirstVisit)
+            {
+                            <div class="row">
+                                <div class="col-md-5 mb-3">
+
+                                    <h1 class="form-control" style="background:var(--warning);box-shadow: 0px 3px 8px 2px var(--red); text-align:@Localizer["float"]">
+                                        @Localizer["First Visit"]
+                                    
+                                    </h1>
+                                </div>
+
+                            <div class="col-md-5 mb-3 durationClass" style="letter-spacing:0px">
+                                @Model.ServiceName()
+
+                            </div>
+
+
+                            @*<div class="col-md-3 mb-3 justify-content-center" style="display:flex">
+                            <input name="Duration" id="Duration" class="durationClass"  />
+
+            </div>*@
+
+                            </div>
+
+
+                            <hr />
+            }
+            else
+            {
+
+                            <div class="row">
+                            <div class="col-md-5 mb-3 durationClass" style="letter-spacing:0px">
+                                @Model.ServiceName()
+
+                            </div>
+
+                               @* <div class="col-md-3 mb-3 justify-content-center" style="display:flex">
+                            <input name="Duration" id="Duration" class="durationClass" />
+
+                        </div>*@
+
+
+
+                            </div>
+
+                            <hr />
+
+
+            }
+        }
+
+        <div class="dash-head">
+            <button class="k-rpanel-toggle"><span class="k-icon k-i-menu"></span></button>
+        </div>
+
+        <div id="profile" class="widget" style="text-align:@Localizer["float"]">
+            <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                @Localizer["Patient Info"]
+            </h3>
+            <div>
+                <h4>@Model.PetOwner.FullName</h4>
+                <h4># &nbsp; @Model.PetOwner.GeneralNumber</h4>
+                <br />
+                <div class="profile-photo"></div>
+                <h4>@Localizer["PetName"]</h4>
+                @{
+                    try
+                    {
+                                <p>@Model.Pet.BloodType</p>
+                    }
+                    catch
+                    {
+                                <p></p>
+                    }
+                }
+                <br/>
+                <h4>@Localizer["Sex"]</h4>
+                @{
+                    try
+                    {
+                                <center>
+                                <select disabled="true" class="form-control fieldLabel" asp-for="@Model.Pet.Sex" asp-items="@slSrvc.SexSL()" style="width:40%"></select>
+                                </center>
+                    }
+                    catch
+                    {
+                                <p></p>
+                    }
+                }
+                <br />
+
+       
+            </div>
+        </div>
+
+
+
+
+        <div>
+
+            <kendo-responsivepanel name="slidebar" breakpoint="1000" orientation="@Localizer["orientation"]">
+                
+
+
+
+                <div id="teammates" class="widget" style="text-align:@Localizer["float"]">
+                    <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                        @Localizer["Medical Info"]
+                    </h3>
+
+
+
+                    <div style="text-align:@Localizer["float"]">
+                        <div class="team-mate" style="cursor:pointer" onclick="openPatientVisits()">
+                            <h4> @Localizer["Previous visits"] &nbsp;&nbsp; <i class="fa fa-address-book"></i></h4>
+                        </div>
+
+                        <div class="team-mate" style="cursor:pointer" onclick="openAllergy()">
+                            <h4> @Localizer["Allergy"] &nbsp;&nbsp; <i class="fas fa-allergies"></i></h4>
+                        </div>
+
+                        <div class="team-mate" style="cursor:pointer" onclick="openFamilyHistory()">
+                            <h4> @Localizer["Family History"] &nbsp;&nbsp; <i class="fas fa-clinic-medical"></i></h4>
+                        </div>
+
+                        <div class="team-mate" style="cursor:pointer" onclick="openMedicalHistory()">
+                            <h4> @Localizer["Medical History"] &nbsp;&nbsp; <i class="fas fa-file-medical"></i></h4>
+                        </div>
+                        
+                        <div class="team-mate" style="cursor:pointer" onclick="openMedicineHistory()">
+                            <h4> @Localizer["Medicine History"] &nbsp;&nbsp; <i class="fas fa-pills"></i></h4>
+                        </div>
+
+                        <div class="team-mate" style="cursor:pointer" onclick="openSurgicalHistory()">
+                            <h4> @Localizer["Surgical History"] &nbsp;&nbsp; <i class="fas fa-procedures"></i></h4>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="teammates" class="widget" style="text-align:@Localizer["float"]">
+                    <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                        @Localizer["Patient Files"]
+                    </h3>
+                    <div>
+                        <div class="team-mate" style="cursor:pointer;text-align:@Localizer["float"]" onclick="openPatientFiles()">
+                                                        <h4>@Localizer["Open patient files"] &nbsp;&nbsp; <i class="fas fa-folder-open"></i></h4>
+                        </div>
+
+                    </div>
+                </div>
+
+            </kendo-responsivepanel>
+
+
+
+            <div id="main-content">
+                <div id="news" class="widget" style="padding:0px; width:100% !important">
+                    <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                        @Localizer["Medical Evaluation"]
+                    </h3>
+
+                        <div class="container" style="padding:0px;">
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                <label class="fieldLabel" style="color:rgba(38, 102, 238, 1)   !important"> @Localizer["Vaccinated"]</label>
+                                    @(Html.Kendo().RadioGroup()
+                                        .Name("Vaccinated")
+                                        .Items(i =>
+                                        {
+                                            i.Add().Label(Localizer["YES"]).Value("1");
+                                            i.Add().Label(Localizer["NO"]).Value("2");
+
+                                        })
+                                        
+                                        )
+                                </div>
+
+                                <div class="col-md-4">
+                                <label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Body Condition"]</label>
+                                        @(Html.Kendo().RadioGroup()
+                                            .Name("BodyCondition")
+                                            .Items(i =>
+                                            {
+                                                i.Add().Label(Localizer["Emaciated"]).Value("1");
+                                                i.Add().Label(Localizer["Underweight"]).Value("2");
+                                                i.Add().Label(Localizer["Ideal"]).Value("3");
+                                                i.Add().Label(Localizer["Overweight"]).Value("4");
+                                                i.Add().Label(Localizer["Obese"]).Value("5");
+                                            })
+                                            )
+                                </div>
+          
+                                <div class="col-md-4">
+                                <label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Behavior"]</label>
+                                        @(Html.Kendo().RadioGroup()
+                                            .Name("Behavior")
+                                            .Items(i =>
+                                            {
+                                                i.Add().Label(Localizer["Friendly"]).Value("1");
+                                                i.Add().Label(Localizer["Aggressive"]).Value("2");
+                                            })
+                                            )
+                                </div>
+
+
+                            <table>
+                                <tr>
+                                    <td>
+@*                                         <select class="form-select" asp-for="Weight" asp-items="@slSrvc.WeightSL()">
+                                            <option value="">Weight (KG)</option>
+
+                                        </select> *@
+                                        <input class="form-control fieldInput" asp-for="Weight" placeholder="@Localizer["Weight"]" />
+
+                                    </td>
+
+                                    <td>
+                                        <input class="form-control fieldInput" asp-for="Temperature" placeholder="@Localizer["Temperature"]" />
+
+
+@*                                         <select class="form-select" asp-for="Temperature" asp-items="@slSrvc.TemperatureSL()">
+                                            <option value="">Temp (C)</option>
+
+                                        </select> *@
+                                    </td>
+
+                                </tr>
+  
+                            </table>
+
+                            </div>
+
+                        </div>
+                </div>
+
+
+                <div id="news" class="widget" style="padding:0px; width:100% !important">
+                    <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                        @Localizer["Diagnosis"]
+                    </h3>
+
+                    <div class="container" style="padding:0px;">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Prognosis"]</label>
+                                
+                                @(Html.Kendo().RadioGroup()
+                                    .Name("Prognosis")
+                                    .Items(i =>
+                                    {
+                                        i.Add().Label(Localizer["Excellent"]).Value("1");
+                                        i.Add().Label(Localizer["Good"]).Value("2");
+                                        i.Add().Label(Localizer["Fair"]).Value("3");
+                                        i.Add().Label(Localizer["Poor"]).Value("4");
+                                        i.Add().Label(Localizer["Hopeless"]).Value("5");
+                                    })
+
+
+                                    )
+
+                            </div>
+
+                            <div class="col-md-8">
+                                <table>
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Abdomen"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("Abdomen")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["SKIN"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("SKIN")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["Ears"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("Ears")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["HeartRate"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("HeartRate")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td><label class="fieldLabel" style="color:rgba(38, 102, 238, 1)  !important"> @Localizer["MuscSkel"]</label></td>
+                                        <td>
+                                            @(Html.Kendo().RadioGroup()
+                                                .Name("MuscSkel")
+                                                .Items(i =>
+                                                {
+                                                    i.Add().Label(Localizer["N"]).Value("1");
+                                                    i.Add().Label(Localizer["Abn"]).Value("2");
+                                                })
+                                                .Layout("horizontal")
+                                                )
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                
+                
+            </div>
+        
+        
+        </div>
+        <br />
+            <hr />
+
+                <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                    @Localizer["Treatment Plan & assessment"]
+                </h3>
+
+                <div class="" style="padding:0px;">
+                    <div class="row">
+
+                        <div class="@Localizer["k-rtl"]">
+                    @(
+                        Html.Kendo().Grid<VisitMedicineViewModel>()
+                                .Name("gridVisitMedicineViewModel")
+                                .ToolBar
+                                (
+                                toolbar =>
+                                {
+                                    toolbar.Create().Text(@Localizer["Add new"]).IconClass("k-icon k-i-plus k-button-icon").HtmlAttributes(new { @class = "addCtrl" });
+
+                                }).HtmlAttributes(new { @class = "myToolBar" })
+
+                                .Columns(columns =>
+                                {
+
+
+ 
+
+
+                            columns.ForeignKey(p => p.CenterMedicineListId, slSrvc.CenterMedicineSL());
+                            columns.ForeignKey(p => p.CenterMedicineUnitId, slSrvc.CenterMedicineUnitSL())
+                            .EditorViewData(new { funds = slSrvc.CenterMedicineUnitSL() })
+                            .EditorTemplateName("FundForeignKeyEditor");
+
+
+                                    columns.ForeignKey(p => p.Duration, slSrvc.TreatmentDurationSL());
+                                    columns.Command(command =>
+                                    {
+                                        command.Destroy().TemplateId("Temp_Destroy");
+                                    }).Width(80).Title(" ");
+                                }
+
+                                )
+                                .Mobile(MobileMode.Auto)
+
+
+                                .Pageable(pageable => pageable
+                                .Refresh(true)
+                                .PageSizes(true)
+                                .ButtonCount(25)
+                                .Responsive(true)
+                                .Info(true)
+                                .Numeric(true)
+                                )
+                                .Sortable()
+                                .Navigatable()
+                                .Resizable(r => r.Columns(true))
+                                .Reorderable(r => r.Columns(true))
+                                .Filterable(filt =>
+                                {
+                                    filt.Messages(msg => msg.And(Localizer["And"]));
+                                    filt.Messages(msg => msg.Or(Localizer["Or"]));
+                                    filt.Messages(msg => msg.Equals(Localizer["Equal"]));
+                                    filt.Messages(msg => msg.Clear(Localizer["Cancel"]));
+                                    filt.Messages(msg => msg.Filter(Localizer["Search"]));
+                                    filt.Messages(msg => msg.Info(""));
+
+                                    filt.Operators(op => op.ForDate(
+                                    fs =>
+                                    {
+                                        fs.Clear();
+                                        fs.IsNotEqualTo(Localizer["Equal"]);
+                                        fs.IsEqualTo(Localizer["Not Equal"]);
+                                        fs.IsLessThan(Localizer["Smaller"]);
+                                        fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                                        fs.IsGreaterThan(Localizer["Greater"]);
+                                        fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+                                    }
+                                    )
+                                    );
+
+                                    filt.Operators(op => op.ForString(
+                                    fs =>
+                                    {
+                                        fs.Clear();
+                                        fs.StartsWith(Localizer["Starts with"]);
+                                        fs.EndsWith(Localizer["Ends with"]);
+                                        fs.Contains(Localizer["Contains"]);
+                                        fs.IsNotEqualTo(Localizer["Not Equal"]);
+                                        fs.IsEqualTo(Localizer["Equal"]);
+                                        fs.DoesNotContain(Localizer["Does not Contain"]);
+
+                                    }
+                                    )
+                                    );
+
+
+                                    filt.Operators(op => op.ForNumber(
+                                    fs =>
+                                    {
+                                        fs.Clear();
+                                        fs.IsNotEqualTo(Localizer["Not Equal"]);
+                                        fs.IsEqualTo(Localizer["Equal"]);
+
+                                        fs.IsLessThan(Localizer["Smaller"]);
+                                        fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                                        fs.IsGreaterThan(Localizer["Greater"]);
+                                        fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+
+                                    }
+                                    )
+                                    );
+
+
+
+                                })
+                                .Scrollable()
+                                .Editable(ed =>
+                                {
+                                    ed.Mode(GridEditMode.InCell);
+
+                                    ed.DisplayDeleteConfirmation(false);
+                                })
+                         .Events(e => e.Edit("gridEdit")) 
+
+
+                                .HtmlAttributes(new { @class = "custom-grid", @style = "height:350px" }) // Add a custom class
+
+                                .DataSource(
+                                dataSource => dataSource
+
+                                .Ajax()
+                                .Batch(true)
+                                .PageSize(20)
+
+
+
+
+                                .Destroy(destroy =>
+                                {
+                                    destroy.Action("Destroy_PatientAllergy", "PatientX");
+                                })
+
+
+
+
+                                .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+                                )
+                                .Events(events => events.DataBound("onDataBound"))
+                                )
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <hr />
+            <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                @Localizer["Other Measurements"]
+            </h3>
+
+
+            <div class="@Localizer["k-rtl"]">
+                @(
+                    Html.Kendo().Grid<VisitMeasurement>()
+                    .Name("gridVisitMeasurement")
+                    .ToolBar
+                    (
+                    toolbar =>
+                    {
+
+                        toolbar.Create().Text(@Localizer["Add new"]).IconClass("k-icon k-i-plus k-button-icon").HtmlAttributes(new { @class = "addCtrl" });
+                        toolbar.Save().SaveText(@Localizer["Save"]).CancelText(@Localizer["Cancel"]).IconClass("fa fa-save").HtmlAttributes(new { @class = "addCtrl" });
+                        toolbar.Search().Text(Localizer["Search"]);
+                    }).HtmlAttributes(new { @class = "myToolBar" })
+
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.Id).Visible(false);
+                        columns.Bound(p => p.Type) .Title(Localizer["Type"]);
+                        columns.Bound(p => p.Value).Title(Localizer["Value"]);
+
+                        columns.Command(command =>
+                        {
+                            command.Destroy().TemplateId("Temp_Destroy");
+                        }).Width(250).Title(" ");
+                    }
+
+                    )
+                    .Mobile(MobileMode.Auto)
+                    .Editable(ed =>
+                    {
+                        ed.Mode(GridEditMode.InCell);
+
+                        ed.DisplayDeleteConfirmation(false);
+                    })
+
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(25)
+                    .Responsive(true)
+                    .Info(true)
+                    .Numeric(true)
+                    )
+                    .Sortable()
+                    .Navigatable()
+                    .Resizable(r => r.Columns(true))
+                    .Reorderable(r => r.Columns(true))
+                    .Filterable(filt =>
+                    {
+                        filt.Messages(msg => msg.And(Localizer["And"]));
+                        filt.Messages(msg => msg.Or(Localizer["Or"]));
+                        filt.Messages(msg => msg.Equals(Localizer["Equal"]));
+                        filt.Messages(msg => msg.Clear(Localizer["Cancel"]));
+                        filt.Messages(msg => msg.Filter(Localizer["Search"]));
+                        filt.Messages(msg => msg.Info(""));
+
+                        filt.Operators(op => op.ForDate(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Equal"]);
+                            fs.IsEqualTo(Localizer["Not Equal"]);
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+                        }
+                        )
+                        );
+
+                        filt.Operators(op => op.ForString(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.StartsWith(Localizer["Starts with"]);
+                            fs.EndsWith(Localizer["Ends with"]);
+                            fs.Contains(Localizer["Contains"]);
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+                            fs.DoesNotContain(Localizer["Does not Contain"]);
+
+                        }
+                        )
+                        );
+
+
+                        filt.Operators(op => op.ForNumber(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+
+                        }
+                        )
+                        );
+
+
+
+                    })
+                    .Scrollable()
+
+
+                    .HtmlAttributes(new { @class = "custom-grid", @style = "height:300px" }) // Add a custom class
+
+                    .DataSource(
+                    dataSource => dataSource
+
+                    .Ajax()
+                    .Batch(true)
+                    .PageSize(20)
+                    .Model(model => model.Id(p => p.Id))
+                    .Read(read => read.Action("VisitMeasurement_Read", "Appointment", new { VisitId = @Model.Id }).Type(HttpVerbs.Get))
+
+                    .Destroy(destroy =>
+                    {
+                        destroy.Action("Destroy_VisitMeasurement", "Appointment");
+                    })
+
+
+                    .Create(destroy =>
+                    {
+                        destroy.Action("Create_VisitMeasurement", "Appointment", new { PetOwnerId = @Model.PetOwnerId, VisitId = @Model.Id, BaseClinicId = @Model.BaseClinicId });
+                    })
+
+                    .Update(destroy =>
+                    {
+                        destroy.Action("Update_VisitMeasurement", "Appointment");
+                    })
+
+                    .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+                    )
+                    @*.Events(events => events.Edit("onEdit"))*@
+                    .Events(events => events.DataBound("onDataBound"))
+                    )
+
+
+
+
+        </div>
+
+
+            <br />
+            <hr />
+            <h3 style="text-align: center;
+    background: rgba(38, 102, 238, 0.8);
+    font-size: 25px">
+                @Localizer["Treatment and Management"]
+            </h3>
+
+            <div class="@Localizer["k-rtl"]">
+                @(
+                    Html.Kendo().Grid<VisitTreatment>()
+                    .Name("gridVisitTreatment")
+                    .ToolBar
+                    (
+                    toolbar =>
+                    {
+
+                        toolbar.Create().Text(@Localizer["Add new"]).IconClass("k-icon k-i-plus k-button-icon").HtmlAttributes(new { @class = "addCtrl" });
+                        toolbar.Save().SaveText(@Localizer["Save"]).CancelText(@Localizer["Cancel"]).IconClass("fa fa-save").HtmlAttributes(new { @class = "addCtrl" });
+                        toolbar.Search().Text(Localizer["Search"]);
+                    }).HtmlAttributes(new { @class = "myToolBar" })
+
+                    .Columns(columns =>
+                    {
+                        columns.Bound(p => p.Id).Visible(false);
+                        columns.Bound(p => p.Name);
+                        columns.Bound(p => p.Note);
+
+                        columns.Command(command =>
+                        {
+                            command.Destroy().TemplateId("Temp_Destroy");
+                        }).Width(250).Title(" ");
+                    }
+
+                    )
+                    .Mobile(MobileMode.Auto)
+                    .Editable(ed =>
+                    {
+                        ed.Mode(GridEditMode.InCell);
+
+                        ed.DisplayDeleteConfirmation(false);
+                    })
+
+                    .Pageable(pageable => pageable
+                    .Refresh(true)
+                    .PageSizes(true)
+                    .ButtonCount(25)
+                    .Responsive(true)
+                    .Info(true)
+                    .Numeric(true)
+                    )
+                    .Sortable()
+                    .Navigatable()
+                    .Resizable(r => r.Columns(true))
+                    .Reorderable(r => r.Columns(true))
+                    .Filterable(filt =>
+                    {
+                        filt.Messages(msg => msg.And(Localizer["And"]));
+                        filt.Messages(msg => msg.Or(Localizer["Or"]));
+                        filt.Messages(msg => msg.Equals(Localizer["Equal"]));
+                        filt.Messages(msg => msg.Clear(Localizer["Cancel"]));
+                        filt.Messages(msg => msg.Filter(Localizer["Search"]));
+                        filt.Messages(msg => msg.Info(""));
+
+                        filt.Operators(op => op.ForDate(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Equal"]);
+                            fs.IsEqualTo(Localizer["Not Equal"]);
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+                        }
+                        )
+                        );
+
+                        filt.Operators(op => op.ForString(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.StartsWith(Localizer["Starts with"]);
+                            fs.EndsWith(Localizer["Ends with"]);
+                            fs.Contains(Localizer["Contains"]);
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+                            fs.DoesNotContain(Localizer["Does not Contain"]);
+
+                        }
+                        )
+                        );
+
+
+                        filt.Operators(op => op.ForNumber(
+                        fs =>
+                        {
+                            fs.Clear();
+                            fs.IsNotEqualTo(Localizer["Not Equal"]);
+                            fs.IsEqualTo(Localizer["Equal"]);
+
+                            fs.IsLessThan(Localizer["Smaller"]);
+                            fs.IsLessThanOrEqualTo(Localizer["Smaller or Equal"]);
+                            fs.IsGreaterThan(Localizer["Greater"]);
+                            fs.IsGreaterThanOrEqualTo(Localizer["Greater or Equal"]);
+
+                        }
+                        )
+                        );
+
+
+
+                    })
+                    .Scrollable()
+
+
+                    .HtmlAttributes(new { @class = "custom-grid", @style = "height:300px" }) // Add a custom class
+
+                    .DataSource(
+                    dataSource => dataSource
+
+                    .Ajax()
+                    .Batch(true)
+                    .PageSize(20)
+                    .Model(model => model.Id(p => p.Id))
+                    .Read(read => read.Action("VisitTreatment_Read", "Appointment", new { VisitId = @Model.Id }).Type(HttpVerbs.Get))
+
+                    .Destroy(destroy =>
+                    {
+                        destroy.Action("Destroy_VisitTreatment", "Appointment");
+                    })
+
+
+                    .Create(destroy =>
+                    {
+                        destroy.Action("Create_VisitTreatment", "Appointment", new { PetOwnerId = @Model.PetOwnerId, VisitId = @Model.Id, BaseClinicId = @Model.BaseClinicId });
+                    })
+
+                    .Update(destroy =>
+                    {
+                        destroy.Action("Update_VisitTreatment", "Appointment");
+                    })
+
+                    .Events(events => events.Sync("sync_handler").RequestEnd("requestEnd").RequestStart("requestStart"))
+
+                    )
+                    @*.Events(events => events.Edit("onEdit"))*@
+                    .Events(events => events.DataBound("onDataBound"))
+                    )
+
+
+
+
+            </div>
+
+
+
+        </div>
+        <br />
+        <br />
+
+        
+
+
+
+        <div>
+
+
+    
+
+ 
+
+        <style>
+
+
+            .k-radio-label
+            {
+                color: rgba(0,0,0,0.6) !important;
+                font-size:14px !important;
+                font-weight:bold;
+            }
+
+            .file-icon {
+                display: inline-block;
+                float: left;
+                width: 48px;
+                height: 48px;
+                margin-left: 10px;
+                margin-top: 13.5px;
+            }
+
+            .video-file {
+            }
+
+            .video-file:before {
+                    content: "\f1c8"; /* this is your text. You can also use UTF-8 character codes as I do here */
+                font-family: FontAwesome;
+                font-size:45px;
+
+            }
+            
+            .default-file {
+            }
+
+                .default-file:before {
+                content: "X"; /* this is your text. You can also use UTF-8 character codes as I do here */
+                font-family: FontAwesome;
+                    font-size: 45px;
+    color:red;
+                }
+            .file-heading {
+                font-family: Arial;
+                font-size: 1.1em;
+                display: inline-block;
+                float: left;
+                width: 60%;
+                margin: 0 0 0 20px;
+                height: 25px;
+                -ms-text-overflow: ellipsis;
+                -o-text-overflow: ellipsis;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .file-name-heading {
+                font-weight: bold;
+                margin-top: 20px;
+            }
+
+            .file-size-heading {
+                font-weight: normal;
+                font-style: italic;
+            }
+
+            li.k-file div.file-wrapper {
+                position: relative;
+                height: 75px;
+                width: 100%;
+            }
+        </style>
+
+
+
+
+        <hr />
+        <br />
+
+        <button type="button" onclick="onDone()" class="form-control addCtrl">@Localizer["End visit"]</button>
+        
+
+    </div>
+
+
+</form>
+
+
+
+
+<script type="text/javascript">
+
+
+
+    function onDone() {
+
+        var validator = $("#myFormXX").kendoValidator().data("kendoValidator");
+        var f = document.getElementById("myFormXX");
+
+
+        grid = $("#gridVisitMedicineViewModel").data("kendoGrid");
+        gridData = grid.dataSource.data();
+        for (var i = 0; i < gridData.length; i++) {
+            var inputItemName = document.createElement("input");
+            inputItemName.type = "hidden";
+            inputItemName.name = "VisitMedicineViewModel[" + i + "].CenterMedicineListId";
+            inputItemName.value = gridData[i].CenterMedicineListId;
+            f.appendChild(inputItemName);
+
+            inputItemName = document.createElement("input");
+            inputItemName.type = "hidden";
+            inputItemName.name = "VisitMedicineViewModel[" + i + "].CenterMedicineUnitId";
+            inputItemName.value = gridData[i].CenterMedicineUnitId;
+            f.appendChild(inputItemName);
+
+
+            inputItemName = document.createElement("input");
+            inputItemName.type = "hidden";
+            inputItemName.name = "VisitMedicineViewModel[" + i + "].Duration";
+            inputItemName.value = gridData[i].Duration;
+            f.appendChild(inputItemName);
+
+            debugger;
+        }
+
+        if (validator.validate()) {
+            $("#myFormXX").submit();
+        }
+    }
+
+
+        function gridEdit(e) {
+        var fundDropDown = e.container.find("#CenterMedicineUnitId").data("kendoDropDownList");
+
+            if (fundDropDown) {
+            fundDropDown.dataSource.filter({ field: "CenterMedicineListId", operator: "eq", value: e.model.CenterMedicineListId });
+            }
+        }
+ 
+</script>
+
+<style>
+
+    .k-edit-buttons .k-button{
+        display:none !important;
+    }
+
+    .custom-grid .k-grid-pager{
+        border-bottom: 1px solid var(--toolbar-bg-color) !important;
+    }
+
+    .k-window-titlebar {
+        font-size: 35px !important;
+        border-color: inherit !important;
+        color: white !important;
+        /* background-color: var(--site-navbar-bg-color); */
+        background-color: black !important;
+        font-weight: bold;
+    }
+
+    #example {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        overflow: hidden;
+    }
+
+    .dash-head {
+        max-width: 100%;
+        height: 80px;
+        background-color: white;
+        position: relative;
+    }
+
+        .dash-head .k-rpanel-toggle {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: 20px;
+            left: 20px;
+        }
+
+    .panel-wrap {
+        max-width: 968px;
+        background-color: #f5f5f5;
+        border: 1px solid #e5e5e5;
+        position: relative;
+    }
+
+    #slidebar {
+        margin: 0;
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+        vertical-align: top;
+    }
+
+    @@media (max-width: 1000px) {
+
+
+
+        #slidebar {
+            background: #fff;
+            padding: 20px;
+            border-left: 1px solid #e5e5e5;
+            /* show sidebar in container, demo only*/
+            position: absolute;
+            top: 0;
+            bottom: 0;
+        }
+
+            #slidebar.k-rpanel-expanded {
+                box-shadow: 0 0 10px rgba(0,0,0,.3);
+            }
+    }
+
+    #main-content {
+        overflow: hidden;
+        margin: 0;
+        /* padding: 20px; */
+        min-height: 580px;
+        vertical-align: top;
+    }
+
+    /* WIDGETS */
+    .widget {
+        margin: 0 0 20px;
+        padding: 0;
+        background-color: #ffffff;
+        border: 1px solid #e7e7e7;
+        border-radius: 3px;
+    }
+
+        .widget div {
+            padding: 10px;
+            min-height: 50px;
+        }
+
+        .widget h3 {
+            font-size: 12px;
+            padding: 8px 10px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #e7e7e7;
+            font-weight:bold;
+        }
+
+            .widget h3 span {
+                float: right;
+                font-weight: bold;
+            }
+
+                .widget h3 span:hover {
+                    cursor: pointer;
+                    background-color: #e7e7e7;
+                    border-radius: 20px;
+                    font-weight: bold;
+                }
+
+    /* PROFILE */
+    .profile-photo {
+        width: 80px;
+        height: 80px;
+        margin: 10px auto;
+        border-radius: 100px;
+        border: 1px solid #e7e7e7;
+        background: url(@Url.Content(Model.Pet.ImageFullPath)) no-repeat 50% 50%;
+    }
+
+    #profile div {
+        text-align: center;
+    }
+
+    #profile h4 {
+        width: auto;
+        margin: 0 0 5px;
+        font-size: 1.2em;
+        color: var(--site-light-pink);
+    }
+
+    #profile p {
+        margin: 0 0 10px;
+    }
+
+    /* BLOGS & NEWS */
+    #blogs div,
+    #news div {
+        padding: 0 20px 20px;
+    }
+
+    #teammates h4,
+    #blogs h4,
+    #news h4 {
+        width: auto;
+        margin: 20px 0 2px;
+        font-size: 1.4em;
+        color: var(--site-light-pink);
+        font-weight: normal;
+    }
+
+    .blog-info {
+        margin: 0 0 10px;
+        font-size: .9em;
+        color: #787878;
+    }
+
+    #slidebar #blogs h4 {
+        font-size: 1em;
+    }
+
+    #slidebar #blogs p {
+        display: none;
+    }
+
+    #slidebar #blogs .blog-info {
+        display: block;
+    }
+
+    #main-content #news h4 {
+        font-size: 1.2em;
+        line-height: 1.4em;
+    }
+
+        #main-content #news h4 span {
+            display: block;
+            float: left;
+            width: 100px;
+            color: #000;
+            padding-right: 10px;
+        }
+
+    #slidebar #news h4 {
+        font-size: 1em;
+    }
+
+        #slidebar #news h4 span {
+            display: block;
+            margin-bottom: 3px;
+            color: #000;
+        }
+
+    /* TEAMMATES */
+    .team-mate:after {
+        content: ".";
+        display: block;
+        height: 0;
+        line-height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+
+    #teammates .team-mate h4 {
+        font-size: 1.4em;
+        font-weight: normal;
+        margin-top: 12px;
+    }
+
+    .team-mate p {
+        margin: 0;
+    }
+
+    .team-mate img {
+        float: left;
+        margin: 0 15px 0 0;
+        border: 1px solid #e7e7e7;
+        border-radius: 60px;
+    }
+
+
+    .k-dialog .k-overlay {
+        display:none !important;
+    }
+
+</style>
+
+<script>
+    function filterPets() {
+        return {
+            ownerId: $("#PetOwnerId").val()
+        };
+    }
+
+    /*************** File Browser *******************/
+    var TYPEFIELD = "type";
+    var NAMEFIELD = "name";
+    var trimSlashesRegExp = /(^\/|\/$)/g;
+    var isFunction = kendo.isFunction;
+
+
+    function concatPaths(path, name) {
+        if (path === undefined || !path.match(/\/$/)) {
+            path = (path || "") + "/";
+        }
+        return path + name;
+    }
+
+    kendo.ui.ImageBrowser.fn.value = function () {
+        var that = this,
+            selected = that._selectedItem(),
+            path,
+            imageUrl = that.options.transport.imageUrl;
+
+        if (selected && selected.get(TYPEFIELD) === "f") {
+            path = concatPaths(that.path(), selected.get(NAMEFIELD)).replace(trimSlashesRegExp, "");
+            if (imageUrl) {
+                path = isFunction(imageUrl) ? imageUrl(path) : kendo.format(imageUrl, path);
+            }
+            return path;
+        }
+    };
+
+
+    kendo.ui.FileBrowser.fn.value = function () {
+        var that = this,
+            selected = that._selectedItem(),
+            path,
+            fileUrl = that.options.transport.fileUrl;
+        debugger;
+        if (selected && selected.get(TYPEFIELD) === "f") {
+            path = concatPaths(that.path(), selected.get(NAMEFIELD)).replace(trimSlashesRegExp, "");
+            if (fileUrl) {
+                path = isFunction(fileUrl) ? fileUrl(path) : kendo.format(fileUrl, path);
+            }
+            return path;
+        }
+    };
+    /*************** End Of File Browser *******************/
+
+</script>
+
+<script>
+
+    $("#sidebar").addClass("active");
+
+
+    document.getElementById("sidebarCollapse").addEventListener("click", function () {
+
+        var sidebar = document.getElementById('sidebar');
+
+        toggle(sidebar, "active")
+    
+    });
+
+
+    function toggle(el, classname) {
+        if (el.classList.contains(classname)) {
+            el.classList.remove(classname)
+        }
+        else {
+            el.classList.add(classname)
+        }
+    }
+
+    const startPoint = Date.now();
+
+
+    startTime()
+
+    function startTime() {
+        const today = new Date();
+        var diff = today - startPoint;
+
+        let ms = diff % 1000;
+        let s = Math.floor(diff / 1000) % 60;
+        let m = Math.floor(diff / 1000 / 60) % 60;
+        let h = Math.floor(diff / 1000 / 60 / 60);
+
+        m = checkTime(m);
+        s = checkTime(s);
+        document.getElementById('Duration').value = m + ":" + s;
+        setTimeout(startTime, 1000);
+    }
+
+    function checkTime(i) {
+        if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
+        return i;
+    }
+</script>
+
+<script>
+
+    function onChange(e) {
+        var selectedClinic = $("#clinicFilter").val();
+        var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        if (e.checked) {
+            schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic, PetOwnerId:'@Model.PetOwnerId' };
+            schedulerDataSource.read();
+        }
+        else
+        {
+            schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic };
+            schedulerDataSource.read();
+        }
+
+    }
+
+</script>
+
+<script type="text/javascript">
+
+    function changeGroupingDirection(e) {
+
+        var scheduler = $("#scheduler").data("kendoScheduler");
+
+        if (e.checked) {
+            scheduler.options.group.orientation = "vertical"; //"horizontal"
+        }
+        else {
+            scheduler.options.group.orientation = "horizontal"; //"vertical"
+        }
+        scheduler.view(scheduler.view().name);
+
+    }
+
+    function scheduler_navigate(e) {
+        var selectedClinic = $("#clinicFilter").val();
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+        schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic, view: e.view, date: e.date };
+        schedulerDataSource.read();
+    }
+
+    function scheduler_remove(e) {
+        if (e.event.IsStarted) {
+            alert("This appointment cannot be deleted, because the session is started!!");
+            return;
+        }
+
+        if (e.event.IsFinished) {
+            alert("This appointment cannot be deleted, because the session is finished!!");
+            return;
+
+        }
+
+        debugger
+    }
+
+    function scheduler_edit(e) {
+        if (e.event.IsStarted) {
+            alert("This appointment cannot be updated, because the session is started!!");
+            return;
+        }
+
+        if (e.event.IsFinished) {
+            alert("This appointment cannot be updated, because the session is finished!!");
+            return;
+
+        }
+
+        debugger
+    }
+
+    function clinicFilter() {
+        var selectedClinic = $("#clinicFilter").val();
+        var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic };
+        schedulerDataSource.read();
+    }
+
+    function onError(e) {
+        // this.cancelChanges();
+
+        // var errorMessage = "";
+        // if (e.errors) {
+        //     for (var error in e.errors) {
+        //         errorMessage += e.errors[error].errors[0] + " ";
+        //     }
+        // }
+
+        // alert(errorMessage);
+    }
+
+</script>
+
+<script>
+
+    function onAdditionalDataClinic() {
+        return {
+            text: $("#BaseClinicName").val()
+        };
+    }
+
+    function onSelectClinic(e) {
+        var dataItem = this.dataItem(e.item.index());
+        $("#BaseClinicId").val(e.dataItem.Id).trigger("change");
+
+    }
+
+</script>
+
+<script>
+
+    function onAdditionalDataPatien() {
+        return {
+            text: $("#PatienName").val()
+        };
+    }
+
+    function onSelectPatient(e) {
+        var dataItem = this.dataItem(e.item.index());
+        $("#PetOwnerId").val(e.dataItem.Id).trigger("change");
+    }
+
+    function filterPets() {
+        return {
+            ownerId: $("#PetOwnerId").val()
+        };
+    }
+
+</script>
+
+<script type="text/javascript">
+
+
+
+
+    function clinicFilter() {
+        var selectedClinic = $("#clinicFilter").val();
+        var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        if ($("#switch").val() == true) {
+            schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic, PetOwnerId: '@Model.PetOwnerId' };
+            schedulerDataSource.read();
+        }
+        else {
+
+            schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic };
+            schedulerDataSource.read();
+        }
+
+    }
+
+
+    function changeGroupingDirection(e) {
+
+        var scheduler = $("#scheduler").data("kendoScheduler");
+
+
+        if (e.checked) {
+            scheduler.options.group.orientation = "vertical"; //"horizontal"
+        }
+        else {
+            scheduler.options.group.orientation = "horizontal"; //"vertical"
+        }
+        scheduler.view(scheduler.view().name);
+
+
+
+    }
+
+    function scheduler_navigate(e) {
+        var selectedClinic = $("#clinicFilter").val();
+
+        if (selectedClinic == "") {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = ['BaseClinicId'];
+            scheduler.view(scheduler.view().name);
+        }
+        else {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            scheduler.options.group.resources = [];
+            scheduler.view(scheduler.view().name);
+        }
+
+        if ($("#switch").val() == true) {
+            console.log(kendo.format("navigate:: action:{0}; view:{1}; date:{2:d}; PetOwnerId:{3:d};", e.action, e.view, e.date, '@Model.PetOwnerId'));
+            var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+            schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic, view: e.view, date: e.date, PetOwnerId: '@Model.PetOwnerId' };
+            schedulerDataSource.read();
+        }
+        else {
+            console.log(kendo.format("navigate:: action:{0}; view:{1}; date:{2:d};", e.action, e.view, e.date));
+            var schedulerDataSource = $("#scheduler").data("kendoScheduler").dataSource;
+            schedulerDataSource.transport.options.read.data = { ClinicId: selectedClinic, view: e.view, date: e.date };
+            schedulerDataSource.read();
+        }
+
+
+    }
+
+    function scheduler_remove(e) {
+        if (e.event.IsStarted) {
+            alert("This appointment cannot be deleted, because the session is started!!");
+            return;
+        }
+
+        if (e.event.IsFinished) {
+            alert("This appointment cannot be deleted, because the session is finished!!");
+            return;
+
+        }
+
+        debugger
+    }
+
+    function scheduler_save(e) {
+        if (e.event.IsStarted) {
+            alert("This appointment cannot be updated, because the session is started!!");
+            return;
+        }
+
+        if (e.event.IsFinished) {
+            alert("This appointment cannot be updated, because the session is finished!!");
+            return;
+
+        }
+
+        debugger
+    }
+
+    function onError(e) {
+        // this.cancelChanges();
+
+        // var errorMessage = "";
+        // if (e.errors) {
+        //     for (var error in e.errors) {
+        //         errorMessage += e.errors[error].errors[0] + " ";
+        //     }
+        // }
+
+        // alert(errorMessage);
+    }
+
+</script>
+
+<script>
+
+    function onAdditionalDataClinic() {
+        return {
+            text: $("#BaseClinicName").val()
+        };
+    }
+
+    function onSelectClinic(e) {
+        var dataItem = this.dataItem(e.item.index());
+        $("#BaseClinicId").val(e.dataItem.Id).trigger("change");
+
+    }
+
+</script>
+
+<script>
+
+    function onAdditionalDataPatien() {
+        return {
+            text: $("#PatienName").val()
+        };
+    }
+
+    function onSelectPatient(e) {
+        var dataItem = this.dataItem(e.item.index());
+        $("#PetOwnerId").val(e.dataItem.Id).trigger("change");
+
+    }
+
+</script>
+
+
+
+
+
+
+
+<script src="/lib/bootstrap/js/bootstrap.js"></script>
+@* For Navigation Bar*@
+<script src="/NavBar/js/jquery.min.js"></script>
+<script src="/NavBar/js/popper.js"></script>
+<script src="/NavBar/js/bootstrap.min.js"></script>
+<script src="/NavBar/js/main.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v84a3a4012de94ce1a686ba8c167c359c1696973893317" integrity="sha512-euoFGowhlaLqXsPWQ48qSkBSCFs3DPRyiwVu3FjR96cMPx+Fr+gpWRhIafcHwqwCqWS42RZhIudOvEI+Ckf6MA==" data-cf-beacon='{"rayId":"81c6ce3a3cdce3ab","b":1,"version":"2023.10.0","token":"cd0b4b3a733644fc843ef0b185f98241"}' crossorigin="anonymous"></script>
+@* End Navigation Bar*@
+
+@* For Kendo UI*@
+<link href="/KendoUi/styles/kendo.default-turquoise.min.css" rel="stylesheet" type="text/css" />
+<script src="/KendoUi/js/jquery.min.js"></script>
+<script src="/KendoUi/js/jszip.min.js"></script>
+<script src="/KendoUi/js/kendo.all.min.js"></script>
+<script src="/KendoUi/js/kendo.aspnetmvc.min.js"></script>
+<script src="/KendoUi/js/kendo.timezones.min.js"></script>
+
+<script id="Temp_Destroy" type="text/kendo-tmpl">
+    <span class="k-grid-delete" style="font-size:24px;cursor:pointer;color:red"><i class="fa fa-trash"></i></span>
+</script>
+
+<script id="Temp_Edit" type="text/kendo-tmpl">
+    <span class="k-grid-edit"   style="font-size:24px;cursor:pointer;color:rgba(1, 81, 83, 1)"><i class="fas fa-edit"></i></span>
+</script>

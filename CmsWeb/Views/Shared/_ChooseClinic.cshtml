@@ -1,0 +1,30 @@
+﻿
+@inject ISelectListService selectService
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group" style="margin-bottom:0px !important">
+            <select class="form-control" asp-items="@selectService.ClinicsSL()" onchange="ChangeClinic()" id="clinicList">
+                <option>@Localizer["Select your clinic"]</option>
+                
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function ChangeClinic()
+    {
+        var URL = "/Doctor/Home/ChangeClinic/?ClinicId=" + $("#clinicList").val();
+        
+        var a = document.createElement('a');
+        a.href = URL;
+        a.click();
+    }
+
+</script>

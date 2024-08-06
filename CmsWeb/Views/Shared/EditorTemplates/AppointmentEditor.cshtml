@@ -1,0 +1,243 @@
+﻿@model AppointmentViewModel
+
+@inject ISelectListService slSrvc
+
+@{
+    // Required to render validation attributes
+    ViewContext.FormContext = new FormContext();
+}
+
+<style>
+    .k-checkbox-label {
+        float: @Localizer["float"] !important;
+        font-size: 20px;
+    }
+
+    .k-checkbox {
+        float: @Localizer["float"] !important;
+    }
+
+    .k-edit-label {
+        float: @Localizer["float"] !important;
+    }
+
+    .k-edit-field {
+        float: @Localizer["float"] !important;
+    }
+</style>
+
+@functions {
+    public Dictionary<string, object> generateDatePickerAttributes(
+        string elementId,
+        string fieldName,
+        string dataBindAttribute,
+        Dictionary<string, object> additionalAttributes = null)
+    {
+        Dictionary<string, object> datePickerAttributes = additionalAttributes != null
+            ? new Dictionary<string, object>(additionalAttributes)
+            : new Dictionary<string, object>();
+
+        datePickerAttributes["id"] = elementId;
+        datePickerAttributes["name"] = fieldName;
+        datePickerAttributes["data-bind"] = dataBindAttribute;
+        datePickerAttributes["required"] = "required";
+        datePickerAttributes["style"] = "z-index: inherit;";
+
+        return datePickerAttributes;
+    }
+}
+
+@{
+    string _PatientId = Localizer["dir"] == "rtl" ? "المريض" : "Patient";
+}
+
+<div class="@Localizer["k-rtl"]">
+    <div class="row">
+        <div class="mb-3 col-md-4" style="align-items:center;display:flex">
+            @(Html.Kendo().CheckBox().Name("IsFirstVisit").Label(@Localizer["First Visit"]))
+        </div>
+        <div class="mb-3 col-md-4" style="align-items:center;display:flex">
+            @(Html.Kendo().CheckBox().Name("IsStarted").Label(@Localizer["Start visit"]))
+        </div>
+        <div class="mb-3 col-md-4" style="align-items:center;display:flex">
+            @(Html.Kendo().CheckBox().Name("IsFinished").Label(Localizer["IsFinished"]).Enable(false))
+        </div>
+    </div>
+    <div class="row" disabled>
+        <div class="col-md-4">
+            <label asp-for="Cost" class="fieldLabel"></label>
+        </div>
+        <div class="col-md-8">
+            <input asp-for="Cost" disabled class="" style="width:100% !important" />
+        </div>
+    </div>
+    <br /><br />
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="fieldLabel">@Html.Raw(Localizer["PetOwner"])</label>
+            &nbsp;
+        </div>
+        <div class="mb-3 col-md-8">
+            @(Html.Kendo().DropDownList()
+                .Name("PetOwnerId")
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .HtmlAttributes(new { style = "width:100%", required = "required" })
+                .Filter(FilterType.Contains)
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("GetPatient_Fitering", "Appointment");
+                    })
+                    .ServerFiltering(true);
+                })
+                )
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="fieldLabel">@Html.Raw(Localizer["PetName"])</label>
+            &nbsp;
+        </div>
+        <div class="mb-3 col-md-8">
+            @(Html.Kendo().DropDownList()
+                .Name("PetId")
+                .HtmlAttributes(new { style = "width:100%", required = "required" })
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("Cascading_GetPets", "Appointment")
+                    .Data("filterPets");
+                    })
+                    .ServerFiltering(true);
+                })
+                .Enable(false)
+                .AutoBind(false)
+                .CascadeFrom("PetOwnerId")
+                )
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="fieldLabel">@Html.Raw(Localizer["Title"])</label>
+            &nbsp;
+        </div>
+        <div class="mb-3 col-md-8">
+            <input class="form-control fieldInput" name="title" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="fieldLabel">@Html.Raw(Localizer["Description"])</label>
+            &nbsp;
+        </div>
+        <div class="mb-3 col-md-8">
+            <input class="form-control fieldInput" name="description" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="fieldLabel">@Html.Raw(Localizer["Clinic"])</label>
+            &nbsp;
+        </div>
+        <div class="mb-3 col-md-8">
+            @(
+                Html.Kendo().DropDownList().Name("BaseClinicId")
+                .HtmlAttributes(new { required = "required" })
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("ReadClinic", "Appointment", new { asSelectList = true });
+                    });
+                })
+                )
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="fieldLabel">@Html.Raw(Localizer["ServiceType"])</label>
+            &nbsp;
+        </div>
+        <div class="mb-3 col-md-8">
+            @(Html.Kendo().DropDownList().Name("CenterServicesId")
+                .HtmlAttributes(new { required = "required" })
+                .DataTextField("Name")
+                .DataValueField("Id")
+                .DataSource(source =>
+                {
+                    source.Read(read =>
+                    {
+                        read.Action("ReadServices", "Appointment", new { asSelectList = true });
+                    })
+                    .ServerFiltering(true);
+                })
+                )
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="fieldLabel">@Html.Raw(Localizer["Start"])</label>
+            &nbsp;
+        </div>
+        <div class="mb-3 col-md-8">
+            <div data-container-for="start" class="k-edit-field">
+                @(Html.Kendo().DateTimePickerFor(model => model.Start)
+                    .HtmlAttributes(generateDatePickerAttributes("startDateTime", "start", "value:start,invisible:isAllDay")))
+                @(Html.Kendo().DatePickerFor(model => model.Start)
+                    .HtmlAttributes(generateDatePickerAttributes("startDate", "start", "value:start,visible:isAllDay")))
+                <span data-bind="text: startTimezone"></span>
+                <span data-for="start" class="k-invalid-msg"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3 col-md-4">
+            <label class="fieldLabel">@Html.Raw(Localizer["End"])</label>
+            &nbsp;
+        </div>
+        <div class="mb-3 col-md-8">
+            <div data-container-for="end" class="k-edit-field">
+                @(Html.Kendo().DateTimePickerFor(model => model.End)
+                    .HtmlAttributes(generateDatePickerAttributes(
+                    "endDateTime",
+                    "end",
+                    "value:end,invisible:isAllDay",
+                    new Dictionary<string, object>() { { "data-dateCompare-msg", "End date should be greater than or equal to the start date" } })))
+                @(Html.Kendo().DatePickerFor(model => model.End)
+                    .HtmlAttributes(generateDatePickerAttributes(
+                    "endDate",
+                    "end",
+                    "value:end,visible:isAllDay",
+                    new Dictionary<string, object>() { { "data-dateCompare-msg", "End date should be greater than or equal to the start date" } })))
+                <span data-bind="text: endTimezone"></span>
+                <span data-for="end" class="k-invalid-msg"></span>
+            </div>
+            <!--make an input for phone number-->
+            <div class="mb-3 col-md-8" "> 
+                <input type="text" class="form-control" id="phone" placeholder="Enter phone number" style="width:100%">
+                </div>
+           <!--Send via whatsapp button-->
+           <div class="mb-3 col-md-8">
+                <button class="btn btn-primary" id="sendViaWhatsapp" onclick="sendViaWhatsapp()" style="width:100%" >@Localizer["Send Via Whatsapp"]</button>                   
+            </div>            
+        </div>
+    </div>
+</div>
+
+
+

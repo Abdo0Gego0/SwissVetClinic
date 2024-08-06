@@ -1,0 +1,253 @@
+﻿@inject IUserService _userSrvc
+
+<br />
+<br />
+
+
+
+@{
+
+    DateTime todayStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,0,0,0);
+    DateTime todayEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day,23,59,59);
+
+    int totPatients = new ApplicationDbContext().PetOwner.Where(a => !a.IsDeleted).Count();
+    int totAppointments = new ApplicationDbContext().Appointment.Count();
+
+    int todayTotPatients = new ApplicationDbContext().PetOwner.Where(a => a.CreateDate >= todayStart && a.CreateDate <= todayEnd && !a.IsDeleted).Count();
+    int todayTotAppointments = new ApplicationDbContext().Appointment.Where(a => a.Start >= todayStart && a.End <= todayEnd).Count();
+
+    int totDoctors= new ApplicationDbContext().Doctor.Where(a =>   !a.IsDeleted).Count();
+
+    int totClinics = new ApplicationDbContext().BaseClinic.Where(a =>  !a.IsDeleted).Count();
+    double? totOutcomes = new ApplicationDbContext().Outcome.Sum(a => a.Amount);
+}
+
+
+
+
+
+<div class="row parentRow">
+
+    <div class="col-md-5 mb-5">
+
+        <div class="form-groub">
+
+            <div class="row childRow">
+                <div class="col-md-8 childCol">
+
+                    <label>
+                        @totPatients
+                    </label>
+                    <br />
+                    <label>
+                        @Localizer["Total number of patients"]
+                        
+                    </label>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <img src="~/siteimages/Total number of patients.svg" class="childImg" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-5 mb-5">
+
+        <div class="form-groub">
+
+            <div class="row childRow">
+                <div class="col-md-8 childCol">
+
+                    <label>
+                        @todayTotPatients
+                    </label>
+                    <br />
+                    <label>
+                        
+                        @Localizer["Today patients"]
+                    </label>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <img src="~/siteimages/Total number of patients.svg" class="childImg" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="row parentRow">
+
+    <div class="col-md-5 mb-5">
+
+        <div class="form-groub">
+
+            <div class="row childRow">
+                <div class="col-md-8 childCol">
+
+                    <label>
+                        @totAppointments
+                    </label>
+                    <br />
+                    <label>
+                        
+
+                        @Localizer["Total number of appointments"]
+
+                    </label>
+
+                </div>
+
+                <div class="col-md-4">
+                    <br />
+                    <img src="~/siteimages/Total number of appointments.svg" class="childImg" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-5 mb-5">
+
+        <div class="form-groub">
+
+            <div class="row childRow">
+                <div class="col-md-8 childCol">
+
+                    <label>
+                        @todayTotAppointments
+                    </label>
+                    <br />
+                    <label>
+                        
+                        @Localizer["Today appointments"]
+
+                    </label>
+
+                </div>
+
+                <div class="col-md-4">
+                    <br />
+
+                    <img src="~/siteimages/Total number of appointments.svg" class="childImg" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="row parentRow">
+
+    <div class="col-md-5 mb-5">
+
+        <div class="form-groub">
+
+            <div class="row childRow">
+                <div class="col-md-8 childCol">
+
+                    <label>
+                        @totDoctors
+                    </label>
+                    <br />
+                    <label>
+                        
+                        @Localizer["Total number of doctors"]
+                    </label>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <img src="~/siteimages/Total number of doctors.svg" class="childImg" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-5 mb-5">
+
+        <div class="form-groub">
+
+            <div class="row childRow">
+                <div class="col-md-8 childCol">
+
+                    <label>
+                        @totClinics
+                    </label>
+                    <br />
+                    <label>
+                        
+
+                        @Localizer["Total number of clinics"]
+                    </label>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <img src="~/siteimages/Incoming.svg" class="childImg" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+ <div class="row parentRow">
+        <!-- Existing code for patients, appointments, doctors, and clinics -->
+
+        <div class="col-md-5 mb-5">
+            <div class="form-group">
+                <div class="row childRow">
+                    <div class="col-md-8 childCol">
+                        <label>
+                            @totOutcomes
+                        </label>
+                        <br />
+                        <label>
+                            @Localizer["Total number of outcomes"]
+                        </label>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="~/siteimages/Total number of outcomes.svg" class="childImg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+

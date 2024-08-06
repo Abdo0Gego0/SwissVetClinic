@@ -1,0 +1,10 @@
+﻿@model CenterMedicineUnitViewModel
+
+@(
+Html.Kendo().DropDownListFor(m => m)
+            .BindTo(new ApplicationDbContext().CenterMedicineUnit
+            .Where(a=>!a.IsDeleted)
+            .ToList().Select(a => new CenterMedicineUnitViewModel { Id = a.Id, Name = a.SmallestUnit, CenterMedicineListId =a.CenterMedicineListId}))
+            .DataTextField("Name")
+            .DataValueField("Id")
+)
