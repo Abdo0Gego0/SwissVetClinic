@@ -21,9 +21,13 @@ namespace YourAppName.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
         {
-            var bills = await _context.Bill.ToListAsync();
+            var bills = await _context.Bill
+                        .OrderByDescending(b => b.BillDate)
+                        .Skip((page - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
             return View("CenterEmployeeReception/_StoreBills", bills);
         }
 
@@ -94,6 +98,7 @@ namespace YourAppName.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 var bill = new Bill
                 {
                     BillDate = model.BillDate,
@@ -148,10 +153,10 @@ namespace YourAppName.Controllers
             {
                 Id = bill.Id,
                 BillDate = bill.BillDate,
-                TotalAmount = bill.TotalAmount ?? 0,
-                Discount = bill.Discount ?? 0,
-                Tax = bill.Tax ?? 0,
-                TotalPrice = bill.TotalPrice ?? 0,
+                TotalAmount = bill.TotalAmount,
+                Discount = bill.Discount,
+                Tax = bill.Tax,
+                TotalPrice = bill.TotalPrice,
                 Items = bill.BillProducts.Select(bp => new BillProductViewModel
                 {
                     ProductId = bp.ProductId,

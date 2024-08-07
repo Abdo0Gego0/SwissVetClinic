@@ -14,22 +14,15 @@ namespace CmsDataAccess.DbModels
         public DateTime BillDate { get; set; }
 
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal? TotalAmount { get; set; }
+        public decimal TotalAmount { get; set; }
 
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal? Discount { get; set; } = 0.00m;
+        public decimal Discount { get; set; } = 0.00m;
 
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal? Tax { get; set; } = 0.00m;
+        public decimal Tax { get; set; } = 0.00m;
 
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal? TotalPrice { get; set; }
-
-        // You might want to add a method to calculate TotalPrice
-        public void CalculateTotalPrice()
-        {
-            TotalPrice = TotalAmount - Discount + Tax;
-        }
+        public decimal TotalPrice => TotalAmount - Discount + Tax;
 
         public List<BillProduct>? BillProducts { get; set; }
 
