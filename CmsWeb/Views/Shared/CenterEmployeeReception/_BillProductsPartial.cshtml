@@ -8,9 +8,9 @@
             @product.Product.ProductTranslation
             .FirstOrDefault(pt => pt.LangCode == "en-US")?.Name ?? "Unknown"
         </td>
-        <td>@product.Quantity</td>
-        <td>@product.Price</td>
-        <td>@product.Discount</td>
-        <td>@product.Tax</td>
+        <td>@product.Quantity.ToString();</td>
+        <td>@product.Price.ToString();</td>
+        <td>@product.Discount.ToString();</td>
+        <td>@product.Tax.ToString();</td>
     </tr>
 }

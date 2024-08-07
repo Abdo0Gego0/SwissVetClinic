@@ -1,0 +1,120 @@
+﻿@model CmsWeb.Areas.CenterEmployeeReception.Models.BillEditViewModel
+@{
+    ViewData["Title"] = "Edit Bill";
+}
+
+<h1>Edit Bill</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="BillDate" class="control-label"></label>
+        <input asp-for="BillDate" class="form-control" />
+        <span asp-validation-for="BillDate" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Discount" class="control-label"></label>
+        <input asp-for="Discount" class="form-control" />
+        <span asp-validation-for="Discount" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tax" class="control-label"></label>
+        <input asp-for="Tax" class="form-control" />
+        <span asp-validation-for="Tax" class="text-danger"></span>
+    </div>
+
+    <h3>Products</h3>
+    <table class="table" id="productsTable">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Tax</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <select asp-for="Items[i].ProductId" asp-items="ViewBag.Products" class="form-control"></select>
+                    </td>
+                    <td>
+                        <input asp-for="Items[i].Quantity" class="form-control" />
+                    </td>
+                    <td>
+                        <input asp-for="Items[i].Price" class="form-control" />
+                    </td>
+                    <td>
+                        <input asp-for="Items[i].Discount" class="form-control" />
+                    </td>
+                    <td>
+                        <input asp-for="Items[i].Tax" class="form-control" />
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm remove-product">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="button" id="addProduct" class="btn btn-primary">Add Product</button>
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            $("#addProduct").click(function () {
+                var newRow = `
+                            <tr>
+                                <td>
+                                    <select name="Items[${$('#productsTable tbody tr').length}].ProductId" class="form-control">
+        @foreach (var item in ViewBag.Products)
+        {
+                                                <option value="@item.Value">@item.Text</option>
+        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input name="Items[${$('#productsTable tbody tr').length}].Quantity" class="form-control" type="number" value="1" />
+                                </td>
+                                <td>
+                                    <input name="Items[${$('#productsTable tbody tr').length}].Price" class="form-control" type="number" step="0.01" value="0.00" />
+                                </td>
+                                <td>
+                                    <input name="Items[${$('#productsTable tbody tr').length}].Discount" class="form-control" type="number" step="0.01" value="0.00" />
+                                </td>
+                                <td>
+                                    <input name="Items[${$('#productsTable tbody tr').length}].Tax" class="form-control" type="number" step="0.01" value="0.00" />
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-product">Remove</button>
+                                </td>
+                            </tr>
+                        `;
+                $('#productsTable tbody').append(newRow);
+            });
+
+            $(document).on("click", ".remove-product", function () {
+                $(this).closest("tr").remove();
+            });
+        });
+    </script>
+}

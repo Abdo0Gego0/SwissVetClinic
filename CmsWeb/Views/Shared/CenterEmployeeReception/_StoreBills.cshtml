@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<CmsDataAccess.DbModels.Bill>
+@Html.AntiForgeryToken()
 
 @{
     ViewData["Title"] = "Store Bills";
 }
 
-<h1 class="my-4">Store Bills</h1>
+<h1 class="my-6">Store Bills</h1>
 
-<!-- Create Bill Button -->
 <div class="mb-3">
     <a href="@Url.Action("Create", "StoreBill")" class="btn btn-primary">Create New Bill</a>
 </div>
@@ -20,6 +20,7 @@
                     <th>Total Amount</th>
                     <th>Discount</th>
                     <th>Tax</th>
+                    <th>Total Price</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -28,13 +29,15 @@
                 {
                     <tr data-bill-id="@bill.Id" class="bill-row">
                         <td>@bill.BillDate.ToString("yyyy-MM-dd")</td>
-                        <td>@bill.TotalAmount.ToString("C")</td>
-                        <td>@bill.Discount.ToString("C")</td>
-                        <td>@bill.Tax.ToString("C")</td>
+                        <td>@bill.TotalAmount</td>
+                        <td>@bill.Discount</td>
+                        <td>@bill.Tax</td>
+                        <td>@bill.TotalPrice</td>
                         <td>
                             <button class="btn btn-info btn-sm view-products" data-bill-id="@bill.Id.ToString()">View Products</button>
-                            <a href="@Url.Action("Edit", "StoreBill", new { id = bill.Id, area = "CenterEmployeeReception" })" class="btn btn-warning btn-sm">Edit Bill</a>
+                            <a asp-action="Edit" asp-route-id="@bill.Id" class="btn btn-warning btn-sm">Edit Bill</a>
                             <button class="btn btn-danger btn-sm delete-bill" data-bill-id="@bill.Id.ToString()">Delete Bill</button>
+                            <button class="btn btn-outline-primary btn-sm">Export as PDF</button>
                         </td>
                     </tr>
                 }
@@ -79,14 +82,38 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
             $(".view-products").click(function () {
                 var billId = $(this).data("bill-id");
-                $.get('/CenterEmployeeReception/StoreBill/GetBillProducts/' + billId, function (data) {
-                    $('#billProductsTable tbody').html(data);
+                $.get('/CenterEmployeeReception/StoreBill/GetBillProducts?billId=' + billId, function (response) {
+                    console.log("Received response:", response);
+                    var tableContent = '';
+                    if (response.success) {
+                        if (response.data.length === 0) {
+                            tableContent = '<tr><td colspan="5">No products found for this bill.</td></tr>';
+                        } else {
+                            response.data.forEach(function (product) {
+                                tableContent += '<tr>' +
+                                    '<td>' + (product.name || 'N/A') + '</td>' +
+                                    '<td>' + (product.quantity || 0) + '</td>' +
+                                    '<td>$' + (product.price != null ? product.price.toFixed(2) : '0.00') + '</td>' +
+                                    '<td>$' + (product.discount != null ? product.discount.toFixed(2) : '0.00') + '</td>' +
+                                    '<td>$' + (product.tax != null ? product.tax.toFixed(2) : '0.00') + '</td>' +
+                                    '</tr>';
+                            });
+                        }
+                    } else {
+                        tableContent = '<tr><td colspan="5">' + (response.message || 'Error loading products') + '</td></tr>';
+                    }
+                    $('#billProductsTable tbody').html(tableContent);
                     $('#billProductsModal').modal('show');
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.error("AJAX request failed:", textStatus, errorThrown);
+                    console.error("Response text:", jqXHR.responseText);
+                    alert("Failed to load bill products. Please try again.");
                 });
             });
-       
 
             $('.modal .close, .modal .btn-secondary').click(function () {
                 $('#billProductsModal').modal('hide');
@@ -95,11 +122,25 @@
             $(".delete-bill").click(function () {
                 var billId = $(this).data("bill-id");
                 if (confirm("Are you sure you want to delete this bill?")) {
-                    $.post('/CenterEmployeeReception/StoreBill/Delete/' + billId, function (result) {
-                        if (result.success) {
-                            $('tr[data-bill-id="' + billId + '"]').remove();
-                        } else {
-                            alert("Failed to delete the bill. Please try again.");
+                    $.ajax({
+                        url: '/CenterEmployeeReception/StoreBill/Delete',
+                        type: 'POST',
+                        headers: {
+                            'RequestVerificationToken': token
+                        },
+                        data: JSON.stringify({ id: billId }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (result) {
+                            if (result.success) {
+                                $('tr[data-bill-id="' + billId + '"]').remove();
+                            } else {
+                                alert("Failed to delete the bill: " + (result.message || "Please try again."));
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("AJAX request failed:", textStatus, errorThrown);
+                            alert("An error occurred. Please try again.");
                         }
                     });
                 }

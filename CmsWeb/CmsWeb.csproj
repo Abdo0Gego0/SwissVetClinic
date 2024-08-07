@@ -73,7 +73,6 @@
     <Folder Include="Areas\CcenterDoctor\Models\" />
     <Folder Include="Areas\CcenterDoctor\Views\" />
     <Folder Include="Areas\CenterEmployeeReception\Data\" />
-    <Folder Include="Areas\CenterEmployeeReception\Models\" />
     <Folder Include="Areas\FilesAndImages\Data\" />
     <Folder Include="Areas\FilesAndImages\Models\" />
     <Folder Include="Areas\FilesAndImages\Views\" />

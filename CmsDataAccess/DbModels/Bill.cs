@@ -14,15 +14,22 @@ namespace CmsDataAccess.DbModels
         public DateTime BillDate { get; set; }
 
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal TotalAmount { get; set; }
+        public decimal? TotalAmount { get; set; }
 
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal Discount { get; set; } = 0.00m;
+        public decimal? Discount { get; set; } = 0.00m;
 
         [Column(TypeName = "decimal(10, 2)")]
-        public decimal Tax { get; set; } = 0.00m;
+        public decimal? Tax { get; set; } = 0.00m;
 
-        public decimal TotalPrice => TotalAmount - Discount + Tax;
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal? TotalPrice { get; set; }
+
+        // You might want to add a method to calculate TotalPrice
+        public void CalculateTotalPrice()
+        {
+            TotalPrice = TotalAmount - Discount + Tax;
+        }
 
         public List<BillProduct>? BillProducts { get; set; }
 
@@ -39,10 +46,18 @@ namespace CmsDataAccess.DbModels
 
         public static async Task DeleteFromDb(Guid id, ApplicationDbContext context)
         {
-            var bill = await GetFromDb(id, context);
+            var bill = await context.Bill
+                .Include(b => b.BillProducts) // Ensure to include related BillProducts
+                .FirstOrDefaultAsync(b => b.Id == id);
+
             if (bill != null)
             {
+                // Remove associated BillProducts
+                context.BillProduct.RemoveRange(bill.BillProducts);
+
+                // Remove the bill
                 context.Bill.Remove(bill);
+
                 await context.SaveChangesAsync();
             }
         }
