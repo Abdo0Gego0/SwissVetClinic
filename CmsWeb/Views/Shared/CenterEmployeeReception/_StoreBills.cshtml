@@ -37,7 +37,7 @@
                             <button class="btn btn-info btn-sm view-products" data-bill-id="@bill.Id.ToString()">View Products</button>
                             <a asp-action="Edit" asp-route-id="@bill.Id" class="btn btn-warning btn-sm">Edit Bill</a>
                             <button class="btn btn-danger btn-sm delete-bill" data-bill-id="@bill.Id.ToString()">Delete Bill</button>
-                            <button class="btn btn-outline-primary btn-sm">Export as PDF</button>
+                            <a href="@Url.Action("ExportAsPdf", new { billId = bill.Id })" class="btn btn-outline-primary btn-sm">Export as PDF</a>
                         </td>
                     </tr>
                 }
@@ -95,11 +95,11 @@
                         } else {
                             response.data.forEach(function (product) {
                                 tableContent += '<tr>' +
-                                    '<td>' + (product.name || 'N/A') + '</td>' +
-                                    '<td>' + (product.quantity || 0) + '</td>' +
-                                    '<td>$' + (product.price != null ? product.price.toFixed(2) : '0.00') + '</td>' +
-                                    '<td>$' + (product.discount != null ? product.discount.toFixed(2) : '0.00') + '</td>' +
-                                    '<td>$' + (product.tax != null ? product.tax.toFixed(2) : '0.00') + '</td>' +
+                                    '<td>' + (product.Name || 'N/A') + '</td>' +
+                                    '<td>' + (product.Quantity || 0) + '</td>' +
+                                    '<td>$' + (product.Price != null ? product.Price.toFixed(2) : '0.00') + '</td>' +
+                                    '<td>$' + (product.Discount != null ? product.Discount.toFixed(2) : '0.00') + '</td>' +
+                                    '<td>$' + (product.Tax != null ? product.Tax.toFixed(2) : '0.00') + '</td>' +
                                     '</tr>';
                             });
                         }
