@@ -196,8 +196,8 @@ namespace CmsWeb.Areas.Center.Controllers
                     {
                        
                         CenterMedicineListId = id,
-                        PricePerUnit=item.PricePerUnit,
-                        SmallestUnit=item.SmallestUnit,
+                        PricePerDose = item.PricePerDose,
+                        SmallestDose = item.SmallestDose,
                     }
                     );
             }

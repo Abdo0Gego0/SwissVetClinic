@@ -17,8 +17,8 @@ namespace CmsDataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SmallestUnit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PricePerUnit = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    SmallestDose = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PricePerDose = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

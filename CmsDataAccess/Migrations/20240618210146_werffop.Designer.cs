@@ -469,7 +469,7 @@ namespace CmsDataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PricePerUnit")
+                    b.Property<string>("PricePerDose")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

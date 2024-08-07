@@ -123,7 +123,7 @@ namespace CmsWeb.Areas.CcenterDoctor.Controllers
             // Fetch the data based on the selected CenterMedicineListId
             var centerMedicineUnits = cmsContext.CenterMedicineUnit
                                             .Where(u => u.CenterMedicineListId == centerMedicineListId)
-                                            .Select(u => new { CenterMedicineUnitId = u.Id, Text = u.SmallestUnit });
+                                            .Select(u => new { CenterMedicineUnitId = u.Id, Text = u.SmallestDose });
             return Json(centerMedicineUnits);
         }
 
@@ -516,9 +516,9 @@ namespace CmsWeb.Areas.CcenterDoctor.Controllers
                 PatientVisitId=visit.Id,
                 Duration=item.Duration,
                 MedicineName=cmsContext.CenterMedicineList.Find(item.CenterMedicineListId).Name,
-                MedicineUnit=cmsContext.CenterMedicineUnit.Find(item.CenterMedicineUnitId).SmallestUnit,
+                MedicineUnit=cmsContext.CenterMedicineUnit.Find(item.CenterMedicineUnitId).SmallestDose,
                 PetOwnerId=visit.PetOwnerId,
-                Cost= cmsContext.CenterMedicineUnit.Find(item.CenterMedicineUnitId).PricePerUnit*item.Duration
+                Cost= cmsContext.CenterMedicineUnit.Find(item.CenterMedicineUnitId).PricePerDose * item.Duration
 
                 };
                 cmsContext.VisitMedicine.Add(temp);

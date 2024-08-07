@@ -18,11 +18,11 @@ namespace CmsDataAccess.DbModels
         [ForeignKey("CenterMedicineList")]
         public Guid CenterMedicineListId { set; get; }
 
-        [Display(Name = nameof(Messages.SmallestUnit), ResourceType = typeof(Messages))]
-        public string SmallestUnit { set; get; }
+        [Display(Name = nameof(Messages.SmallestDose), ResourceType = typeof(Messages))]
+        public string SmallestDose { set; get; }
 
-        [Display(Name = nameof(Messages.PricePerUnit), ResourceType = typeof(Messages))]
-        public float PricePerUnit { set; get; }
+        [Display(Name = nameof(Messages.PricePerDose), ResourceType = typeof(Messages))]
+        public float PricePerDose { set; get; }
 
         public bool IsDeleted { get; set; }=false;
 

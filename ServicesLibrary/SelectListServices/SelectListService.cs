@@ -132,7 +132,7 @@ namespace ServicesLibrary.SelectListServices
 
         public SelectList CenterMedicineUnitSL()
         {
-            return new SelectList(cmsContext.CenterMedicineUnit.Where(a => !a.IsDeleted).ToList().Select(a => new { Id = a.Id, Name = a.SmallestUnit })
+            return new SelectList(cmsContext.CenterMedicineUnit.Where(a => !a.IsDeleted).ToList().Select(a => new { Id = a.Id, Name = a.SmallestDose })
 , "Id", "Name");
 
         }

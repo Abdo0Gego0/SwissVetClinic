@@ -3247,11 +3247,11 @@ namespace CmsResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Price Per Unit.
+        ///   Looks up a localized string similar to Price Per Dose.
         /// </summary>
-        public static string PricePerUnit {
+        public static string PricePerDose {
             get {
-                return ResourceManager.GetString("PricePerUnit", resourceCulture);
+                return ResourceManager.GetString("PricePerDose", resourceCulture);
             }
         }
         
@@ -3616,11 +3616,11 @@ namespace CmsResources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Smallest Unit.
+        ///   Looks up a localized string similar to Smallest Dose.
         /// </summary>
-        public static string SmallestUnit {
+        public static string SmallestDose {
             get {
-                return ResourceManager.GetString("SmallestUnit", resourceCulture);
+                return ResourceManager.GetString("SmallestDose", resourceCulture);
             }
         }
         

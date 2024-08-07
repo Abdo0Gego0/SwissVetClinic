@@ -1179,8 +1179,8 @@
   <data name="Price" xml:space="preserve">
     <value>Price</value>
   </data>
-  <data name="PricePerUnit" xml:space="preserve">
-    <value>Price Per Unit</value>
+  <data name="PricePerDose" xml:space="preserve">
+    <value>Price Per Dose</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Product</value>
@@ -1302,8 +1302,8 @@
   <data name="Smaller or Equal" xml:space="preserve">
     <value>Smaller or Equal</value>
   </data>
-  <data name="SmallestUnit" xml:space="preserve">
-    <value>Smallest Unit</value>
+  <data name="SmallestDose" xml:space="preserve">
+    <value>Smallest Dose</value>
   </data>
   <data name="Speicality" xml:space="preserve">
     <value>Speicality</value>

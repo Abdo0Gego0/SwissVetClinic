@@ -22,7 +22,7 @@ namespace CmsDataAccess.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MedicalCenterId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SmallestUnit = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PricePerUnit = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PricePerDose = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

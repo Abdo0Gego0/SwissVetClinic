@@ -1161,8 +1161,8 @@
   <data name="Price" xml:space="preserve">
     <value>السعر</value>
   </data>
-  <data name="PricePerUnit" xml:space="preserve">
-    <value>سعر الوحدة</value>
+  <data name="PricePerDose" xml:space="preserve">
+    <value>سعر الجرعة</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>المنتج</value>
@@ -1284,8 +1284,8 @@
   <data name="Smaller or Equal" xml:space="preserve">
     <value>أصغر أو يساوي</value>
   </data>
-  <data name="SmallestUnit" xml:space="preserve">
-    <value>الوحدة الأصغر</value>
+  <data name="SmallestDose" xml:space="preserve">
+    <value>أصغر جرعة</value>
   </data>
   <data name="Speicality" xml:space="preserve">
     <value>التخصص</value>

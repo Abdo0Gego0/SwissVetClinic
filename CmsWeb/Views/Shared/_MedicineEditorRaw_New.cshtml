@@ -35,8 +35,8 @@
                             .Columns(columns =>
                             {
                                 columns.Bound(p => p.Id).Visible(false);
-                    columns.Bound(p => p.SmallestUnit);
-                    columns.Bound(p => p.PricePerUnit);
+                    columns.Bound(p => p.SmallestDose);
+                    columns.Bound(p => p.PricePerDose);
 
                                 columns.Command(command =>
                                 {
@@ -189,15 +189,15 @@
 
             var inputItemName = document.createElement("input");
             inputItemName.type = "hidden";
-            inputItemName.name = "CenterMedicineUnit[" + i + "].SmallestUnit";
-            inputItemName.value = gridData[i].SmallestUnit;
+            inputItemName.name = "CenterMedicineUnit[" + i + "].SmallestDose";
+            inputItemName.value = gridData[i].SmallestDose;
             f.appendChild(inputItemName);
 
 
             var inputItemName1 = document.createElement("input");
             inputItemName1.type = "hidden";
-            inputItemName1.name = "CenterMedicineUnit[" + i + "].PricePerUnit";
-            inputItemName1.value = gridData[i].PricePerUnit;
+            inputItemName1.name = "CenterMedicineUnit[" + i + "].PricePerDose";
+            inputItemName1.value = gridData[i].PricePerDose;
             f.appendChild(inputItemName1);
 
 
