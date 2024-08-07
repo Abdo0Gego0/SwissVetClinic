@@ -35,7 +35,7 @@
                         <td>@bill.TotalPrice</td>
                         <td>
                             <button class="btn btn-info btn-sm view-products" data-bill-id="@bill.Id.ToString()">View Products</button>
-                            <a asp-action="Edit" asp-route-id="@bill.Id" class="btn btn-warning btn-sm">Edit Bill</a>
+                            @*<a asp-action="Edit" asp-route-id="@bill.Id" class="btn btn-warning btn-sm">Edit Bill</a>*@
                             <button class="btn btn-danger btn-sm delete-bill" data-bill-id="@bill.Id.ToString()">Delete Bill</button>
                             <a href="@Url.Action("ExportAsPdf", new { billId = bill.Id })" class="btn btn-outline-primary btn-sm">Export as PDF</a>
                         </td>

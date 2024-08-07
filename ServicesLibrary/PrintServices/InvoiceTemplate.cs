@@ -36,8 +36,26 @@ namespace ServicesLibrary.PrintServices
             string? BillNumber = temp.Number.ToString();
             string ClientName = context.PetOwner.Find(temp.PetOwnerId).FullName;
             string ClinicName = context.BaseClinic.Include(a=>a.BaseClinicTranslation).FirstOrDefault(a=>a.Id==temp.BaseClinicId).ClinicName;
-            string DoctorName = context.Doctor.Find(temp.DoctorId).FullName;
-            
+            string DoctorName = context.Doctor.Find(temp.DoctorId)?.FullName ?? "Unknown";
+
+            var doctor = context.Doctor.Find(temp.DoctorId);
+            if (doctor == null)
+            {
+                // Log this incident
+                Console.WriteLine($"Doctor with ID {temp.DoctorId} not found in the database.");
+                DoctorName = "Doctor Not Found";
+            }
+            else if (string.IsNullOrEmpty(doctor.FullName))
+            {
+                // Log this incident
+                Console.WriteLine($"Doctor with ID {temp.DoctorId} has a null or empty FullName.");
+                DoctorName = "Name Not Set";
+            }
+            else
+            {
+                DoctorName = doctor.FullName;
+            }
+
             List<VisitMedicine> BillItems = context.VisitMedicine.Where(a => a.PatientVisitId == temp.PatientVisitId).ToList();
 
             string billDate = "";

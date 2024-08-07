@@ -390,6 +390,7 @@ namespace CmsWeb.Areas.Center.Controllers
             //cmsContext.SaveChanges();
 
             Guid guid = (Guid)_userService.GetMyCenterIdWeb();
+
             return Json(meetingService.GetAll(TypeFilter, guid, ClinicId, view, date, null).ToDataSourceResult(request));
         }
 

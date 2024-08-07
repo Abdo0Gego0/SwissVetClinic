@@ -187,6 +187,7 @@ namespace CmsApi.API.ProductsAPI
                     var query = cmsContext.Product
                         .Include(a => a.ProductTranslation)
                         .Include(a => a.SubProduct)
+                            .ThenInclude(sp => sp.SubProductImage)
                         .Where(a => a.IsVisible && !a.IsDeleted);
 
                     if (CategoryId.HasValue)

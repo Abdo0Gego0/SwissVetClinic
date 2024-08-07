@@ -174,35 +174,62 @@ namespace CmsApi.API.MyPets
             return new ObjectResult(new { status = StatusCodes.Status200OK, data = res, message = "Pets" });
         }
 
-        [HttpPost("update-animal-info"), Authorize]
-        public async Task<ActionResult> UpdateAnimalInfo(Guid PetId, string PetName, string PetType, IFormFile? image, DateTime BirthDate, string? LifeStyle = "", string? Breed = "", string? BloodType = "")
+        [HttpPost("update-animal-info")]
+        public async Task<IActionResult> UpdateAnimalInfo(
+    Guid petId,
+    string petName,
+    string petType,
+    IFormFile image,
+    DateTime? birthDate,
+    string lifeStyle,
+    string breed,
+    string bloodType)
         {
-            Pet res = cmsContext.Pet.Find(PetId);
-
-            res.PetName = PetName;
-            res.PetType= PetType;
-            res.BloodType=BloodType;
-            res.LifeStyle= LifeStyle;
-            res.BirthDate = BirthDate;
-            res.Breed=Breed;
-
-            cmsContext.Pet.Attach(res);
-            cmsContext.Entry(res).Property(a => a.PetName).IsModified = true;
-            cmsContext.Entry(res).Property(a => a.PetType).IsModified = true;
-            cmsContext.Entry(res).Property(a => a.BloodType).IsModified = true;
-            cmsContext.Entry(res).Property(a => a.LifeStyle).IsModified = true;
-            cmsContext.Entry(res).Property(a => a.Breed).IsModified = true;
-            cmsContext.Entry(res).Property(a => a.BirthDate).IsModified = true;
-
-            if (image!=null)
+            try
             {
-                res.ImageName=FileHandler.UpdateImageFile(res.ImageName, image);
-                cmsContext.Entry(res).Property(a => a.ImageName).IsModified = true;
+                //var userId = _userService.GetMyId();
+                //if (!userId.HasValue)
+                //{
+                //    return Unauthorized("User ID not found.");
+                //}
+
+                var pet = await cmsContext.Pet.FindAsync(petId);
+                if (pet == null || pet.IsDeleted)
+                {
+                    return NotFound("Pet not found or you don't have permission to update it.");
+                }
+
+                // Ensure petName is not null or empty
+                if (string.IsNullOrWhiteSpace(petName))
+                {
+                    return BadRequest("Pet name cannot be empty.");
+                }
+
+                // Update pet information
+                pet.PetName = petName;
+                pet.PetType = petType;
+                pet.BirthDate = birthDate;
+                pet.LifeStyle = lifeStyle;
+                pet.Breed = breed;
+                pet.BloodType = bloodType;
+
+                // Handle image upload if provided
+                if (image != null && image.Length > 0)
+                {
+                    // Use the second UpdateImageFile method
+                    pet.ImageName = FileHandler.UpdateImageFile(pet.ImageName, image);
+                }
+
+                await cmsContext.SaveChangesAsync();
+
+                return Ok(new { status = StatusCodes.Status200OK, message = "Pet information updated successfully." });
             }
-
-            cmsContext.SaveChanges();
-
-            return new ObjectResult(new { status = StatusCodes.Status200OK, data = res, message = "Updated Successfully" });
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in UpdateAnimalInfo: {ex.Message}");
+                return StatusCode(500, new { status = StatusCodes.Status500InternalServerError, message = "An error occurred while updating pet information." });
+            }
         }
 
         #endregion
