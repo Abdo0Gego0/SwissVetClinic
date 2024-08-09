@@ -113,9 +113,16 @@ namespace CmsDataAccess.DbModels
             ApplicationDbContext context = new ApplicationDbContext();
             try
             {
-                context.Product.Remove(GetFromDb());
-                context.SaveChanges();
-                return true;
+                var product = GetFromDb();
+                if (product != null)
+                {
+                    product.IsDeleted = true; // Mark the product as deleted
+                    context.Product.Attach(product);
+                    context.Entry(product).State = EntityState.Modified;
+                    context.SaveChanges();
+                    return true;
+                }
+                return false;
             }
             catch (Exception ex)
             {

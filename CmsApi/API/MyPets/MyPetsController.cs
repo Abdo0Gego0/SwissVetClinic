@@ -174,7 +174,7 @@ namespace CmsApi.API.MyPets
             return new ObjectResult(new { status = StatusCodes.Status200OK, data = res, message = "Pets" });
         }
 
-        [HttpPost("update-animal-info")]
+        [HttpPost("update-animal-info"), Authorize]
         public async Task<IActionResult> UpdateAnimalInfo(
     Guid petId,
     string petName,
@@ -183,18 +183,29 @@ namespace CmsApi.API.MyPets
     DateTime? birthDate,
     string lifeStyle,
     string breed,
-    string bloodType)
+    string bloodType,
+    int sex)
         {
             try
             {
-                //var userId = _userService.GetMyId();
-                //if (!userId.HasValue)
-                //{
-                //    return Unauthorized("User ID not found.");
-                //}
+                var userId = _userService.GetMyId();
+                if (!userId.HasValue)
+                {
+                    return Unauthorized("User ID not found.");
+                }
 
-                var pet = await cmsContext.Pet.FindAsync(petId);
-                if (pet == null || pet.IsDeleted)
+                var petOwner = await cmsContext.PetOwner
+                    .FirstOrDefaultAsync(po => po.User.Id == userId.Value.ToString() && !po.IsDeleted);
+
+                if (petOwner == null)
+                {
+                    return NotFound("Pet owner not found.");
+                }
+
+                var pet = await cmsContext.Pet
+                    .FirstOrDefaultAsync(p => p.Id == petId && p.PetOwnerId == petOwner.Id && !p.IsDeleted);
+
+                if (pet == null)
                 {
                     return NotFound("Pet not found or you don't have permission to update it.");
                 }
@@ -212,16 +223,15 @@ namespace CmsApi.API.MyPets
                 pet.LifeStyle = lifeStyle;
                 pet.Breed = breed;
                 pet.BloodType = bloodType;
+                pet.Sex = sex;
 
                 // Handle image upload if provided
                 if (image != null && image.Length > 0)
                 {
-                    // Use the second UpdateImageFile method
                     pet.ImageName = FileHandler.UpdateImageFile(pet.ImageName, image);
                 }
 
                 await cmsContext.SaveChangesAsync();
-
                 return Ok(new { status = StatusCodes.Status200OK, message = "Pet information updated successfully." });
             }
             catch (Exception ex)

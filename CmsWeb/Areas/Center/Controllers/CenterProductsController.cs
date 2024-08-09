@@ -152,7 +152,7 @@ namespace CmsWeb.Areas.Center.Controllers
                 ViewBag.ErrorMessage = "Db Error";
                 return View("Ecommerce/_NewProduct",model);
             }
-
+            
             return RedirectToAction("Create_SubProduct",new { id= res });
         }
 
@@ -165,7 +165,7 @@ namespace CmsWeb.Areas.Center.Controllers
             ViewBag.ErrorMessage = "";
             ViewBag.Id = id;
 
-            return View("Ecommerce/_SubProductList");
+            return View("Ecommerce/_SubProductList")  ;
         }
 
 
@@ -220,7 +220,6 @@ namespace CmsWeb.Areas.Center.Controllers
             double? Quantity,
             List<SubproductCharacteristics> subproductCharacteristics,List<IFormFile> files)
         {
-
 
             SubProduct model=new SubProduct(cmsContext);
 
@@ -492,11 +491,6 @@ namespace CmsWeb.Areas.Center.Controllers
             return Json("Ok");
 
         }
-
-
-
-
-
 
 
     }

@@ -10,13 +10,20 @@ namespace CmsDataAccess.Utils.FilesUtils
     {
         public static string getUploadfolder()
         {
+            
             var configurationBuilder = new ConfigurationBuilder();
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
+            var currentDirectory = Directory.GetCurrentDirectory();
+            var path = Path.Combine(currentDirectory, "appsettings.json");
             configurationBuilder.AddJsonFile(path, false);
             var root = configurationBuilder.Build();
-            var Images = root.GetSection("Images");
-            var PathToImages = Images.GetSection("PathToImages").Value;
-            return PathToImages;
+            var images = root.GetSection("Images");
+            var pathToImages = images.GetSection("PathToImages").Value;
+
+            // Assuming PathToImages in appsettings.json is a relative path
+            var parentDirectory = Directory.GetParent(currentDirectory).FullName;
+            var fullPathToImages = Path.Combine(parentDirectory, pathToImages);
+
+            return fullPathToImages;
         }
 
 

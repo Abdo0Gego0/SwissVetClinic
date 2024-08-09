@@ -187,7 +187,7 @@ namespace CmsApi.API.ProductsAPI
                     var query = cmsContext.Product
                         .Include(a => a.ProductTranslation)
                         .Include(a => a.SubProduct)
-                            .ThenInclude(sp => sp.SubProductImage)
+                        .ThenInclude(sp => sp.SubProductImage)
                         .Where(a => a.IsVisible && !a.IsDeleted);
 
                     if (CategoryId.HasValue)
@@ -203,7 +203,7 @@ namespace CmsApi.API.ProductsAPI
                             (a.ProductTranslation.Any(pt => pt.LangCode == lang && pt.Description.Contains(text)))
                         );
                     }
-
+                    // دي بقى بتجيب ايه
                     var prods = await query
                         .Skip((PageIndex - 1) * PageSize)
                         .Take(PageSize)
@@ -228,24 +228,38 @@ namespace CmsApi.API.ProductsAPI
                     }
 
                     List<object> res = new List<object>();
-
+                    // الitem جاية من prods
                     foreach (var item in prods)
                     {
                         var productTranslation = item.ProductTranslation?.FirstOrDefault(pt => pt.LangCode == lang);
-                        string productName;
-                        if (productTranslation == null)
-                        {
-                            _logger.LogWarning($"No translation found for product {item.Id} in language {lang}. Available languages: {string.Join(", ", item.ProductTranslation?.Select(pt => pt.LangCode) ?? new string[0])}");
-                            productName = item.ProductTranslation?.FirstOrDefault()?.Name ?? "No translation available";
+                        string productName = productTranslation?.Name ?? "No translation available";
+
+                        var subProducts = item.SubProduct?.ToList() ?? new List<SubProduct>();
+                        if (subProducts.Any())
+                        {   // دلوقتي المشكلة في item ID 
+                            Console.WriteLine($"Found {subProducts.Count()} subproducts for product {item.Id}");
                         }
                         else
                         {
-                            productName = productTranslation.Name ?? "Name not set in translation";
+                            Console.WriteLine($"No subproducts found for product {item.Id}");
+                            res.Add(new
+                            {
+                                Id = item.Id,
+                                Name = productName,
+                                Description = productTranslation?.Description ?? string.Empty,
+                                SKU = productTranslation?.SKU ?? string.Empty,
+                                KeyWords = productTranslation?.KeyWords ?? string.Empty,
+                                CategoryId = item.ProductCategoriesId,
+                                IsInFavourite = favouriteProductIds.Contains(item.Id),
+                                ExpireDate = item.ExpireDate,
+                                Type = item.Type,
+                                Details = new List<SubProductDetails>(),
+                                Review = item.GetReview()
+                            });
+                            continue;
                         }
 
-                        var subProducts = item.SubProduct ?? Enumerable.Empty<SubProduct>();
-
-                        var subProductDetails = subProducts.Select(su => new
+                        var subProductDetails = subProducts.Select(su => new SubProductDetails
                         {
                             Id = su.Id,
                             Images = su.SubProductImage?.Select(a => a.ImageFullPath).ToList() ?? new List<string>(),
@@ -255,9 +269,9 @@ namespace CmsApi.API.ProductsAPI
                                 .Where(tr => su.SubproductCharacteristics != null &&
                                              su.SubproductCharacteristics.Any(sct => sct.Id == tr.SubproductCharacteristicsId))
                                 .Select(tr => tr.Description)
-                                .ToList(),
+                                .ToList() ?? new List<string>(), // Handle the case where there are no characteristics
                             Available = su.Quantity > 0,
-                            IsInBasket = ProductHanlder.IsSubProductInBasket(su.Id, userId),
+                            IsInBasket = ProductHanlder.IsSubProductInBasket(su.Id, userId)
                         }).ToList();
 
                         res.Add(new
@@ -274,6 +288,8 @@ namespace CmsApi.API.ProductsAPI
                             Details = subProductDetails,
                             Review = item.GetReview()
                         });
+                    
+                    Console.WriteLine($"TTHHEE Sub is {subProductDetails}");
                     }
 
                     return Ok(new

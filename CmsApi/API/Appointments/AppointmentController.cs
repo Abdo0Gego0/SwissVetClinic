@@ -131,8 +131,10 @@ namespace CmsApi.API.Appointments
                     Id= item.Id,
                     StartDate = medicalCenterService.ConvertToLocalTime(item.Start),
                     EndDate = medicalCenterService.ConvertToLocalTime(item.End),
+                    ClinicId = item.BaseClinicId,
                     ClinicName=cmsContext.BaseClinicTranslation.FirstOrDefault(a=>a.LangCode== lang && a.BaseClinicId== item.BaseClinicId).Name,
                     Service= cmsContext.CenterServicesTranslation.FirstOrDefault(a => a.LangCode == lang && a.CenterServicesId == item.CenterServicesId).Name,
+                    PetId = item.PetId,
                     PetName = cmsContext.Pet.Find(item.PetId).PetName,
                     UpComming=(item.Start>DateTime.Now)?true:false,
                     IsStarted=item.IsStarted,
@@ -150,80 +152,100 @@ namespace CmsApi.API.Appointments
 
         [HttpPost("make-appointment"), Authorize]
         public async Task<ActionResult> MakeAppointment(DateTime StartDate,
-    
-        Guid ClinicId,
-        Guid ServiceId,
-        Guid PetId,
-        string Title="...",
-        string Description="..."
-    
-        )
-            {
-
-
-            if (ClinicId==null || ClinicId==Guid.Empty)
+    Guid ClinicId,
+    Guid ServiceId,
+    Guid PetId,
+    string Title = "...",
+    string Description = "..."
+)
+        {
+            if (ClinicId == Guid.Empty)
             {
                 return new ObjectResult(new { status = StatusCodes.Status400BadRequest, data = "", message = "ClinicId is required" });
-
             }
 
-            if (ServiceId == null || ServiceId == Guid.Empty)
+            if (ServiceId == Guid.Empty)
             {
-                            return new ObjectResult(new { status = StatusCodes.Status400BadRequest, data = "", message = "ServiceId is required" });
-
+                return new ObjectResult(new { status = StatusCodes.Status400BadRequest, data = "", message = "ServiceId is required" });
             }
 
-            if (PetId == null || PetId == Guid.Empty)
+            if (PetId == Guid.Empty)
             {
-                            return new ObjectResult(new { status = StatusCodes.Status400BadRequest, data = "", message = "PetId is required" });
-
+                return new ObjectResult(new { status = StatusCodes.Status400BadRequest, data = "", message = "PetId is required" });
             }
 
             Guid userId = (Guid)_userService.GetMyId();
 
-                DateTime d =DateTime.Now;
+            DateTime d = DateTime.Now;
 
-                DateTime dayStart = new DateTime(d.Year,d.Month,d.Day,0,0,0);
-                DateTime dayEnd = new DateTime(d.Year,d.Month,d.Day,23,59,59);
+            DateTime dayStart = new DateTime(d.Year, d.Month, d.Day, 0, 0, 0);
+            DateTime dayEnd = new DateTime(d.Year, d.Month, d.Day, 23, 59, 59);
 
-                int maxAppPerDay = (int)cmsContext.BookingPolicy.FirstOrDefault().AllowedBookingNumberPerday;
+            int maxAppPerDay = (int)cmsContext.BookingPolicy.FirstOrDefault().AllowedBookingNumberPerday;
 
-                if (cmsContext.Appointment.Where(a=>a.PetOwnerId== userId && (a.Start>=dayStart && a.Start<=dayEnd)).Count()>= maxAppPerDay)
-                {
-                    return new ObjectResult(new { status = StatusCodes.Status403Forbidden, data = "", message = $"Max Appointments per day: {maxAppPerDay}" });
-                }
+            if (cmsContext.Appointment.Where(a => a.PetOwnerId == userId && (a.Start >= dayStart && a.Start <= dayEnd)).Count() >= maxAppPerDay)
+            {
+                return new ObjectResult(new { status = StatusCodes.Status403Forbidden, data = "", message = $"Max Appointments per day: {maxAppPerDay}" });
+            }
 
+            Appointment model = new Appointment
+            {
+                Start = StartDate,
+                End = StartDate.AddMinutes(15),
+                IsFinished = false,
+                IsStarted = false,
+                IsFirstVisit = !cmsContext.Appointment.Any(a => a.PetId == PetId),
+                PetOwnerId = userId,
+                IsFromMobile = true,
+                PetId = PetId,
+                MedicalCenterId = cmsContext.MedicalCenter.FirstOrDefault().Id,
+                Timezone = "Asia/Dubai",
+                StartTimezone = "Asia/Dubai",
+                EndTimezone = "Asia/Dubai",
+                CenterServicesId = ServiceId,
+                BaseClinicId = ClinicId,
+                Title = Title,
+                Description = Description,
+            };
 
-
-                Appointment model = new Appointment
-                {
-                    Start = StartDate,
-                    End=StartDate.AddMinutes(15),
-                    IsFinished=false,
-                    IsStarted=false,
-                    IsFirstVisit=!cmsContext.Appointment.Any(a=>a.PetId==PetId),
-                    PetOwnerId=userId,
-                    IsFromMobile=true,
-                    PetId=PetId,
-                    MedicalCenterId=cmsContext.MedicalCenter.FirstOrDefault().Id,
-                    Timezone= "Asia/Dubai",
-                    StartTimezone= "Asia/Dubai",
-                    EndTimezone= "Asia/Dubai",
-                    CenterServicesId= ServiceId,
-                    BaseClinicId=ClinicId,
-                    Title= Title,
-                    Description= Description,
-
-                };
-           
-                cmsContext.Appointment.Add(model);
-                cmsContext.SaveChanges();
+            cmsContext.Appointment.Add(model);
+            cmsContext.SaveChanges();
             await _hubContext.Clients.All.SendAsync("RefreshClinicStatus_", _userService.GetMyCenterIdWeb().ToString());
 
+            // Fetching additional details
+            string petName = cmsContext.Pet.Find(PetId)?.PetName;
+            string clinicName = cmsContext.BaseClinicTranslation.FirstOrDefault(a => a.LangCode == _userService.GetMyLanguage() && a.BaseClinicId == ClinicId)?.Name;
 
-            return new ObjectResult(new { status = StatusCodes.Status200OK, data = "", message = "Added Successfully" });
+            return new ObjectResult(new
+            {
+                status = StatusCodes.Status200OK,
+                data = new
+                {
+                    model.Id,
+                    StartDate = model.Start,  // Changed from Start to StartDate
+                    EndDate = model.End,      // Changed from End to EndDate for consistency
+                    model.IsFinished,
+                    model.IsStarted,
+                    model.IsFirstVisit,
+                    model.PetOwnerId,
+                    model.IsFromMobile,
+                    model.PetId,
+                    PetName = petName,
+                    model.MedicalCenterId,
+                    model.Timezone,
+                    model.StartTimezone,
+                    model.EndTimezone,
+                    model.CenterServicesId,
+                    model.BaseClinicId,
+                    ClinicName = clinicName,
+                    model.Title,
+                    model.Description
+                },
+                message = "Added Successfully"
+            });
+        }
 
-            }
+
 
 
 

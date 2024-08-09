@@ -27,28 +27,33 @@ namespace CmsDataAccess.DbModels
         [Display(Name = "Quantity")]
         public double? Quantity { get; set; }
 
-        public List<SubProductImage>? SubProductImage { get; set; }
+        public List<SubProductImage>? SubProductImage { get; set; } = new List<SubProductImage>();
         public List<SubproductCharacteristics> SubproductCharacteristics { get; set; } = new List<SubproductCharacteristics>();
 
-        // Constructor accepting a DbContext to handle dependency injection
-        private readonly ApplicationDbContext _context;
+        // Parameterless constructor
+        public SubProduct() { }
 
+        // Constructor with ApplicationDbContext injection
         public SubProduct(ApplicationDbContext context)
         {
             _context = context;
         }
 
+        // Dependency injection is handled differently in ASP.NET Core; consider using services instead of injecting into models directly
+        private readonly ApplicationDbContext _context;
+
         public string ParentProductName
         {
             get
             {
+                if (_context == null) return "Unknown Product";
+
                 var prod = _context.Product
-                    .Include(p => p.ProductTranslation) // Corrected property name
+                    .Include(p => p.ProductTranslation)
                     .FirstOrDefault(p => p.Id == ProductId);
 
                 if (prod != null && prod.ProductTranslation.Any())
                 {
-                    // Assumes you want the first translation as default or concatenates all available translations
                     return string.Join(" ", prod.ProductTranslation.Select(pt => pt.Name));
                 }
                 return "Unknown Product";
@@ -72,8 +77,10 @@ namespace CmsDataAccess.DbModels
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                // Log the exception for debugging
+                Console.WriteLine($"Insert Error: {ex.Message}");
                 return false;
             }
         }
@@ -91,8 +98,10 @@ namespace CmsDataAccess.DbModels
                 }
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                // Log the exception for debugging
+                Console.WriteLine($"Delete Error: {ex.Message}");
                 return false;
             }
         }
@@ -111,8 +120,10 @@ namespace CmsDataAccess.DbModels
                 }
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
+                // Log the exception for debugging
+                Console.WriteLine($"Soft Delete Error: {ex.Message}");
                 return false;
             }
         }
