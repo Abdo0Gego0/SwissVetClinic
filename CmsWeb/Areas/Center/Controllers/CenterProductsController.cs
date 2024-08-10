@@ -380,23 +380,35 @@ namespace CmsWeb.Areas.Center.Controllers
             ViewBag.PreviousAction = "Index";
             ViewBag.ErrorMessage = "";
 
-            cmsContext.ProductTranslation.Attach(model.ProductTranslation[0]);
-            cmsContext.Entry(model.ProductTranslation[0]).State = EntityState.Modified;
+            // Debug output to check the state of the model
+            Console.WriteLine("Product model is null: " + (model == null));
+            Console.WriteLine("ProductTranslation is null: " + (model.ProductTranslation == null));
+            Console.WriteLine("ProductTranslation count: " + (model.ProductTranslation?.Count ?? 0));
 
-            cmsContext.ProductTranslation.Attach(model.ProductTranslation[1]);
-            cmsContext.Entry(model.ProductTranslation[1]).State = EntityState.Modified;
+            if (model.ProductTranslation != null && model.ProductTranslation.Count >= 2)
+            {
+                cmsContext.ProductTranslation.Attach(model.ProductTranslation[0]);
+                cmsContext.Entry(model.ProductTranslation[0]).State = EntityState.Modified;
+
+                cmsContext.ProductTranslation.Attach(model.ProductTranslation[1]);
+                cmsContext.Entry(model.ProductTranslation[1]).State = EntityState.Modified;
+            }
+            else
+            {
+                Console.WriteLine("Error: ProductTranslation is missing or incomplete.");
+                ViewBag.ErrorMessage = "ProductTranslation is missing or incomplete.";
+                return View("Ecommerce/_EditProduct", model);
+            }
 
             cmsContext.SaveChanges();
-
 
             cmsContext.Product.Attach(model);
             cmsContext.Entry(model).Property(a => a.ProductCategoriesId).IsModified = true;
             cmsContext.SaveChanges();
-            
 
             return View("Ecommerce/_EditProduct", model);
-
         }
+
 
         public ActionResult Read_SubproductCharacteristics([DataSourceRequest] DataSourceRequest request, Guid? id, string preferredCulture = "en-US")
         {

@@ -34,7 +34,7 @@ namespace CmsDataAccess.DbModels
         {
             get
             {
-                var apiUrl = "http://example.com/api/"; // Replace with actual URL
+                var apiUrl = "https://swissvetclinics.com/api/"; // Replace with actual URL
                 return $"{apiUrl}pImages/{ImageName}";
             }
         }
