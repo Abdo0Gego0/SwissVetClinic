@@ -27,8 +27,8 @@
     <Folder Include="WebViewModels\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\CmsResources\CmsResources.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\CmsResources\CmsResources.csproj" />
+	</ItemGroup>
 
 </Project>

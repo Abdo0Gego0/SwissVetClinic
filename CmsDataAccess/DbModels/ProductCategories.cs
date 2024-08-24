@@ -29,13 +29,12 @@ namespace CmsDataAccess.DbModels
         [NotMapped]
         public string? Image64 { get; set; }
 
-        [NotMapped]
         public string? ImageFullPath
         {
             get
             {
-                var apiUrl = "https://swissvetclinics.com/api/"; // Replace with actual URL
-                return $"{apiUrl}pImages/{ImageName}";
+                return new ApplicationDbContext().MySystemConfiguration.FirstOrDefault().ApiUrl + "pImages/" + ImageName;
+
             }
         }
 
